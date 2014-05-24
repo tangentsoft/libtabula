@@ -5,20 +5,21 @@
 <sect1 id="licenses">
   <title>Licensing</title>
 
-  <para>The primary copyright holders on the MySQL++ library and its
-  documentation are Kevin Atkinson (© 1998), MySQL AB (© 1999 through 2001)
-  and Educational Technology Resources, Inc. (© 2004 through the date of
-  this writing). There are other contributors, who also retain
-  copyrights on their additions; see the ChangeLog file in the MySQL++
-  distribution tarball for details.</para>
+  <para>The primary copyright holders on libtabula and its
+  documentation are Kevin Atkinson (© 1998), MySQL AB (© 1999 through
+  2001) and Educational Technology Resources, Inc. (© 2004 through the
+  date of this writing).  There are other contributors, who also retain
+  copyrights on their additions; see the ChangeLog file in the
+  distribution tarball for details. Contributions made prior to May
+  2014 were done to MySQL++, the predecessor to this library.</para>
 
-  <para>The MySQL++ library and its Reference Manual are released under
+  <para>The libtabula library and its Reference Manual are released under
   the GNU Lesser General Public License (LGPL), reproduced below.</para>
 
-  <para>The MySQL++ User Manual &mdash; excepting some example code from
+  <para>The libtabula User Manual &mdash; excepting some example code from
   the library reproduced within it &mdash; is offered under a license
   closely based on the Linux Documentation Project License (LDPL) v2.0,
-  included below. (The MySQL++ documentation isn&#x2019;t actually part
+  included below. (The libtabula documentation isn&#x2019;t actually part
   of the Linux Documentation Project, so the main changes are to
   LDP-related language. Also, generic language such as
   &#x201C;author&#x2019;s (or authors&#x2019;)&#x201D; has been replaced
@@ -613,19 +614,19 @@
 
   <?hard-pagebreak?>
   <sect2 id="userman-license">
-    <title>MySQL++ User Manual License</title>
+    <title>Libtabula User Manual License</title>
 
     <sect3 id="userman-license-copyright">
       <title>I. COPYRIGHT</title>
 
-      <para>The copyright to the MySQL++ User Manual is owned by its
+      <para>The copyright to the Libtabula User Manual is owned by its
       authors.</para>
     </sect3>
 
     <sect3 id="userman-license-main">
       <title>II. LICENSE</title>
 
-      <para>The MySQL++ User Manual may be reproduced and distributed in
+      <para>The Libtabula User Manual may be reproduced and distributed in
       whole or in part, in any medium physical or electronic, provided
       that this license notice is displayed in the reproduction.
       Commercial redistribution is permitted and encouraged. Thirty days
@@ -670,12 +671,12 @@
           is provided in the document.</para></listitem>
         </orderedlist>
 
-        <para>Mere aggregation of the MySQL++ User Manual with other
+        <para>Mere aggregation of the Libtabula User Manual with other
         documents or programs on the same media shall not cause this
         license to apply to those other works.</para>
 
         <para>All translations, derivative documents, or modified
-        documents that incorporate the MySQL++ User Manual may not have
+        documents that incorporate the Libtabula User Manual may not have
         more restrictive license terms than these, except that you may
         require distributors to make the resulting document available in
         source format.</para>

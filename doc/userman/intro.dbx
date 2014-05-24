@@ -5,24 +5,28 @@
 <sect1 id="intro">
   <title>Introduction</title>
 
-  <para>MySQL++ is a powerful C++ wrapper for MySQL&#x2019;s
-  C API<footnote><para>The MySQL C API is also known as <ulink
-  url="https://dev.mysql.com/downloads/connector/c/">Connector/C</ulink>.</para></footnote>.
-  Its purpose is to make working with queries as easy as working with
-  STL containers.</para>
+  <para>Libtabula is a powerful C++ wrapper for multiple
+  C database access libraries. The initial version supports
+  MySQL<footnote><para>The MySQL C API is also known as <ulink
+  url="https://dev.mysql.com/downloads/connector/c/">Connector/C</ulink>.</para></footnote>,
+  MariaDB, and SQLite. Its purpose is to make working with SQL queries
+  as easy as working with STL containers.</para>
 
-  <para>The latest version of MySQL++ can be found at <ulink
-  url="http://tangentsoft.net/mysql++/">the official web
-  site</ulink>.</para>
+  <para>The latest version of libtabula can be found at <ulink
+  url="http://libtabula.org/"></para>
 
-  <para>Support for MySQL++ can be had on <ulink
-  url="http://lists.mysql.com/plusplus">the mailing list</ulink>. That
+  <para>Support for libtabula can be had on <ulink
+  url="http://libtabula.org/ml/">the mailing list</ulink>. That
   page hosts the mailing list archives, and tells you how you can
   subscribe.</para>
 
 
   <sect2 id="history">
-    <title>A Brief History of MySQL++</title>
+    <title>A Brief History of Libtabula</title>
+
+    <para>libtabula is a fork of <ulink
+    url="http://tangentsoft.net/mysql++/">MySQL++ 3.2.1</ulink>. (More
+    on this at the end of this section.)</para>
 
     <para>MySQL++ was created in 1998 by Kevin Atkinson. It started
     out MySQL-specific, but there were early efforts to try and
@@ -39,11 +43,11 @@
     Widenius</ulink> himself did some of the work, but later gave it
     over to another MySQL employee, Sinisa Milivojevic. MySQL released
     versions 1.0 and 1.1, and then Kevin gave over maintenance to
-    Sinisa officially with 1.2, and ceased to have any involvement
-    with the library&#x2019;s maintenance. Sinisa went on to maintain
-    the library through 1.7.9, released in mid-2001. It seems to be
-    during this time that the dream of multiple-database compatibility
-    died, for obvious reasons.</para>
+    Sinisa officially with 1.2, and ceased to have any involvement with
+    the library&#x2019;s maintenance. Sinisa went on to maintain the
+    library through 1.7.9, released in mid-2001. During this time, the
+    library&rsquo;s database-independent parts were left undeveloped,
+    for obvious reasons.</para>
 
     <para>With version 1.7.9, MySQL++ went into a period of
     stasis, lasting over three years. (Perhaps it was the
@@ -95,8 +99,19 @@
     which did little more than make the code build with GCC 3.3 without
     warnings. Since then, with a little help from his friends on the
     Net, MySQL++ has lost a lot of bugs, gained a lot of features,
-    gained a few more bugs, lost them again... MySQL++ is alive and
-    healthy now.</para>
+    gained a few more bugs, lost them again...</para>
+
+    <para>In May 2014, libtabula forked from MySQL++. The name change
+    reflects the fact that MySQL++ only works with MySQL and its
+    API-compatible forks, such as MariaDB. The initial version of
+    libtabula does all that, as well as supporting its first non-MySQL
+    type C DBMS access library, SQLite. Libtabula is still primarily
+    maintained by Warren Young of Educational Technology Resources,
+    as is MySQL++. In a very real sense, libtabula is &ldqou;MySQL++
+    4.0.&rdquo; It is a benign fork, not an angry fork. MySQL++ will
+    likely get very little new code following this fork, but that is
+    no different than what would have happened if we&rsquo;d called
+    it MySQL++ 4.0 and kept it in the same code repository.</para>
   </sect2>
 
 
@@ -105,7 +120,7 @@
 
     <para>If you want to email someone to ask questions about
     this library, we greatly prefer that you send mail to the
-    <ulink url="http://lists.mysql.com/plusplus">MySQL++ mailing
+    <ulink url="http://libtabula.org/ml/">MySQL++ mailing
     list</ulink>. The mailing list is archived, so if you have
     questions, do a search to see if the question has been asked
     before.</para>

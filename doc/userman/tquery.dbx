@@ -5,9 +5,9 @@
 <sect1 id="tquery" xreflabel="Template Queries">
   <title>Template Queries</title>
 
-  <para>Another powerful feature of MySQL++ is being able to set up
+  <para>Another powerful feature of libtabula is being able to set up
   template queries. These are kind of like C&#x2019;s
-  <function>printf()</function> facility: you give MySQL++ a string
+  <function>printf()</function> facility: you give libtabula a string
   containing the fixed parts of the query and placeholders for the
   variable parts, and you can later substitute in values into those
   placeholders.</para>
@@ -72,10 +72,11 @@ query.parse();</programlisting>
       <row>
         <entry><emphasis role="bold">q</emphasis></entry>
 
-        <entry>This will escape the item using the MySQL C API
-        function <ulink url="mysql-escape-string" type="mysqlapi"/>
-        and add single quotes around it as necessary, depending on
-        the type of the value you use.</entry>
+        <entry>This will escape and single-quote the item using the
+        underlying C API, as necessary.  For MySQL, we use <ulink
+        url="mysql-escape-string" type="mysqlapi"/>, for example. It is
+        type-dependent, so integers for example pass through unchanged,
+        whereas strings are both quoted and escaped.</entry>
       </row>
 
       <row>
@@ -194,7 +195,7 @@ StoreQueryResult res1 = query.store();</programlisting>
     will not get sympathy if you complain on the mailing list about it
     not working. If your code doesn&#x2019;t actively reuse at least one
     of the parameters in subsequent queries, you&#x2019;re abusing
-    MySQL++, and it is likely to take its revenge on you.</para>
+    the library, and it is likely to take its revenge on you.</para>
   </sect2>
 
 

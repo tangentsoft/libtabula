@@ -1,4 +1,4 @@
-Summary:    C++ wrapper for the MySQL C API
+Summary:    DBMS-independent C++ database access library
 Name:       @PACKAGE_NAME@
 Version:    @PACKAGE_VERSION@
 Release:    1%{?dist}
@@ -10,28 +10,29 @@ BuildRoot:  %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 BuildRequires: mysql-devel
 
 %description
-MySQL++ makes working with MySQL server queries as easy as working
-with STL containers.  This package contains only the libraries needed to
-run MySQL++-based programs.  If you are building your own MySQL++-based
-programs, you also need to install the -devel package.
+Libtabula makes working with database server SQL queries as easy as
+working with STL containers.  This package contains only the libraries
+needed to run libtabula-based programs.  If you are building your own
+libtabula-based programs, you also need to install the -devel package.
 
 %package devel
-Summary:   MySQL++ developer files (headers, examples, etc.)
+Summary:   libtabula developer files (headers, examples, etc.)
 Group:     Development/Libraries
 Requires:  libtabula = %{version}-%{release}, mysql-devel
 
 %description devel
-These are the files needed to compile MySQL++ based programs, plus
+These are the files needed to compile libtabula based programs, plus
 some sample code to get you started.  If you aren't building your own
 programs, you probably don't need to install this package.
 
 %package manuals
-Summary:   MySQL++ user and reference manuals
+Summary:   libtabula user and reference manuals
 Group:     Development/Libraries
 
 %description manuals
-This is the MySQL++ documentation.  It's a separate RPM just because
-it's so large, and it doesn't change with every release.
+This is the libtabula documentation.  It's a separate RPM because
+it's large enough that not everyone will want to install it, and
+it's optional. The same content is online at http://libtabula.org
 
 %prep
 %setup -q
