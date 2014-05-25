@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding='UTF-8'?>
+<?xml version="1.0" encoding='UTF-8'?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<sect1 id="unicode" xreflabel="Using Unicode with MySQL++">
-  <title>Using Unicode with MySQL++</title>
+<sect1 id="unicode" xreflabel="Using Unicode with Libtabula">
+  <title>Using Unicode with Libtabula</title>
 
   <sect2 id="unicode-history">
     <title>A Short History of Unicode</title>
-    <subtitle>...with a focus on relevance to MySQL++</subtitle>
+    <subtitle>...with a focus on relevance to Libtabula</subtitle>
 
     <para>In the old days, computer operating systems only dealt with
     8-bit character sets. That only allows for 256 possible characters,
@@ -42,9 +42,9 @@
     too late for Unix and C. Those decades of legacy created an
     immense inertia preventing a widespread move away from 8-bit
     characters. MySQL and C++ come out of these older traditions, and
-    so they share the same practical limitations. MySQL++ currently
-    doesn't have any code in it for Unicode conversions; it just
-    passes data along unchanged from the underlying MySQL C API,
+    so they share the same practical limitations. Libtabula currently
+    doesn&rsquo;t have any code in it for Unicode conversions; it
+    just passes data along unchanged from the underlying DBMS C API,
     so you still need to be aware of these underlying issues.</para>
 
     <para>During the development of the <ulink
@@ -99,50 +99,57 @@
   <sect2 id="unicode-windows">
     <title>Unicode on Windows</title>
 
-    <para>Each Windows API function that takes a string actually comes
-    in two versions. One version supports only 1-byte
-    &#x201C;ANSI&#x201D; characters (a superset of ASCII), so they end
-    in 'A'. Windows also supports the 2-byte subset of Unicode called
-    <ulink
-    url="http://en.wikipedia.org/wiki/UCS-2">UCS-2</ulink><footnote><para>Since
-    Windows XP, Windows actually uses the <ulink
-    url="http://en.wikipedia.org/wiki/UTF-16">UTF-16</ulink> encoding,
-    not UCS-2.  This means that if you use characters beyond the 16-bit
-    &ldquo;BMP&rdquo; range, they get encoded as 4-byte characters. But
-    again, since the most economically valuable subset of Unicode is the
-    BMP, many programs ignore this distinction and treat modern Windows
-    as supporting 2-byte characters.</para></footnote>. Some call these
-    &#x201C;wide&#x201D; characters, so the other set of functions end
-    in 'W'. The <function><ulink
+    <para>Each Windows API function that takes a string
+    actually comes in two versions. One version supports only
+    1-byte &#x201C;ANSI&#x201D; characters<footnote><para>A
+    superset of ASCII<para></footnote> so they end in
+    'A'. The first Unicode-aware versions of Windows
+    supported a 2-byte subset of Unicode called <ulink
+    url="http://en.wikipedia.org/wiki/UCS-2">UCS-2</ulink>. Since
+    Windows XP, Windows now uses the <ulink
+    url="http://en.wikipedia.org/wiki/UTF-16">UTF-16</ulink>
+    encoding natively instead; it also takes 2 bytes per character
+    for typical Western texts, but unlike UCS-2, it can extend to up
+    to 4 bytes per character to encode the rarer Unicode characters.
+    Regardless of whether you use UTF-16 or UCS-2, these are often
+    generically called &#x201C;wide&#x201D; characters, so the
+    other set of Windows API functions end in 'W'. The <function><ulink
     url="http://msdn.microsoft.com/library/en-us/winui/winui/windowsuserinterface/windowing/dialogboxes/dialogboxreference/dialogboxfunctions/messagebox.asp">MessageBox</ulink>()</function>
-    API, for instance, is actually a macro, not a real function. If you
-    define the <symbol>UNICODE</symbol> macro when building your
-    program, the <function>MessageBox()</function> macro evaluates to
-    <function>MessageBoxW()</function>; otherwise, to
-    <function>MessageBoxA()</function>.</para>
+    API, for instance, is actually a macro, not a real function. If
+    you define the <symbol>UNICODE</symbol> macro when building
+    your program, the <function>MessageBox()</function> macro
+    evaluates to <function>MessageBoxW()</function>; otherwise,
+    to <function>MessageBoxA()</function>.</para>
 
-    <para>Since MySQL uses the UTF-8 Unicode encoding and Windows uses
-    UCS-2, you must convert data when passing text between MySQL++ and
-    the Windows API. Since there&#x2019;s no point in trying for
-    portability &mdash; no other OS I&#x2019;m aware of uses UCS-2
-    &mdash; you might as well use platform-specific functions to do this
-    translation. Since version 2.2.2, MySQL++ ships with two Visual C++
-    specific examples showing how to do this in a GUI program.  (In
-    earlier versions of MySQL++, we did Unicode conversion in the
-    console mode programs, but this was unrealistic.)</para>
+    <para>Most open source DBMSes these days use the UTF-8 Unicode
+    encoding by preference but Windows uses UTF-16 instead.  Because
+    of that, you probably need to convert data when passing text
+    between Libtabula and the Windows API. Since there&#x2019;s no
+    point in trying for portability &mdash; no other OS I&#x2019;m
+    aware of natively uses UTF-16 &mdash; you might as well use
+    platform-specific functions to do this translation. Libtabula
+    ships with two Visual C++ specific examples showing how to do this
+    in a GUI program.<footnote><para>The console examples don&rsquo;t
+    bother with such conversions since console programs are relatively
+    rare on Windows. If you want them to run correctly on Windows, you
+    can run them under the Cygwin MinTTY terminal, as it is natively
+    UTF-8 aware. You don&rsquo;t need to <emphasis>build</emphasis>
+    the console programs as native Cygwin programs for this to
+    work, just run the ones you built under VC++ in the Cygwin
+    terminal.</para></footnote></para>
 
     <para>How you handle Unicode data depends on whether you&#x2019;re
     using the native Windows API, or the newer .NET API. First, the
     native case:</para>
 
     <programlisting>
-// Convert a C string in UTF-8 format to UCS-2 format.
+// Convert a C string in UTF-8 format to UTF-16 format.
 void ToUCS2(LPTSTR pcOut, int nOutLen, const char* kpcIn)
 {
   MultiByteToWideChar(CP_UTF8, 0, kpcIn, -1, pcOut, nOutLen);
 }
 
-// Convert a UCS-2 string to C string in UTF-8 format.
+// Convert a UTF-16 string to C string in UTF-8 format.
 void ToUTF8(char* pcOut, int nOutLen, LPCWSTR kpcIn)
 {
   WideCharToMultiByte(CP_UTF8, 0, kpcIn, -1, pcOut, nOutLen, 0, 0);
@@ -157,13 +164,13 @@ void ToUTF8(char* pcOut, int nOutLen, LPCWSTR kpcIn)
     the .NET libraries for this:</para>
 
     <programlisting>
-// Convert a C string in UTF-8 format to a .NET String in UCS-2 format.
+// Convert a C string in UTF-8 format to a .NET String in UTF-16 format.
 String^ ToUCS2(const char* utf8)
 {
   return gcnew String(utf8, 0, strlen(utf8), System::Text::Encoding::UTF8);
 }
 
-// Convert a .NET String in UCS-2 format to a C string in UTF-8 format.
+// Convert a .NET String in UTF-16 format to a C string in UTF-8 format.
 System::Void ToUTF8(char* pcOut, int nOutLen, String^ sIn)
 {
   array&lt;Byte&gt;^ bytes = System::Text::Encoding::UTF8->GetBytes(sIn);
