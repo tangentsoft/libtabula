@@ -94,24 +94,35 @@
     frustrating exercise as the years wore on, and newer GCCs became
     popular.</para>
 
-    <para>In early August of 2004, Warren Young got fed up with this
-    situation and took over. He released 1.7.10 later that month,
-    which did little more than make the code build with GCC 3.3 without
-    warnings. Since then, with a little help from his friends on the
-    Net, MySQL++ has lost a lot of bugs, gained a lot of features,
-    gained a few more bugs, lost them again...</para>
+    <para>In early August of 2004, Warren Young got fed up with
+    this situation and took over. He released 1.7.10 later that
+    month, which did little more than make the code build with GCC
+    3.3 without warnings. Since then, with a little help from his
+    friends on the Net, MySQL++ has lost a lot of bugs, gained a lot
+    of features, gained a few more bugs, lost them again... Typical
+    spurts-and-lulls open source development occurred for the next
+    decade, culminating in MySQL++ 3.2.1.</para>
 
     <para>In May 2014, libtabula forked from MySQL++. The name change
     reflects the fact that MySQL++ only works with MySQL and its
     API-compatible forks, such as MariaDB. The initial version of
-    libtabula does all that, as well as supporting its first non-MySQL
-    type C DBMS access library, SQLite. Libtabula is still primarily
-    maintained by Warren Young of Educational Technology Resources,
-    as is MySQL++. In a very real sense, libtabula is &ldqou;MySQL++
-    4.0.&rdquo; It is a benign fork, not an angry fork. MySQL++ will
-    likely get very little new code following this fork, but that is
-    no different than what would have happened if we&rsquo;d called
-    it MySQL++ 4.0 and kept it in the same code repository.</para>
+    libtabula supports SQLite in addition to MySQL and compatibles.
+    The idea is that it will grow to add other DBMSes as contributors
+    scratch their itches.</para>
+
+    <para>Libtabula is still primarily maintained by Warren Young of
+    Educational Technology Resources, as is MySQL++. In a very real
+    sense, libtabula is &ldqou;MySQL++ 4.0.&rdquo; It is a benign fork,
+    not an angry fork.</para>
+    
+    <para>MySQL++ will likely get very little new code following
+    this fork, but that is no different than what would have
+    happened if we&rsquo;d called it MySQL++ 4.0 and kept it in
+    the same code repository. MySQL++ has never haad the notion of
+    development and stable branches, with parallel development on
+    both. Instead, MySQL++ (and now libtabula) experiences occasional
+    freeze-and-release events, then work on the next version starts
+    up again on the code repository trunk.</para>
   </sect2>
 
 
