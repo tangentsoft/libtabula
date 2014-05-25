@@ -1,6 +1,6 @@
 Building the Examples
 ~~~~~~~~~~~~~~~~~~~~~
-    If you're installing Libtabula++ from the source tarball, the example
+    If you're installing Libtabula from the source tarball, the example
     programs get built when you build the library.  If you change
     any example code, just say 'make' to rebuild the examples.
     The examples are built against the headers and library in the
@@ -16,7 +16,7 @@ Building the Examples
 
 Getting Started with the Examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Libtabula++ is built as a shared library on most systems, and a DLL
+    Libtabula is built as a shared library on most systems, and a DLL
     on Windows.  Since it isn't built in the same directory as the
     examples, this means that your system won't be able to find the
     library without help until you install it.  Since you generally
@@ -34,7 +34,7 @@ Getting Started with the Examples
 
     On Windows, that would instead be:
 
-        C:\mysql++\> exrun.bat resetdb [-s server] [-u user] [-p pass]
+        C:\libtabula> exrun.bat resetdb [-s server] [-u user] [-p pass]
 
     You don't have to give any of these options.  If you don't pass -s,
     it assumes the database server is running on the same machine,
@@ -78,7 +78,7 @@ Running the Other Command Line Examples
             SSQLS sections in the user manual for details about
             these examples.
 
-        multiquery: Libtabula++ allows you to issue multiple queries at
+        multiquery: Libtabula allows you to issue multiple queries at
             once, and get the results as separate sets.  This shows
             that, and also how to use stored procedures, which return
             their results in the same way as a multiquery.
@@ -122,7 +122,7 @@ Running the Other Command Line Examples
 
     If you run the load_jpeg example, you should consider also
     playing with the other half of the demonstration, cgi_jpeg.
-    To run it, you'll need to install Libtabula++ on a machine with
+    To run it, you'll need to install Libtabula on a machine with
     a web server, then copy the cgi_jpeg program to the server's
     CGI directory.  For example, on a stock Red Hat type box,
     that would be /var/www/cgi-bin.  At that point, a request like
@@ -140,10 +140,10 @@ Dedicated Windows Examples
         examples\vstudio\wforms.vcproj: The same thing, only written in
             C++/CLI and using Windows Forms.  Please follow the
             instructions in README-Visual-C++.txt before trying to
-            build and run this example.  The Libtabula++ library build
+            build and run this example.  The Libtabula library build
             settings must be modified and the library rebuilt first.
 
-    Although these examples show use of Libtabula++ in a GUI rather than
+    Although these examples show use of Libtabula in a GUI rather than
     command line program, that's not the main point of these examples.
     What we're really showing here is how to deal with Unicode.
     The Libtabula server prefers the UTF-8 encoding for Unicode, which

@@ -3,22 +3,24 @@
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
 <sect1 id="configuration">
-  <title>Configuring MySQL++</title>
+  <title>Configuring Libtabula</title>
 
-  <para>The default configuration of MySQL++ is suitable for most
+  <para>The default configuration of libtabula is suitable for most
   purposes, but there are a few things you can change to make it meet
   special needs.</para>
 
   <sect2 id="mysql-loc">
-    <title>The Location of the MySQL Development Files</title>
+    <title>The Location of the C API Development Files</title>
 
-    <para>MySQL++ is built on top
-    of the MySQL C API. (Now called <ulink
-    url="https://dev.mysql.com/downloads/connector/c/">Connector/C</ulink>.)
-    MySQL++ relies on this low-level library for all communication
-    with the database server. Consequently, the build process for
-    MySQL++ may fail if it can&#x2019;t find the C API headers and
-    library.</para>
+    <para>Libtabula can be built against several C DBMS
+    APIs such as <filename>libsqlite3<.filename> and <ulink
+    url="https://dev.mysql.com/downloads/connector/c/">Connector/C</ulink>.
+    The library build process tries to find these automattically,
+    but sometimes it needs guidance, particularly when you install
+    these files somewhere nonstandard. I&rsquo;ts a particular problem
+    on Windows, where installation directories are often versioned,
+    so each release of libtabula just has to guess at a few version
+    numbers common at the time of release.</para>
 
     <para>On platforms that use Autoconf<footnote><para>Linux,
     Solaris, the BSDs, Mac OS X command line (as opposed to the
@@ -40,30 +42,23 @@
     <computeroutput>--with-mysql-lib</computeroutput> flags. See
     <filename>README-Unix.txt</filename> for details.</para>
 
-    <para>No other platform allows this sort of auto-discovery, so
-    the build files for these platforms simply hard-code the default
-    installation location for the current GA version of Connector/C
-    at the time that version of MySQL++ was released. For example,
-    the Visual C++ project files currently assume MySQL is in
-    <filename>c:\Program Files\MySQL\MySQL Server 5.1</filename>. If
-    you&#x2019;re using some other release of MySQL or you installed it
-    somewhere else, you will have to modify the build files.  How you
-    do this, exactly, varies based on platform and what tools you
-    have on hand. See <filename>README-Visual-C++.txt</filename>,
-    <filename>README-MinGW.txt</filename>, or
-    <filename>README-Mac-OS-X.txt</filename>, as appropriate.</para>
+    <para>If you need to modify the build system files, per-platform
+    instructions are in
+    <filename>README-Visual-C++.txt</filename>,
+    <filename>README-MinGW.txt</filename>, and
+    <filename>README-Mac-OS-X.txt</filename>.</para>
   </sect2>
 
 
   <sect2 id="max-fields">
     <title>The Maximum Number of Fields Allowed</title>
 
-    <para>MySQL++ offers two ways to automatically build SQL
-    queries at run time: <xref linkend="tquery"/> and <link
+    <para>Libtabula offers two ways to automatically build
+    SQL queries at run time: <xref linkend="tquery"/> and <link
     linkend="ssqls">SSQLS</link>. There&#x2019;s a limit on the number
     of fields these mechanisms support, defaulting to 25 fields in the
-    official MySQL++ packages.<footnote><para>If you&#x2019;re using
-    a third-party MySQL++ package, its maintainer may have increased
+    official libtabula packages.<footnote><para>If you&#x2019;re using
+    a third-party libtabula package, its maintainer may have increased
     these field counts so the resulting headers more closely approach
     the size limit of the compiler the package was built with. In that
     case, you can look at the top of each generated header file to
@@ -103,7 +98,7 @@
 
       <listitem>
         <para>Because it increases the size of two key files used
-        in building MySQL++ itself and programs built on it, it
+        in building libtabula itself and programs built on it, it
         increases compile times significantly. One test I did here
         showed a tripling of compile time from quadrupling the field
         limit.</para>
@@ -119,7 +114,7 @@
     factors while still being high enough to be useful with most
     DB designs.</para>
 
-    <para>If you&#x2019;re building MySQL++ from source on a platform
+    <para>If you&#x2019;re building libtabula from source on a platform
     that uses Autoconf, the easiest way to change these limits is at
     configuration time:</para>
 
@@ -130,14 +125,14 @@
     <command>-f</command> flag to the two Perl scripts named above,
     overriding the default of 25 fields. Obviously you need a
     Perl interpreter on the system for this to work, but Perl is
-    usually installed by default on systems MySQL++ supports via
+    usually installed by default on systems libtabula supports via
     Autoconf.</para>
 
     <para>On all other platforms, you&#x2019;ll have to give the
     <command>-f</command> flag to these scripts yourself. This
-    may require installing Perl and putting it in the command
-    path first. Having done that, you can do something like this to
-    raise the limits:</para>
+    may require installing Perl and putting it in the command path
+    first. Having done that, you can do something like this to raise
+    the limits:</para>
 
     <screen>
 cd lib
@@ -145,7 +140,7 @@ perl ssqls.pl -f 50
 perl querydef.pl -f 50</screen>
 
     <para>Note the need to run these commands within the
-    <filename>lib</filename> subdirectory of the MySQL++ source
+    <filename>src</filename> subdirectory of the libtabula source
     tree. (This is done for you automatically on systems where you
     are able to use the Autoconf method.)</para>
   </sect2>
@@ -160,10 +155,10 @@ perl querydef.pl -f 50</screen>
     C API headers are in <filename>/usr/include/mysql</filename>, we
     say they are &#x201C;buried&#x201D; underneath the system&#x2019;s
     main include directory, <filename>/usr/include</filename>. Since
-    the MySQL++ headers depend on these C API headers, it can be
-    useful for MySQL++ to know this fact.</para>
+    the libtabula headers depend on these C API headers, it can be
+    useful for libtabula to know this fact.</para>
 
-    <para>When MySQL++ includes one of the C API headers, it normally
+    <para>When libtabula includes one of the C API headers, it normally
     does so in the obvious way:</para>
 
     <programlisting>
@@ -171,8 +166,8 @@ perl querydef.pl -f 50</screen>
 </programlisting>
 
     <para>But, if you define the
-    <varname>LIBTABULA_MYSQL_HEADERS_BURIED</varname> macro, it switches
-    to this style:</para>
+    <varname>LIBTABULA_MYSQL_HEADERS_BURIED</varname> macro, it
+    switches to this style:</para>
 
     <programlisting>
 #include &lt;mysql/mysql.h&gt;
@@ -185,27 +180,26 @@ perl querydef.pl -f 50</screen>
 
 
   <sect2 id="c99">
-    <title>Building MySQL++ on Systems Without Complete C99
-    Support</title>
+    <title>Building on Systems Without Complete C99 Support</title>
 
-    <para>MySQL++ uses the <ulink
+    <para>Libtabula uses the <ulink
     url="http://en.wikipedia.org/wiki/C_(programming_language)#C99">C99</ulink>
     header <filename>stdint.h</filename> for portable fixed-size
-    integer typedefs where possible. The C99 extensions aren&#x2019;t
-    yet officially part of the C++ Standard, so there are still
-    some C++ compilers that don&#x2019;t offer this header. MySQL++
-    works around the lack of this header where it knows it needs
-    to, but your platform might not be recognized, causing
-    the build to break. If this happens, you can define the
-    <varname>LIBTABULA_NO_STDINT_H</varname> macro to make MySQL++
+    integer typedefs where possible. The C99 extensions
+    aren&#x2019;t yet officially part of the C++ Standard, so
+    there are still some C++ compilers that don&#x2019;t offer this
+    header. Libtabula works around the lack of this header where it
+    knows it needs to, but your platform might not be recognized,
+    causing the build to break. If this happens, you can define the
+    <varname>LIBTABULA_NO_STDINT_H</varname> macro to make libtabula
     use its best guess for suitable integer types instead of relying
     on <filename>stdint.h</filename>.</para>
 
-    <para>MySQL++ also uses C99&#x2019;s <type>long long</type>
-    data type where available. MySQL++ has workarounds for platforms
-    where this is known not to be available, but if you get errors in
-    <filename>common.h</filename> about this type, you can define the
-    macro <varname>LIBTABULA_NO_LONG_LONGS</varname> to make MySQL++
-    fall back to portable constructs.</para>
+    <para>Libtabula also uses C99&#x2019;s <type>long long</type>
+    data type where available. Libtabula has workarounds for platforms
+    where this is known not to be available, but if you get errors
+    in <filename>common.h</filename> about this type, you can define
+    the macro <varname>LIBTABULA_NO_LONG_LONGS</varname> to make
+    libtabula fall back to portable constructs.</para>
   </sect2>
 </sect1>

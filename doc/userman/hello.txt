@@ -1,8 +1,8 @@
-#include <mysql++.h>
+#include <libtabula.h>
 
 int main()
 {
-    mysqlpp::String greeting("Hello, world!");
+    libtabula::String greeting("Hello, world!");
     std::cout << greeting << std::endl;
     return 0;
 }

@@ -3,24 +3,24 @@
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
 <sect1 id="incorporating">
-  <title>Using MySQL++ in Your Own Project</title>
+  <title>Using Libtabula in Your Own Project</title>
 
-  <para>Up to now, this manual has only discussed MySQL++
+  <para>Up to now, this manual has only discussed libtabula
   in conjunction with the example programs that come with the
   library. This chapter covers the steps you need to take to
-  incorporate MySQL++ into your own projects.</para>
+  incorporate libtabula into your own projects.</para>
 
   <para>The first thing you have to do is include
-  <filename>mysql++.h</filename> in each module
-  that uses MySQL++. In modules that use <link
+  <filename>libtabula.h</filename> in each module
+  that uses libtabula. In modules that use <link
   linkend="ssqls">SSQLS v1</link>, you also need to include
-  <filename>ssqls.h</filename>.<footnote><para>MySQL++ has many header
+  <filename>ssqls.h</filename>.<footnote><para>Libtabula has many header
   files, but the only one that isn&#x2019;t intertwined with the rest is
-  <filename>ssqls.h</filename>. <filename>mysql++.h</filename> brings
+  <filename>ssqls.h</filename>. <filename>libtabula.h</filename> brings
   in all of the others in the correct order. Some have tried to speed
-  their build times by finding a subset of MySQL++ headers to include,
-  but <filename>mysql++.h</filename> already does as much of this as
-  is practical. MySQL++&#x2019;s monolithic nature rules out finding
+  their build times by finding a subset of libtabula headers to include,
+  but <filename>libtabula.h</filename> already does as much of this as
+  is practical. Libtabula&#x2019;s monolithic nature rules out finding
   a true subset of the library headers.</para></footnote></para>
 
   <para>At this point, your project probably still won&#x2019;t compile,
@@ -35,7 +35,7 @@
     <title>Visual C++</title>
 
     <sect3 id="inc-vstudio-mfc">
-      <title>Using MySQL++ in an MFC Project</title>
+      <title>Using Libtabula in an MFC Project</title>
 
       <para>If you don&#x2019;t already have a project set up, open
       Visual Studio, say File | New | Project, then choose Visual C++
@@ -52,7 +52,7 @@
         <listitem><para>Append the following to C/C++ | General |
         Additional Include Directories: <filename>C:\Program
         Files\MySQL\MySQL Connector C 6.1\include,
-        C:\mysql++\include</filename></para></listitem>
+        C:\libtabula\include</filename></para></listitem>
 
         <listitem><para>Under C/C++ | Code Generation change
         &#x201C;Runtime Library&#x201D; to &#x201C;Multi-threaded
@@ -64,7 +64,7 @@
           <para>For both Release and Debug builds, append the following
           to Linker | General | Additional Library Directories:
           <filename>C:\Program Files\MySQL\MySQL Connector C 6.1\lib,
-          C:\mysql++\lib</filename></para>
+          C:\libtabula\lib</filename></para>
 
           <para>Connector/C does include debug libraries, but you
           will probably not need to use them.</p>
@@ -74,13 +74,13 @@
           <para>Under Linker | Input add the following to
           &#x201C;Additional Dependencies&#x201D; for the Debug
           configuration: <filename>libmysql.lib wsock32.lib
-          mysqlpp_d.lib</filename></para>
+          libtabula_d.lib</filename></para>
 
           <para>...and then for the Release configuration:
           <filename>libmysql.lib wsock32.lib
-          mysqlpp.lib</filename></para>
+          libtabula.lib</filename></para>
 
-          <para>This difference is because MySQL++&#x2019;s Debug
+          <para>This difference is because libtabula&#x2019;s Debug
           DLL and import library have a <filename>_d</filename>
           suffix so you can have both in the same directory without
           conflicts.</para>
@@ -91,17 +91,17 @@
       <filename>examples\vstudio\mfc\mfc.vcproj</filename>
       to see this in action. Note that some of the paths will
       be different, because it can use relative paths for
-      <filename>mysqlpp.dll</filename>.</para>
+      <filename>libtabula.dll</filename>.</para>
     </sect3>
 
 
     <sect3 id="inc-vstudio-wforms">
-      <title>Using MySQL++ in a Windows Forms C++/CLI Project</title>
+      <title>Using Libtabula in a Windows Forms C++/CLI Project</title>
 
-      <para>Before you start work on getting MySQL++ working with your
-      own program, you need to make some changes to the MySQL++ build
-      settings. Open <filename>mysqlpp.sln</filename>, then right-click
-      on the mysqlpp target and select Properties. Make the following
+      <para>Before you start work on getting libtabula working with your
+      own program, you need to make some changes to the libtabula build
+      settings. Open <filename>libtabula.sln</filename>, then right-click
+      on the libtabula target and select Properties. Make the following
       changes for both the Debug and Release configurations:</para>
 
       <itemizedlist>
@@ -115,26 +115,26 @@
         (/EHa)&#x201D;</para></listitem>
       </itemizedlist>
 
-      <para>If you have already built MySQL++, be sure to perform a
+      <para>If you have already built libtabula, be sure to perform a
       complete rebuild after changing these options.  The compiler
       will emit several C4835 warnings after making those changes,
       which are harmless when using the DLL with a C++/CLI
       program, but which warn of real problems when using it with
-      unmanaged C++.  This is why MySQL++&#x2019;s Windows installer
+      unmanaged C++.  This is why libtabula&#x2019;s Windows installer
       (<filename>install.hta</filename>) offers the option to install
       the CLR version into a separate directory; use it if you need
       both managed and unmanaged versions installed!</para>
 
       <para>For the same reason, you might give some thought about
-      where you install <filename>mysqlpp.dll</filename> on your
+      where you install <filename>libtabula.dll</filename> on your
       end user&#x2019;s machines when distributing your program.
       My recommendation is to install it in the same directory as
       the <filename>.exe</filename> file that uses it, rather than
       installing into a system directory where it could conflict
-      with a <filename>mysqlpp.dll</filename> built with different
+      with a <filename>libtabula.dll</filename> built with different
       settings.</para>
 
-      <para>Once you have MySQL++ built with CLR support, open your
+      <para>Once you have libtabula built with CLR support, open your
       program&#x2019;s project.  If you don&#x2019;t already have a
       project set up, open Visual Studio, say File | New | Project,
       then choose Visual C++ | CLR | Windows Forms Application.
@@ -150,7 +150,7 @@
         <listitem><para>Under Configuration Properties | General
         change the setting from /clr:pure to /clr.  (You need mixed
         assembly support to allow a C++/CLI program to use a plain C++
-        library like MySQL++.)</para></listitem>
+        library like libtabula.)</para></listitem>
 
         <listitem><para>For the Linker | Input settings, you
         don&#x2019;t need <filename>wsock32.lib</filename>. The mere
@@ -169,8 +169,8 @@
       <filename>examples\vstudio\wforms\wforms.vcproj</filename>
       to see all this in action. Note that some of the
       paths will be different, because it can use relative
-      paths for <filename>mysqlpp_d.dll</filename> and
-      <filename>mysqlpp.dll</filename>.</para>
+      paths for <filename>libtabula_d.dll</filename> and
+      <filename>libtabula.dll</filename>.</para>
     </sect3>
   </sect2>
 
@@ -185,7 +185,7 @@
     to more sophisticated build systems such as GNU Autotools or
     Bakefile.</para>
 
-    <para>&#x201C;Hello, world!&#x201D; for MySQL++ might look something
+    <para>&#x201C;Hello, world!&#x201D; for libtabula might look something
     like this:</para>
 
     <programlisting><xi:include href="hello.txt" parse="text"
@@ -203,8 +203,8 @@
     and so will require changing.</para>
 
     <para>The trickiest line is the <varname>LDLIBS</varname>
-    one. MySQL++ programs need to get built against both the MySQL
-    and MySQL++ libraries, because MySQL++ is built on top of the
+    one. libtabula programs need to get built against both the MySQL
+    and libtabula libraries, because libtabula is built on top of the
     MySQL C API library<footnote><para>The MySQL C API library
     is most commonly called <filename>libmysqlclient</filename>
     on Unixy systems, though it is also known as <ulink
@@ -218,13 +218,13 @@
     <para>On some systems, the order of libraries in the
     <varname>LDLIBS</varname> line is important: these linkers collect
     symbols from right to left, so the rightmost library needs to
-    be the most generic. In this example, MySQL++ depends on MySQL,
+    be the most generic. In this example, libtabula depends on MySQL,
     so the MySQL C API library is rightmost.</para>
 
     <para>You might need to add more libraries to the
     <varname>LDLIBS</varname> line. <filename>-lnsl</filename>,
     <filename>-lz</filename> and <filename>-lm</filename> are
-    common. If you study how MySQL++ itself gets built on your system,
+    common. If you study how libtabula itself gets built on your system,
     you can see what it uses, and emulate that.</para>
 
     <para>You may be wondering why we have used both
@@ -263,7 +263,7 @@
 
       <para>Another tricky bit on OS X is the concept of Universal
       binaries. See <filename>README-Mac-OS-X.txt</filename> for
-      details on building a Universal version of the MySQL++ library,
+      details on building a Universal version of the libtabula library,
       if you need one. By default, you only get a version tuned for
       the system type you build it on.</para>
     </sect3>
@@ -271,8 +271,8 @@
     <sect3 id="inc-osx-xcode">
       <title>Xcode</title>
 
-      <para>I have no information on how to incorporate MySQL++ in
-      an Xcode project. Send a message to the MySQL++ mailing list
+      <para>I have no information on how to incorporate libtabula in
+      an Xcode project. Send a message to the libtabula mailing list
       if you can help out here.</para>
     </sect3>
   </sect2>

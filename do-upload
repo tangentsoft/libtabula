@@ -1,5 +1,5 @@
 #!/bin/sh
-CFG_FILE=~/.mysqlpp
+CFG_FILE=~/.libtabula
 if [ ! -f $CFG_FILE ]
 then
 	echo Create $CFG_FILE, please.
@@ -11,12 +11,12 @@ fi
 if [ ! -f config.h ]
 then
 	echo Package hasn't yet been built, or you aren't in the top
-	echo mysql++ directory.
+	echo libtabula directory.
 	echo
 	exit 1
 fi
 
-VERSION=`grep ^Version: mysql++.spec | awk '{ print $2 }'`
+VERSION=`grep ^Version: libtabula.spec | awk '{ print $2 }'`
 case "$VERSION" in
 	*alpha*) SSH_TARGET=$SSH_TARGET/test ;;
 	*beta*) SSH_TARGET=$SSH_TARGET/test ;;
@@ -24,31 +24,31 @@ case "$VERSION" in
 	*) SSH_TARGET=$SSH_TARGET/releases ;;
 esac
 
-TMPDIR=`mktemp -d /tmp/mysqlpp-up.XXXXXXXXXX`
+TMPDIR=`mktemp -d /tmp/libtabula-up.XXXXXXXXXX`
 
 for action in $*
 do
 	case $action in
 		src)
-			if [ ! -e mysql++-$VERSION.tar.gz ]
+			if [ ! -e libtabula-$VERSION.tar.gz ]
 			then
 				make dist
 			fi
-			cp mysql++-$VERSION.tar.gz $TMPDIR
+			cp libtabula-$VERSION.tar.gz $TMPDIR
 
-			if [ ! -e /usr/src/redhat/SRPMS/mysql++-$VERSION-1.src.rpm ]
+			if [ ! -e /usr/src/redhat/SRPMS/libtabula-$VERSION-1.src.rpm ]
 			then
 				make srpm
 			fi
-			cp /usr/src/redhat/SRPMS/mysql++-$VERSION-1.src.rpm $TMPDIR
+			cp /usr/src/redhat/SRPMS/libtabula-$VERSION-1.src.rpm $TMPDIR
 			;;
 
 		man)
-			if [ ! -e /usr/src/redhat/RPMS/i386/mysql++-manuals-$VERSION-1.i386.rpm ]
+			if [ ! -e /usr/src/redhat/RPMS/i386/libtabula-manuals-$VERSION-1.i386.rpm ]
 			then
 				make rpm
 			fi
-			cp /usr/src/redhat/RPMS/i386/mysql++-manuals-$VERSION-1.i386.rpm $TMPDIR
+			cp /usr/src/redhat/RPMS/i386/libtabula-manuals-$VERSION-1.i386.rpm $TMPDIR
 			;;
 
 		*)
@@ -57,10 +57,10 @@ do
 	esac
 done
 
-cp /usr/src/redhat/RPMS/i386/mysql++-$VERSION-1.i386.rpm \
-		$TMPDIR/mysql++-$VERSION-1.`./osver`.i386.rpm
-cp /usr/src/redhat/RPMS/i386/mysql++-devel-$VERSION-1.i386.rpm \
-		$TMPDIR/mysql++-devel-$VERSION-1.`./osver`.i386.rpm
+cp /usr/src/redhat/RPMS/i386/libtabula-$VERSION-1.i386.rpm \
+		$TMPDIR/libtabula-$VERSION-1.`./osver`.i386.rpm
+cp /usr/src/redhat/RPMS/i386/libtabula-devel-$VERSION-1.i386.rpm \
+		$TMPDIR/libtabula-devel-$VERSION-1.`./osver`.i386.rpm
 
 scp $SSH_OPTIONS $TMPDIR/* $SSH_TARGET
 

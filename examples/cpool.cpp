@@ -40,13 +40,13 @@ using namespace std;
 // a global pointer to an object of this type, which we create soon
 // after startup; this should be a common usage pattern, as what use
 // are multiple pools?
-class SimpleConnectionPool : public mysqlpp::ConnectionPool
+class SimpleConnectionPool : public libtabula::ConnectionPool
 {
 public:
 	// The object's only constructor
-	SimpleConnectionPool(mysqlpp::examples::CommandLine& cl) :
+	SimpleConnectionPool(libtabula::examples::CommandLine& cl) :
 	conns_in_use_(0),
-	db_(mysqlpp::examples::db_name),
+	db_(libtabula::examples::db_name),
 	server_(cl.server()),
 	user_(cl.user()),
 	password_(cl.pass())
@@ -65,7 +65,7 @@ public:
 	// already.  Can't do this in create() because we're interested in
 	// connections actually in use, not those created.  Also note that
 	// we keep our own count; ConnectionPool::size() isn't the same!
-	mysqlpp::Connection* grab()
+	libtabula::Connection* grab()
 	{
 		while (conns_in_use_ > 8) {
 			cout.put('R'); cout.flush(); // indicate waiting for release
@@ -73,32 +73,32 @@ public:
 		}
 
 		++conns_in_use_;
-		return mysqlpp::ConnectionPool::grab();
+		return libtabula::ConnectionPool::grab();
 	}
 
 	// Other half of in-use conn count limit
-	void release(const mysqlpp::Connection* pc)
+	void release(const libtabula::Connection* pc)
 	{
-		mysqlpp::ConnectionPool::release(pc);
+		libtabula::ConnectionPool::release(pc);
 		--conns_in_use_;
 	}
 
 protected:
 	// Superclass overrides
-	mysqlpp::Connection* create()
+	libtabula::Connection* create()
 	{
 		// Create connection using the parameters we were passed upon
 		// creation.  This could be something much more complex, but for
 		// the purposes of the example, this suffices.
 		cout.put('C'); cout.flush(); // indicate connection creation
-		return new mysqlpp::Connection(
+		return new libtabula::Connection(
 				db_.empty() ? 0 : db_.c_str(),
 				server_.empty() ? 0 : server_.c_str(),
 				user_.empty() ? 0 : user_.c_str(),
 				password_.empty() ? "" : password_.c_str());
 	}
 
-	void destroy(mysqlpp::Connection* cp)
+	void destroy(libtabula::Connection* cp)
 	{
 		// Our superclass can't know how we created the Connection, so
 		// it delegates destruction to us, to be safe.
@@ -135,7 +135,7 @@ worker_thread(thread_arg_t running_flag)
 	// that this won't happen.  Anyway, this is an example program,
 	// meant to show good style, so we take the high road and ensure the
 	// resources are allocated before we do any queries.
-	mysqlpp::Connection::thread_start();
+	libtabula::Connection::thread_start();
 	cout.put('S'); cout.flush(); // indicate thread started
 
 	// Pull data from the sample table a bunch of times, releasing the
@@ -145,7 +145,7 @@ worker_thread(thread_arg_t running_flag)
 		// if there are no free conns yet.  Uses safe_grab() to get a
 		// connection from the pool that will be automatically returned
 		// to the pool when this loop iteration finishes.
-		mysqlpp::ScopedConnection cp(*poolptr, true);
+		libtabula::ScopedConnection cp(*poolptr, true);
 		if (!cp) {
 			cerr << "Failed to get a connection from the pool!" << endl;
 			break;
@@ -153,8 +153,8 @@ worker_thread(thread_arg_t running_flag)
 
 		// Pull a copy of the sample stock table and print a dot for
 		// each row in the result set.
-		mysqlpp::Query query(cp->query("select * from stock"));
-		mysqlpp::StoreQueryResult res = query.store();
+		libtabula::Query query(cp->query("select * from stock"));
+		libtabula::StoreQueryResult res = query.store();
 		for (size_t j = 0; j < res.num_rows(); ++j) {
 			cout.put('.');
 		}
@@ -170,7 +170,7 @@ worker_thread(thread_arg_t running_flag)
 	cout.put('E'); cout.flush(); // indicate thread ended
 	
 	// Release the per-thread resources before we exit
-	mysqlpp::Connection::thread_end();
+	libtabula::Connection::thread_end();
 
 	return 0;
 }
@@ -182,7 +182,7 @@ main(int argc, char *argv[])
 {
 #if defined(HAVE_THREADS)
 	// Get database access parameters from command line
-	mysqlpp::examples::CommandLine cmdline(argc, argv);
+	libtabula::examples::CommandLine cmdline(argc, argv);
 	if (!cmdline) {
 		return 1;
 	}
@@ -196,14 +196,14 @@ main(int argc, char *argv[])
 	// awareness turned on.  See README-*.txt for your platform.
 	poolptr = new SimpleConnectionPool(cmdline);
 	try {
-		mysqlpp::ScopedConnection cp(*poolptr, true);
+		libtabula::ScopedConnection cp(*poolptr, true);
 		if (!cp->thread_aware()) {
 			cerr << "Libtabula wasn't built with thread awareness!  " <<
 					argv[0] << " can't run without it." << endl;
 			return 1;
 		}
 	}
-	catch (mysqlpp::Exception& e) {
+	catch (libtabula::Exception& e) {
 		cerr << "Failed to set up initial pooled connection: " <<
 				e.what() << endl;
 		return 1;

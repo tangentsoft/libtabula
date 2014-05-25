@@ -1,7 +1,7 @@
 Prerequisites
 ~~~~~~~~~~~~~
-    You need to have the Libtabula C API development files on your system,
-    since Libtabula++ is built on top of it.
+    You need to have the Libtabula C API development files on your
+    system, since libtabula is built on top of it.
 
     The easiest way to get it is to download Connector/C from
     mysql.com.
@@ -20,11 +20,11 @@ Project Files
 
     We do this for several reasons:
 
-      1. It lets you build Libtabula++ with multiple versions of Visual
+      1. It lets you build libtabula with multiple versions of Visual
          C++ without the build products conflicting.
 
       2. For Visual C++ 2003, we had to disable the SSQLS feature
-         because changes made in Libtabula++ 3.0 now cause the compiler
+         because changes made in libtabula 3.0 now cause the compiler
          to crash while building.  See the Breakages chapter in the
          user manual for workarounds if you must still use VC++ 2003.
 
@@ -36,12 +36,12 @@ Project Files
 
          VC++ 2005 did have experimental 64-bit compilers available,
          but their beta nature was only one reason we chose not to
-         use them.  The real reason is that the current Libtabula++ build
+         use them.  The real reason is that the current libtabula build
          system isn't currently set up to make it easy to build both
          32- and 64-bit libraries and executables at the same time
          within the same solution.  Bakefile allows it, but it would
-         require forking many of the build rules in mysql++.bkl so
-         we can do things like have separate MYSQL_WIN_DIR values
+         require forking many of the build rules in libtabula.bkl
+         so we can do things like have separate MYSQL_WIN_DIR values
          for each bitness.  (See below for more on this variable.)
 
          For that same reason, the VC++ 2008 project files are set
@@ -55,12 +55,12 @@ Project Files
     easiest to open the vc2005\* project files and let Visual Studio
     upgrade them for you.  The alternative, starting with the vc2008
     files, requires that you add a 32-bit build option to all of the
-    many targets in Libtabula++, then optionally delete the 64-bit targets.
-    This is a lot more work.  Plus, it only works if you have the
-    64-bit compilers installed, since Visual Studio will refuse to
-    open project files where all targets must be built with compilers
-    that aren't installed, even if your goal is to immediately adjust
-    them to use compilers that *are* installed.
+    many targets in libtabula, then optionally delete the 64-bit
+    targets.  This is a lot more work.  Plus, it only works if you
+    have the 64-bit compilers installed, since Visual Studio will
+    refuse to open project files where all targets must be built
+    with compilers that aren't installed, even if your goal is to
+    immediately adjust them to use compilers that *are* installed.
 
     When converting the VC++ 2008 project files to VC++ 2012, Visual
     Studio will change the output directories from Debug to Debug\x64
@@ -78,7 +78,7 @@ Project Files
 
 Using Nonstandard Libtabula Installations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    The Visual Studio project files that come with Libtabula++ have
+    The Visual Studio project files that come with libtabula have
     everything set up correctly for the common case.  The biggest
     assumption in the settings is that you're building against the
     current stable version of Connector/C, which gets installed here
@@ -87,10 +87,10 @@ Using Nonstandard Libtabula Installations
         C:\Program Files\Libtabula\Libtabula Connector C 6.1\
 
     If you installed a different version, or it's in a different
-    directory, or you've installed the development files as part of
-    Libtabula Server on the same machine, you need to change the project
-    files to reference the C API development files in that other
-    location.  There are two ways to do this.
+    directory, or you've installed the development files as part
+    of Libtabula Server on the same machine, you need to change the
+    project files to reference the C API development files in that
+    other location.  There are two ways to do this.
 
     The hard way is to make 16 different changes each to 44 separate
     project files.  If you're a talented Visual Studio driver,
@@ -105,18 +105,25 @@ Using Nonstandard Libtabula Installations
 
     The easy way is to install Bakefile (http://bakefile.org/),
     change the value of the MYSQL_WIN_DIR variable near the top of
-    mysql++.bkl in the top level of the Libtabula++ source tree, and run
-    rebake.bat.  This will rebuild all of the project files for you,
-    using the new Libtabula path in all the many places it's needed.
+    libtabula.bkl in the top level of the libtabula source tree,
+    and run rebake.bat.  This will rebuild all of the project
+    files for you, using the new Libtabula path in all the many
+    places it's needed.  The easy way is to install Bakefile
+    (http://bakefile.org/), change the value of the MYSQL_WIN_DIR
+    variable near the top of libtabula.bkl in the top level of the
+    libtabula source tree, and run rebake.bat.  This will rebuild
+    all of the project files for you, using the new Libtabula path
+    in all the many places it's needed.
 
 
 Building the Library and Example Programs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    You must build both the Debug and Release versions of the library,
-    because a release build of your program won't work with a Debug
-    version of the Libtabula++ DLL.  These DLLs get different names, so
-    you can install them in the same directory if needed: mysqlpp_d.dll
-    for the Debug version, and mysqlpp.dll for the Release version.
+    You must build both the Debug and Release versions of the
+    library, because a release build of your program won't work with
+    a Debug version of the libtabula DLL.  These DLLs get different
+    names, so you can install them in the same directory if needed:
+    libtabula_d.dll for the Debug version, and libtabula.dll for the
+    Release version.
 
     With the library built, run at least the resetdb and simple1
     examples to ensure that the library is working correctly.
@@ -136,26 +143,26 @@ Building the Library and Example Programs
     in a text editor to see how it works.)
 
 
-Using Libtabula++ in Your Own Projects
+Using Libtabula in Your Own Projects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     This is covered in the user manual, chapter 9.
 
 
 Working With Bakefile
 ~~~~~~~~~~~~~~~~~~~~~
-    Libtabula++'s top-level Visual Studio project files aren't
+    Libtabula's top-level Visual Studio project files aren't
     maintained directly.  Instead, we use a tool called Bakefile
-    (http://bakefile.org/) to generate them from mysql++.bkl. Since
-    there are so many project files in Libtabula++, it's often simpler to
+    (http://bakefile.org/) to generate them from libtabula.bkl. Since
+    there are so many project files in libtabula, it's often simpler to
     edit this source file and "re-bake" the project files from it than
     to make your changes in Visual Studio.
 
     To do this, download the native Windows version of Bakefile from the
     web site given above.  Install it, and then put the installation
     directory in your Windows PATH.  Then, open up a command window, cd
-    into the Libtabula++ directory, and type "rebake".  This will run
+    into the libtabula directory, and type "rebake".  This will run
     rebake.bat, which rebuilds the Visual Studio project files from
-    mysql++.bkl.
+    libtabula.bkl.
 
     There's more information about using Bakefile in HACKERS.txt.
 
@@ -166,5 +173,5 @@ If You Run Into Problems...
     settings match the above.  Visual C++ is very picky about things
     like run time library settings.  When in doubt, try running one
     of the example programs.  If it works, the problem is likely in
-    your project settings, not in Libtabula++.
+    your project settings, not in libtabula.
 

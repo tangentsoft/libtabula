@@ -8,18 +8,18 @@
 
  This file is part of libtabula
 
- Libtabula++ is free software; you can redistribute it and/or modify it
+ Libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula++ is distributed in the hope that it will be useful, but WITHOUT
+ Libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula++; if not, write to the Free Software
+ License along with Libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -61,7 +61,7 @@ test_float_conversion()
 
 	// This is trickier: Libtabula ignores the system locale when it comes
 	// to decimal separators, always using '.', so ensure the conversion
-	// stuff in Libtabula++ does the right thing regardless.  Test against
+	// stuff in Libtabula does the right thing regardless.  Test against
 	// this system's current locale, an arbitrary European one where ','
 	// is the decimal separator, and the "C" locale where it's '.'.
 	if (!test_equality(libtabula::String("621.200"), 621.2)) return false;
@@ -296,7 +296,7 @@ main(int, char* argv[])
 		return failures;
 	}
 	catch (libtabula::Exception& e) {
-		std::cerr << "Unexpected Libtabula++ exception caught in " <<
+		std::cerr << "Unexpected Libtabula exception caught in " <<
 				argv[0] << ": " << e.what() << std::endl;
 		return 1;
 	}

@@ -1,6 +1,6 @@
-CXXFLAGS := -I/usr/include/mysql -I/usr/local/include/mysql++
+CXXFLAGS := -I/usr/include/mysql -I/usr/local/include/libtabula
 LDFLAGS := -L/usr/local/lib
-LDLIBS := -lmysqlpp -lmysqlclient
+LDLIBS := -ltabula -lmysqlclient
 EXECUTABLE := hello
 
 all: $(EXECUTABLE)

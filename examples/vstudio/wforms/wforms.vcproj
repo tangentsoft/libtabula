@@ -59,7 +59,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mysqlpp_d.lib libmysql.lib"
+				AdditionalDependencies="libtabula_d.lib libmysql.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\vc2005\Debug,C:\Program Files\Libtabula\Libtabula Server 5.0\lib\debug"
 				GenerateDebugInformation="true"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mysqlpp.lib libmysql.lib"
+				AdditionalDependencies="libtabula.lib libmysql.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\vc2005\Release,C:\Program Files\Libtabula\Libtabula Server 5.0\lib\opt"
 				GenerateDebugInformation="true"

@@ -12,29 +12,29 @@
  Warren Young.  Others may also hold copyrights on code in this file.
  See the CREDITS file in the top folder of the distribution for details.
 
- This file is part of Libtabula++.
+ This file is part of Libtabula.
 
- Libtabula++ is free software; you can redistribute it and/or modify it
+ Libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula++ is distributed in the hope that it will be useful, but WITHOUT
+ Libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula++; if not, write to the Free Software
+ License along with Libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Install Libtabula++ Development Files</title>
+		<title>Install Libtabula Development Files</title>
 
 		<hta:application
-			applicationname="mysqlppInstaller"
+			applicationname="libtabulaInstaller"
 			borderstyle="raised"
 			innerborder="no"
 			scroll="no"
@@ -167,8 +167,8 @@
 
 				// Install MinGW library build, if it exists
 				destSubDir = 'lib' + (usePlatform ? '\\MinGW' : '');
-				copyFile(null, 'libmysqlpp.a', baseInstallFolder, destSubDir);
-				copyFile(null, 'mysqlpp.dll', baseInstallFolder, destSubDir);
+				copyFile(null, 'libtabula.a', baseInstallFolder, destSubDir);
+				copyFile(null, 'libtabula.dll', baseInstallFolder, destSubDir);
 
 				// Install any and all existing VC++ library builds
 				for (i = 0; i < versions.length; ++i) {
@@ -181,23 +181,23 @@
 					}
 					
 					srcDir = version + '\\Debug';
-					copyFile(srcDir, 'mysqlpp_d.dll', baseInstallFolder, destSubDir);
-					copyFile(srcDir, 'mysqlpp_d.lib', baseInstallFolder, destSubDir);
+					copyFile(srcDir, 'libtabula_d.dll', baseInstallFolder, destSubDir);
+					copyFile(srcDir, 'libtabula_d.lib', baseInstallFolder, destSubDir);
 					
 					srcDir = version + '\\Release';
-					copyFile(srcDir, 'mysqlpp.dll', baseInstallFolder, destSubDir);
-					copyFile(srcDir, 'mysqlpp.lib', baseInstallFolder, destSubDir);
+					copyFile(srcDir, 'libtabula.dll', baseInstallFolder, destSubDir);
+					copyFile(srcDir, 'libtabula.lib', baseInstallFolder, destSubDir);
 				}
 
 				window.close();
 			}
 			
-			// Returns true if the Libtabula++ library for the given VC++
+			// Returns true if the Libtabula library for the given VC++
 			// version was built for use with the CLR.
 			function isManagedBuild(version)
 			{
 				var stream = fso.OpenTextFile(
-						version + '\\mysql++_mysqlpp.vcproj');
+						version + '\\libtabula.vcproj');
 				if (stream) {
 					var mloc = stream.ReadAll().indexOf('ManagedExtensions="1"');
 					stream.Close();
@@ -285,7 +285,7 @@
 			{
 				baseInstallFolder =
 						folderList.options[folderList.selectedIndex].text +
-						'Libtabula++' +
+						'Libtabula' +
 						(versionedFolderBox.checked ? '\\@PACKAGE_VERSION@' : '');
 				installTargetField.value =
 						baseInstallFolder +
@@ -299,7 +299,7 @@
 	
 	<body onload="init()">
 		<p>
-			Where would you like to install the Libtabula++ development
+			Where would you like to install the Libtabula development
 			files?<br/>
 
 			<table cellspacing="10" cellpadding="0" border="0" width="100%"

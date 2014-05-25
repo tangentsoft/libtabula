@@ -29,8 +29,8 @@ dnl
 dnl		--with-libtabula: Give prefix for both library and headers, and try
 dnl			to guess subdirectory names for each.  (e.g. tack /lib and
 dnl			/include onto given dir name, and other common schemes.)
-dnl		--with-libtabula-lib: Similar to --with-mysqlpp, but for library only.
-dnl		--with-libtabula-include: Similar to --with-mysqlpp, but for headers
+dnl		--with-libtabula-lib: Similar to --with-libtabula, but for library only.
+dnl		--with-libtabula-include: Similar to --with-libtabula, but for headers
 dnl			only.
 dnl
 dnl This macro depends on having the default compiler and linker flags
@@ -47,16 +47,16 @@ AC_DEFUN([LIBTABULA_DEVEL],
 	dnl
 	AC_ARG_WITH(libtabula,
 		[  --with-libtabula=<path>     path containing Libtabula header and library subdirs],
-		[LIBTABULA_lib_check="$with_libtabula/lib64 $with_mysqlpp/lib $with_mysqlpp/lib64/libtabula $with_mysqlpp/lib/mysql++"
-		  LIBTABULA_inc_check="$with_libtabula/include $with_mysqlpp/include/libtabula"],
-		[LIBTABULA_lib_check="/usr/local/libtabula/lib64 /usr/local/mysql++/lib /usr/local/lib64/mysql++ /usr/local/lib/mysql++ /opt/mysql++/lib64 /opt/mysql++/lib /usr/lib64/mysql++ /usr/lib/mysql++ /usr/local/lib64 /usr/local/lib /usr/lib64 /usr/lib"
-		  LIBTABULA_inc_check="/usr/local/libtabula/include /usr/local/include/mysql++ /opt/mysql++/include /usr/local/include/mysql++ /usr/local/include /usr/include/mysql++ /usr/include"])
+		[LIBTABULA_lib_check="$with_libtabula/lib64 $with_libtabula/lib $with_libtabula/lib64/libtabula $with_libtabula/lib/libtabula"
+		  LIBTABULA_inc_check="$with_libtabula/include $with_libtabula/include/libtabula"],
+		[LIBTABULA_lib_check="/usr/local/libtabula/lib64 /usr/local/libtabula/lib /usr/local/lib64/libtabula /usr/local/lib/libtabula /opt/libtabula/lib64 /opt/libtabula/lib /usr/lib64/libtabula /usr/lib/libtabula /usr/local/lib64 /usr/local/lib /usr/lib64 /usr/lib"
+		  LIBTABULA_inc_check="/usr/local/libtabula/include /usr/local/include/libtabula /opt/libtabula/include /usr/local/include/libtabula /usr/local/include /usr/include/libtabula /usr/include"])
 	AC_ARG_WITH(libtabula-lib,
 		[  --with-libtabula-lib=<path> directory path of Libtabula library],
-		[LIBTABULA_lib_check="$with_libtabula_lib $with_mysqlpp_lib/lib64 $with_mysqlpp_lib/lib $with_mysqlpp_lib/lib64/mysql $with_mysqlpp_lib/lib/mysql"])
+		[LIBTABULA_lib_check="$with_libtabula_lib $with_libtabula_lib/lib64 $with_libtabula_lib/lib $with_libtabula_lib/lib64/mysql $with_libtabula_lib/lib/mysql"])
 	AC_ARG_WITH(libtabula-include,
 		[  --with-libtabula-include=<path> directory path of Libtabula headers],
-		[LIBTABULA_inc_check="$with_libtabula_include $with_mysqlpp_include/include $with_mysqlpp_include/include/mysql"])
+		[LIBTABULA_inc_check="$with_libtabula_include $with_libtabula_include/include $with_libtabula_include/include/mysql"])
 
 	dnl
 	dnl Look for Libtabula library

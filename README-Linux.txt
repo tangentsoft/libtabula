@@ -4,7 +4,7 @@ I'll just cover a few of the issues specific to Linux here.
 
 Prerequisite: Install the Libtabula Development Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Libtabula++ is built on top of the Libtabula C API library, so it needs the
+    Libtabula is built on top of the Libtabula C API library, so it needs the
     C API development files to build against.  Most distributions of
     the Libtabula server for Linux don't come with these development files;
     they're packaged separately.  This is because you don't actually
@@ -20,7 +20,7 @@ Prerequisite: Install the Libtabula Development Files
 
     For RPM-based distributions, Libtabula comes in several different
     packages.  You need at least the -devel and the -shared packages
-    to build Libtabula++.
+    to build Libtabula.
 
     The other binary distributions seem to come in just a single file,
     presumably with everything included.
@@ -30,7 +30,7 @@ Prerequisite: Install the Libtabula Development Files
 
     Libtabula frequently comes with Linux distributions as well.  If your
     distribution doesn't come with at least Libtabula v4.1, I recommend
-    using the official Libtabula.com packages instead.  Libtabula++ can be
+    using the official Libtabula.com packages instead.  Libtabula can be
     made to run with 4.0 and older, but it takes some work.
 
     On Red Hat type systems with yum, say:
@@ -57,11 +57,11 @@ Dealing with the Dynamic Linker, ld.so
 
     Because ld.so only looks in a few places for libraries on most
     systems, a common problem is a program that builds without error
-    but won't run, complaining about libmysqlpp.SOMETHING.
+    but won't run, complaining about libtabula.SOMETHING.
 
     There are a number of ways to deal with this.
 
-    First, you could just configure Libtabula++ to install under /usr
+    First, you could just configure Libtabula to install under /usr
     instead of /usr/local, like system-provided packages:
 
         $ ./configure --prefix=/usr
@@ -69,7 +69,7 @@ Dealing with the Dynamic Linker, ld.so
     This isn't recommended practice when building packages from source,
     but it does work.
 
-    Second, you can add the Libtabula++ library directory to the
+    Second, you can add the Libtabula library directory to the
     LD_LIBRARY_PATH environment variable.  This works like the shell's
     PATH variable: a colon-separated list of directories to search.
     This is best when the installation directory is something totally

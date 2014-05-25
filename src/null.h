@@ -71,7 +71,7 @@ protected:
 ///
 /// \code
 /// int foo = return_some_value_for_foo();
-/// libtabula::Null<int> bar = foo ? foo : mysqlpp::null;
+/// libtabula::Null<int> bar = foo ? foo : libtabula::null;
 /// \endcode
 /// 
 /// The compiler will try to convert libtabula::null to \c int to make

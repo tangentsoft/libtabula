@@ -49,13 +49,13 @@
 				</tt>
 			</xsl:when>
 
-			<!-- type=classref: makes hyperlinks to a class in the MySQL++
+			<!-- type=classref: makes hyperlinks to a class in the
 			     reference manual, given its name. -->
 			<xsl:when test="@type = 'classref'">
 				<tt>
 					<a>
 						<xsl:attribute name="href">
-							<xsl:text>../refman/classmysqlpp_1_1</xsl:text>
+							<xsl:text>../refman/classlibtabula_1_1</xsl:text>
 							<xsl:value-of select="@url"/>
 							<xsl:text>.html</xsl:text>
 						</xsl:attribute>
@@ -71,13 +71,13 @@
 				</tt>
 			</xsl:when>
 
-			<!-- type=structref: makes hyperlinks to a struct in the MySQL++
+			<!-- type=structref: makes hyperlinks to a struct in the
 			     reference manual, given its name. -->
 			<xsl:when test="@type = 'structref'">
 				<tt>
 					<a>
 						<xsl:attribute name="href">
-							<xsl:text>../refman/structmysqlpp_1_1</xsl:text>
+							<xsl:text>../refman/structlibtabula_1_1</xsl:text>
 							<xsl:value-of select="@url"/>
 							<xsl:text>.html</xsl:text>
 						</xsl:attribute>

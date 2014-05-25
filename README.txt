@@ -1,38 +1,27 @@
 What It Is
 ~~~~~~~~~~
-    Libtabula++ is a C++ wrapper for Libtabula's C API.  It is built around STL
+    Libtabula is a C++ wrapper for multiple C database APIs including
+    SQLite, MariaDB, and MySQL's Connector/C.  It is built around STL
     principles, to make dealing with the database as easy as dealing
-    with an STL container.  Libtabula++ relieves the programmer of dealing
-    with cumbersome C data structures, generation of repetitive SQL
-    statements, and manual creation of C++ data structures to mirror
-    the database schema.
+    with an STL container.  Libtabula relieves the programmer of
+    dealing with cumbersome C data structures, generation of repetitive
+    SQL statements, and manual creation of C++ data structures to
+    mirror the database schema.
 
-    Its home page is http://tangentsoft.net/mysql++/
+    Libtabula's home page is http://libtabula.org/
+
+    Libtabula forked from the MySQL-only C++ wrapper MySQL++ 3.2.1
+    in May 2014.
 
 
 Prerequisites
 ~~~~~~~~~~~~~
-    To build Libtabula++, you must have the Libtabula C API development
-    files installed.
+    To build a release version of Libtabula, you must have the C API
+    development files installed for the DBMSes you want Libtabula to
+    work with.
 
-    On Unixy systems (Linux, Mac OS X, Cygwin, *BSD, Solaris...),
-    the Libtabula development files are installed if you build Libtabula
-    from source.  If you installed Libtabula as a binary package, then
-    the development files are often packaged separately from the
-    Libtabula server itself.  It's common for the package containing the
-    development files to be called something like "Libtabula-devel".
-
-    If you're building on Windows with Visual C++ or MinGW, you
-    need to install the native Win32 port of Libtabula from mysql.com.
-    The development files are only included with the "complete"
-    version of the Libtabula installer, and some versions of this
-    installer won't actually install them unless you do a custom
-    install.  Another pitfall is that Libtabula++'s project files assume
-    that you've installed the current General Availability release of
-    Libtabula (v5.0 right now) and it's installed in the default location.
-    If you've installed a different version, or if Libtabula Inc. changes
-    the default location (which they seem to do regularly!) you'll have
-    to adjust the link and include file paths in the project settings.
+    To build a version checked out from the Fossil repository, see
+    the HACKERS.txt file.
 
 
 Additional Things to Read
@@ -45,22 +34,22 @@ Additional Things to Read
 
     For license information, see the COPYING.txt file.
 
-    If you want to change Libtabula++, see the HACKERS.txt file.
+    If you want to change Libtabula, see the HACKERS.txt file.
 
     You should have received a user manual and a reference manual
-    with Libtabula++.  If not, you can read a recent version online:
+    with Libtabula.  If not, you can read a recent version online:
 
-        http://tangentsoft.net/mysql++/doc/
+        http://libtabula.org/doc/
 
-    Search the Libtabula++ mailing list archives if you have more
+    Search the Libtabula mailing list archives if you have more
     questions:
 
-        http://lists.mysql.com/plusplus/
+        http://libtabula.org/ml/
 
 
 Building the Library
 ~~~~~~~~~~~~~~~~~~~~
-    Libtabula++ uses Bakefile (http://bakefile.org/) to generate
+    Libtabula uses Bakefile (http://bakefile.org/) to generate
     platform-specific project files and makefiles from a single set
     of input files.  We currently support these build systems:
 
@@ -78,7 +67,7 @@ Building the Library
 
     Visual C++:
         We ship Visual Studio 2003, 2005, and 2008 project files.
-        No older version of Visual C++ will build Libtabula++, due to
+        No older version of Visual C++ will build Libtabula, due to
         compiler limitations.  See README-Visual-C++.txt for more
         details.
 
@@ -92,33 +81,34 @@ Building the Library
 Example Programs
 ~~~~~~~~~~~~~~~~
     You may want to try out the programs in the examples subdirectory
-    to ensure that the Libtabula++ API and your Libtabula database are both
-    working properly.  Also, these examples give many examples of
-    the proper use of Libtabula++.  See README-examples.txt for further
-    details.
+    to ensure that Libtabula is working correctly in its own right
+    as well as working properly with your DBMS.
+
+    These examples give many examples of the proper use of Libtabula.
+    See README-examples.txt for further details.
 
 
 Unsupported Compliers
 ~~~~~~~~~~~~~~~~~~~~~
     If you're on Windows but want to use some other compiler besides
     Visual C++ or GCC, you are currently on your own.  There have
-    been past efforts to port Libtabula++ to other Windows compilers,
+    been past efforts to port Libtabula to other Windows compilers,
     but for one reason or another, all of these ports have died.
 
-    On Unixy systems, GCC still works best.  "Native" compilers and
-    third-party compilers may work, but you're on your own to get
-    it working.
+    On Unixy systems, GCC and Clang work best.  "Native" compilers
+    and third-party compilers may work, but you're on your own to
+    get it working.
 
     We have nothing in particular against these unsupported systems.
     We just lack the time and resources to support everything
-    ourselves.  If you are sufficiently motivated to get Libtabula++
+    ourselves.  If you are sufficiently motivated to get Libtabula
     working on one of these alternate systems, see the HACKERS.txt
     file first for guidance.  If you follow the advice in that file,
     your patch will be more likely to be accepted.
 
 
-If You Want to Hack on Libtabula++...
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If You Want to Hack on Libtabula...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     If you intend to change the library or example code, please read
     the HACKERS.txt file.
 

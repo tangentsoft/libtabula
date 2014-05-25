@@ -143,14 +143,14 @@ Bootstrapping the Library Using only Windows
     Option 1: Copy the generated files over from a released version
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         Only one of these generated files is absolutely critical
-        to allowing libtabula to build: lib/mysql++.h.  So, the
+        to allowing libtabula to build: lib/libtabula.h.  So, the
         simplest option you have to bootstrap libtabula entirely on
-        Windows is to copy lib/mysql++.h over from a released version
+        Windows is to copy lib/libtabula.h over from a released version
         of libtabula.  While you're doing that, you might copy over
         the other such generated files:
 
             install.hta
-            mysql++.spec
+            libtabula.spec
             doc/userman/userman.dbx
             lib/Doxyfile
 
@@ -215,12 +215,12 @@ On Manipulating the Build System Source Files
     for each platform.
 
     Bakefile (http://bakefile.org/) produces most of these project
-    and make files from a single source file called mysql++.bkl.
+    and make files from a single source file called libtabula.bkl.
 
-    Except for small local changes, it's best to change mysql++.bkl
+    Except for small local changes, it's best to change libtabula.bkl
     and "re-bake" the project and make files rather than change
     those files directly.  You can do this with the bootstrap scripts
-    covered above.  On Windows, if all you've changed is mysql++.bkl,
+    covered above.  On Windows, if all you've changed is libtabula.bkl,
     you can use rebake.bat instead, which doesn't try to do as much
     as bootstrap.bat.
 
@@ -228,7 +228,7 @@ On Manipulating the Build System Source Files
     and finished Makefiles for MinGW.  It also produces Makefile.in,
     which is input to GNU Autoconf along with configure.ac
     and config/*.  You may need to change these latter files in
-    addition to or instead of mysql++.bkl to get the effect you want.
+    addition to or instead of libtabula.bkl to get the effect you want.
     Running bootstrap incorporates changes to all of these files in
     the GNU autoconf output.
 
@@ -262,7 +262,7 @@ Submitting Patches
     If you're making a patch against a libtabula distribution tarball,
     then you can generate the diff this way:
 
-        $ diff -ruN mysql++-olddir mysql++-newdir > mychange.patch
+        $ diff -ruN libtabula-olddir libtabula-newdir > mychange.patch
 
     The diff command is part of every Unix and Linux system, and
     should be installed by default.  If you're on a Windows machine,

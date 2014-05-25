@@ -1,15 +1,15 @@
-Building Libtabula++
+Building Libtabula
 ~~~~~~~~~~~~~~~~
-    There are two major ways to build Libtabula++: from the command line, or
+    There are two major ways to build Libtabula: from the command line, or
     from within the Xcode IDE.
 
-    Libtabula++ has its roots in Unix and Linux, like Libtabula itself.  As a
-    result, the most well-supported way to build Libtabula++ is from the
+    Libtabula has its roots in Unix and Linux, like Libtabula itself.  As a
+    result, the most well-supported way to build Libtabula is from the
     command line, or Terminal as Apple likes to call it.  See
     README-Unix.txt for the generic instructions.  Further Mac-specific
     details are given elsewhere in this file.
 
-    The option to build Libtabula++ from within Xcode is new.  We added
+    The option to build Libtabula from within Xcode is new.  We added
     experimental support for it in 3.0.0, but it didn't actually get
     tested and debugged until 3.1.0.  It may still be buggy, and over
     time it's more likely to break again than the command line method,
@@ -21,7 +21,7 @@ Building Libtabula++
     If you try the Xcode method and find that it doesn't work, the
     easiest way around that roadblock is to build from the command line
     instead.  If you're the adventurous sort and want to contribute to
-    the development of Libtabula++, see the file HACKERS.txt for more info
+    the development of Libtabula, see the file HACKERS.txt for more info
     on fixing the source file used as input in the project file
     generation process.  We don't want fixed project files, we want a
     process that lets us consistently generate correct project files.
@@ -29,7 +29,7 @@ Building Libtabula++
 
 Prerequisite: Install the Libtabula Development Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Libtabula++ is built on top of the Libtabula C API library, so for Libtabula++
+    Libtabula is built on top of the Libtabula C API library, so for Libtabula
     to build, it needs at least that library and its header files
     installed.  You don't need the server itself installed on your
     development machine, though it's often helpful anyway, for testing.
@@ -45,8 +45,8 @@ Prerequisite: Install the Libtabula Development Files
       them separately as Connector/C.  As of this writing, you get the
       files as a tarball, and you have to copy its contents to some
       suitable location on your hard drive.  If you're using Xcode to
-      build Libtabula++, you'll want to put them under /usr/local/mysql.
-      Libtabula++'s command line build system is far more tolerant, looking
+      build Libtabula, you'll want to put them under /usr/local/mysql.
+      Libtabula's command line build system is far more tolerant, looking
       there and in many other typical locations.
 
     - If you use Fink, you can install the C API files with:
@@ -86,7 +86,7 @@ Dealing with the 64-Bit Transition in Snow Leopard
 
         ./configure CFLAGS=-m32 CXXFLAGS=-m32 LDFLAGS=-m32 --other-flags-here
 
-    Second, you can make the Libtabula++ build system use GCC 4.0 instead:
+    Second, you can make the Libtabula build system use GCC 4.0 instead:
 
         ./configure CC=gcc-4.0 CXX=g++-4.0 --other-flags-here
 
@@ -103,7 +103,7 @@ Dealing with the 64-Bit Transition in Snow Leopard
 Making Universal Binaries
 ~~~~~~~~~~~~~~~~~~~~~~~~~
     By default, the command line build system will generate libraries
-    that only work with the platform you build Libtabula++ on.  It can be
+    that only work with the platform you build Libtabula on.  It can be
     convinced to build "universal" binaries instead by configuring
     the library like so:
 
@@ -124,7 +124,7 @@ Making Universal Binaries
     The first command doubles build time relative to the default
     configuration, and the second quadruples it.  It also makes the
     resulting binaries larger, which increases the amount of time
-    it takes to start a program.  Build Libtabula++ like this only if
+    it takes to start a program.  Build Libtabula like this only if
     you must.
 
     The --disable-dependency-tracking flag is necessary because,

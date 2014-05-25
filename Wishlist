@@ -39,7 +39,7 @@ Any Version
       slist definition is available on that platform.  Xcode, for
       instance, will let us use <ext/slist>.
 
-    o Add ctor and assignment operator that takes mysqlpp::null.  You
+    o Add ctor and assignment operator that takes libtabula::null.  You
       now have to call a 4-argument version of either the ctor or
       assign() to get a NULL SQL string.
 
@@ -171,36 +171,36 @@ v4.0 or Later
 
           examples/stock.ssqls gives ssqls_stock.h containing:
 
-              class SQLStock : public mysqlpp::SsqlsBase
+              class SQLStock : public libtabula::SsqlsBase
               {
               public:
                   SQLStock(Connection* conn = 0); // default ctor
                   SQLStock(const SQLStock& other);
-                  SQLStock(const mysqlpp::Row& row,
+                  SQLStock(const libtabula::Row& row,
                           Connection* conn = 0); // full init from query
-                  SQLStock(mysqlpp::sql_bigint key1); // exemplar creation
+                  SQLStock(libtabula::sql_bigint key1); // exemplar creation
                   SQLStock(Connection* conn,
-                          mysqlpp::sql_bigint key1) // calls load();
+                          libtabula::sql_bigint key1) // calls load();
                   SQLStock(
-                      mysqlpp::sql_bigint f1,
-                      mysqlpp::sql_bigint f2,
-                      mysqlpp::sql_double f3,
-                      mysqlpp::sql_double f4,
-                      const mysqlpp::sql_date& f5,
-                      const mysqlpp::sql_mediumtext& f6); // full init
+                      libtabula::sql_bigint f1,
+                      libtabula::sql_bigint f2,
+                      libtabula::sql_double f3,
+                      libtabula::sql_double f4,
+                      const libtabula::sql_date& f5,
+                      const libtabula::sql_mediumtext& f6); // full init
                   SQLStock(Connection* conn,
-                      mysqlpp::sql_bigint f2,
-                      mysqlpp::sql_double f3,
-                      mysqlpp::sql_double f4,
-                      const mysqlpp::sql_date& f5,
-                      const mysqlpp::sql_mediumtext& f6); // calls create()
+                      libtabula::sql_bigint f2,
+                      libtabula::sql_double f3,
+                      libtabula::sql_double f4,
+                      const libtabula::sql_date& f5,
+                      const libtabula::sql_mediumtext& f6); // calls create()
                   SQLStock(Connection* conn,
-                      mysqlpp::sql_bigint f1,
-                      mysqlpp::sql_bigint f2,
-                      mysqlpp::sql_double f3,
-                      mysqlpp::sql_double f4,
-                      const mysqlpp::sql_date& f5,
-                      const mysqlpp::sql_mediumtext& f6); // calls save()
+                      libtabula::sql_bigint f1,
+                      libtabula::sql_bigint f2,
+                      libtabula::sql_double f3,
+                      libtabula::sql_double f4,
+                      const libtabula::sql_date& f5,
+                      const libtabula::sql_mediumtext& f6); // calls save()
 
                   bool createTable(Connection* conn = 0) const;
                   const char* getTableName() const
@@ -216,30 +216,30 @@ v4.0 or Later
                   std::ostream& value_list(std::ostream& os) const;
                   std::ostream& xml(std::ostream& os) const;
 
-                  mysqlpp::sql_bigint getId() const;
-                  mysqlpp::sql_bigint getNum() const;
-                  mysqlpp::sql_double getWeight() const;
-                  mysqlpp::sql_double getPrice() const;
-                  const mysqlpp::sql_date& getSdate() const;
-                  const mysqlpp::sql_mediumtext& getDescription() const;
+                  libtabula::sql_bigint getId() const;
+                  libtabula::sql_bigint getNum() const;
+                  libtabula::sql_double getWeight() const;
+                  libtabula::sql_double getPrice() const;
+                  const libtabula::sql_date& getSdate() const;
+                  const libtabula::sql_mediumtext& getDescription() const;
 
-                  void setId(mysqlpp::sql_bigint value);
-                  void setNum(mysqlpp::sql_bigint value);
-                  void setWeight(mysqlpp::sql_double value);
-                  void setPrice(mysqlpp::sql_double value);
-                  void setSdate(const mysqlpp::sql_date& value);
-                  void setDescripion(const mysqlpp::sql_mediumtext& value);
+                  void setId(libtabula::sql_bigint value);
+                  void setNum(libtabula::sql_bigint value);
+                  void setWeight(libtabula::sql_double value);
+                  void setPrice(libtabula::sql_double value);
+                  void setSdate(const libtabula::sql_date& value);
+                  void setDescripion(const libtabula::sql_mediumtext& value);
 
                   bool operator<(const SQLStock& rhs) const;
                   SQLStock& operator=(const SQLStock& rhs);
 
               protected:
-                  mysqlpp::sql_bigint id_;
-                  mysqlpp::sql_bigint num_;
-                  mysqlpp::sql_double weight_;
-                  mysqlpp::sql_double price_;
-                  mysqlpp::sql_date sdate_;
-                  mysqlpp::sql_mediumtext description_;
+                  libtabula::sql_bigint id_;
+                  libtabula::sql_bigint num_;
+                  libtabula::sql_double weight_;
+                  libtabula::sql_double price_;
+                  libtabula::sql_date sdate_;
+                  libtabula::sql_mediumtext description_;
 
                   std::bitset<6> set_fields_;
 
@@ -342,7 +342,7 @@ v4.0 or Later
       the examples.
 
     o Bring back mandatory quoting for manipulators?  If someone says
-      os << mysqlpp::escape << foo; do they not really really mean
+      os << libtabula::escape << foo; do they not really really mean
       escape foo?  Automatic quoting and escaping is different.  See
 
       http://lists.mysql.com/plusplus/7999
@@ -352,10 +352,10 @@ v4.0 or Later
 
     o If pkg-config is available, register ourselves with it using
       information discovered by configure.  Also, write out a
-      mysql++-config script, which either wraps pkg-config or
+      libtabula-config script, which either wraps pkg-config or
       reinvents it, poorly, for systems that don't have it.
 
-    o Add String::operator==(const mysqlpp::null_type&).  Needed to
+    o Add String::operator==(const libtabula::null_type&).  Needed to
       allow comparison of row[x] returns to SQL null.  Change one of
       the examples to show it?
 
@@ -377,7 +377,7 @@ v4.0 or Later
       - Move memory leak FAQ into userman, rewriting it to cover
         all this.
 
-    o mysqlpp::execute manipulator.  Immediately executes built
+    o libtabula::execute manipulator.  Immediately executes built
       query string.  Works best with exceptions, as that's the only way
       to detect failures.
 
@@ -407,7 +407,7 @@ v4.0 or Later
 
     o Add Query::storein_if(), mirroring store_if()
 
-    o Add a method to mysqlpp::String to return a widened version of the
+    o Add a method to libtabula::String to return a widened version of the
       string.  Probably make return type templatized so we can return
       wstring, C++/CLI native strings, etc.  Then convert examples that
       do this conversion to use this new mechanism.
@@ -439,7 +439,7 @@ v4.0 or Later
     o Query::save_file() interfaces, wrapping SELECT ... INTO FILE,
       modeled on above.
 
-    o Subclass mysqlpp::String, creating mysqlpp::Blob, which differs
+    o Subclass libtabula::String, creating libtabula::Blob, which differs
       only in that it knows that it should be automatically quoted and
       escaped when inserted into a SQL query.
 
@@ -457,10 +457,10 @@ v4.0 or Later
       void*() instead.  We create an ambiguous conversion in bool
       context with some C++ standard libraries otherwise.
 
-    o Templatize mysqlpp::String on value_type so it can be used to
+    o Templatize libtabula::String on value_type so it can be used to
       hold wide characters.  Then the method that converts UTF-8 to the
       platform's best wide character type can just return a different
-      variant of mysqlpp::String.
+      variant of libtabula::String.
 
     o Add wrapper functions to Null<> like length() that call the
       corresponding function on data member, if present, to make it

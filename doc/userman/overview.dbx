@@ -5,10 +5,10 @@
 <sect1 id="overview">
   <title>Overview</title>
 
-  <para>MySQL++ has a lot of complexity and power to cope with the
-  variety of ways people use databases, but at bottom it doesn&#x2019;t
-  work all that differently than other database access APIs. The usage
-  pattern looks like this:</para>
+  <para>Libtabula has a lot of complexity and power to cope with the
+  variety of DBMSes and uses for them, but at bottom it doesn&#x2019;t
+  work all that differently than other database access APIs. The
+  usage pattern looks like this:</para>
 
   <orderedlist>
     <listitem><para>Open the connection</para></listitem>
@@ -21,7 +21,7 @@
     <listitem><para>Else, deal with errors</para></listitem>
   </orderedlist>
 
-  <para>Each of these steps corresponds to a MySQL++ class or class
+  <para>Each of these steps corresponds to a libtabula class or class
   hierarchy. An overview of each follows.</para>
 
 
@@ -30,11 +30,11 @@
 
     <para>A <ulink type="classref" url="Connection"/> object manages the
     connection to the MySQL server. You need at least one of these
-    objects to do anything. Because the other MySQL++ objects your
+    objects to do anything. Because the other libtabula objects your
     program will use often depend (at least indirectly) on the
     <classname>Connection</classname> instance, the
     <classname>Connection</classname> object needs to live at least as
-    long as all other MySQL++ objects in your program.</para>
+    long as all other libtabula objects in your program.</para>
 
     <para>MySQL supports many different types of data connection between
     the client and the server: TCP/IP, Unix domain sockets, and Windows
@@ -61,7 +61,7 @@
     stream, so you can write data to it like you would to
     <classname>std::cout</classname> or
     <classname>std::ostringstream</classname>. This is the most C++ish
-    way MySQL++ provides for building up a query string.  The library
+    way libtabula provides for building up a query string.  The library
     includes <ulink url="../refman/manip_8h.html">stream
     manipulators</ulink> that are type-aware so it&#x2019;s easy to build
     up syntactically-correct SQL.</para>
@@ -94,14 +94,14 @@
     <classname>std::string</classname>-like class called <ulink
     type="classref" url="String"/>. This class has conversion operators
     that let you automatically convert these objects to any of the basic
-    C data types. Additionally, MySQL++ defines classes like <ulink
+    C data types. Additionally, libtabula defines classes like <ulink
     type="structref" url="DateTime"/>, which you can initialize from a
     MySQL <command>DATETIME</command> string. These automatic
     conversions are protected against bad conversions, and can either
     set a warning flag or throw an exception, depending on how you set
     the library up.</para>
 
-    <para>As for the result sets as a whole, MySQL++ has a number of
+    <para>As for the result sets as a whole, libtabula has a number of
     different ways of representing them:</para>
 
     <sect3 id="SimpleResult">
@@ -116,12 +116,12 @@
     </sect3>
 
     <sect3 id="StoreQueryResult">
-      <title>Queries That Return Data: MySQL++ Data Structures</title>
+      <title>Queries That Return Data: Libtabula Data Structures</title>
 
       <para>The most direct way to retrieve a result set is to use
       <methodname>Query::store()</methodname>. This returns a <ulink
       type="classref" url="StoreQueryResult"/> object, which derives
-      from <classname>std::vector&lt;mysqlpp::Row&gt;</classname>,
+      from <classname>std::vector&lt;libtabula::Row&gt;</classname>,
       making it a random-access container of <ulink type="classref"
       url="Row"/>s. In turn, each <classname>Row</classname> object is
       like a <classname>std::vector</classname> of
@@ -150,7 +150,7 @@
       <title>Queries That Return Data: Specialized SQL
       Structures</title>
 
-      <para>Accessing results through MySQL++&#x2019;s data structures is
+      <para>Accessing results through libtabula&#x2019;s data structures is
       a pretty low level of abstraction. It&#x2019;s better than using
       the MySQL C API, but not by much. You can elevate things a little
       closer to the level of the problem space by using the <link
@@ -158,7 +158,7 @@
       structures that match the table structures in your database
       schema. In addition, it&#x2019;s easy to use SSQLSes with regular
       STL containers (and thus, algorithms) so you don&#x2019;t have to
-      deal with the quirks of MySQL++&#x2019;s data structures.</para>
+      deal with the quirks of libtabula&#x2019;s data structures.</para>
 
       <para>The advantage of this method is that your program will
       require very little embedded SQL code. You can simply execute a
@@ -179,15 +179,15 @@ for (vector&lt;stock&gt;::iterator it = v.begin(); it != v.end(); ++it) {
 
       <para>Isn&#x2019;t that slick?</para>
 
-      <para>If you don&#x2019;t want to create SSQLSes to match your
-      table structures, as of MySQL++ v3 you can now use
+      <para>If you don&#x2019;t want to create SSQLSes to
+      match your table structures, libtabula lets you use
       <classname>Row</classname> here instead:</para>
 
       <programlisting>
-vector&lt;mysqlpp::Row&gt; v;
+vector&lt;libtabula::Row&gt; v;
 query &lt;&lt; "SELECT * FROM stock";
 query.storein(v);
-for (vector&lt;mysqlpp::Row&gt;::iterator it = v.begin(); it != v.end(); ++it) {
+for (vector&lt;libtabula::Row&gt;::iterator it = v.begin(); it != v.end(); ++it) {
   cout &lt;&lt; "Price: " &lt;&lt; it->at("price") &lt;&lt; endl;
 }</programlisting>
 

@@ -68,7 +68,7 @@ There are many alternatives for the tools in the square brackets:
     (e.g. Ubuntu) you can just say "sudo apt-get install fop".
 
     You might be wondering why fo2pdf looks for FOP last, given that
-    MySQL++ is itself free software and relies on a lot of other
+    libtabula is itself free software and relies on a lot of other
     free software.  It's just that it's a good bet that if there's
     a commercial processor on the system, it was put there quite
     purposefully by someone who paid (or caused money to be paid) for
@@ -109,7 +109,7 @@ a bit tricky to set up correctly, so it's better to use a pre-built
 package if you can.
 
 If you are still having problems, post the details about it to the
-MySQL++ mailing list, and I'll try to help you debug the problem.
+libtabula mailing list, and I'll try to help you debug the problem.
 You might also find the FOP and/or DocBook mailing lists helpful.
 
 

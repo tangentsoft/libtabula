@@ -61,7 +61,7 @@ Configure Options
         queries and SSQLSes.  By default, both are limited to 25
         fields.  See chapter 8.2 in the user manual for details:
 
-        http://tangentsoft.net/mysql++/doc/html/userman/configuration.html
+        http://tangentsoft.net/libtabula/doc/html/userman/configuration.html
 
     --enable-thread-check:
 

@@ -102,8 +102,8 @@ LIBTABULA_EXPORT unsigned int get_library_version();
 	\section classes Major Classes
 
 	In Libtabula, the main user-facing classes are
-	libtabula::Connection, mysqlpp::Query, mysqlpp::Row,
-	libtabula::StoreQueryResult, and mysqlpp::UseQueryResult.
+	libtabula::Connection, libtabula::Query, libtabula::Row,
+	libtabula::StoreQueryResult, and libtabula::UseQueryResult.
 
 	In addition, Libtabula has a mechanism called Specialized SQL
 	Structures (SSQLS), which allow you to create C++ structures

@@ -5,8 +5,8 @@ need to know to build and use libtabula.
 
 Prerequisite: Install the Database Engine Development Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Libtabula wraps the C API for multiple database engines.  The
-    development files for the DBMSes you want to use need to be
+    Libtabula wraps the C API for multiple database engines.
+    The development files for the DBMSes you want to use need to be
     installed before you try to build libtabula.
 
     With the current version of Solaris at the time of this writing,
@@ -18,7 +18,7 @@ Prerequisite: Install the Database Engine Development Files
     done that already.  You may need to install Perl as well.
 
     Don't search for just "mysql" in Package Manager, as that will
-    also bring up legacy MySQL 4.0 packages.  Libtabula++ may build
+    also bring up legacy MySQL 4.0 packages.  Libtabula may build
     against 4.0 still; it's been a while since we've tested it.
     What is certain is that the examples won't run against 4.0 without
     modification, as they assume the availability of UTF-8 character

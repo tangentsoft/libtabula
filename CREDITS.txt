@@ -1,17 +1,18 @@
-Libtabula++ was created by Kevin Atkinson during 1998.  From version
+MySQL was created by Kevin Atkinson during 1998.  From version
 1.0 (released in June 1999) through 1.7.9 (May 2001), the primary
 maintainer was Sinisa Milivojevic <sinisa@mysql.com>.  Neither Kevin
-nor Sinisa are currently involved in Libtabula++ development.  The current
-maintainer is Warren Young <mysqlpp@etr-usa.com>, starting with
-version 1.7.10 in August of 2004.
+nor Sinisa are currently involved in Libtabula development.
+The current maintainer is Warren Young <wyoung@libtabula.org>,
+starting with MySQL++ 1.7.10 in August of 2004.
 
-For a fuller account of the library's history, see the first chapter
-of the user manual.  For the nitty-gritty details, see the ChangeLog
-in the root package directory.  ChangeLog items since 1.7.9 that
-aren't attributed to anyone else were done by Warren Young.
+For a fuller account of the library's history -- including the
+transition from MySQL++ to libtabula -- see the first chapter of the
+user manual.  For the nitty-gritty details, see the ChangeLog in the
+root package directory.  ChangeLog items that aren't attributed to
+anyone else were done by Warren Young.
 
 
-Other contributors of note since 1.7.10:
+Other contributors of note since MySQL++ 1.7.10:
 
     Chris Frey <cdfrey@foursquare.net>: Lots of GCC warning fixes
     for the bleeding-edge compiler versions, Gentoo ebuild support,
@@ -91,8 +92,8 @@ between the many versions of this library.
 
 
 Please do not email any of these people with general questions about
-Libtabula++. All of us who are still active in Libtabula++ development read the
-mailing list, so questions sent there do get to us:
+Libtabula. All of us who are still active in Libtabula development
+read the mailing list, so questions sent there do get to us:
 
     http://lists.mysql.com/plusplus
 

@@ -1,16 +1,16 @@
 Prerequisite: GCC Version
 ~~~~~~~~~~~~~~~~~~~~~~~~~
     If your MinGW version isn't using at least GCC 3.4.5, it needs
-    to be updated.  Older versions are known to not work with Libtabula++.
+    to be updated.  Older versions are known to not work with Libtabula.
 
-    As of Libtabula++ 3.1.1, the required version might need to be even
+    As of Libtabula 3.1.1, the required version might need to be even
     newer, as we are now depending on improvements to the MinGW linker
     which probably don't go back that far.
 
 
 Prerequisite: Libtabula C Development Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Libtabula++ is built atop Libtabula's C API library.  The easiest way to
+    Libtabula is built atop Libtabula's C API library.  The easiest way to
     get that is to install Connector/C on your development system,
     which you can download from mysql.com.  The distribution assumes
     these files are in:
@@ -39,10 +39,10 @@ Prerequisite: Libtabula C Development Files
 
       - The easy way is to do a global search and replace on the path
         in Makefile.mingw.  This is a generated file, but if that's the
-        only change to Libtabula++ you need, it works fine.
+        only change to Libtabula you need, it works fine.
 
-      - If you're doing deeper work on Libtabula++, you should change the
-        MYSQL_WIN_DIR variable at the top of mysql++.bkl instead.
+      - If you're doing deeper work on Libtabula, you should change the
+        MYSQL_WIN_DIR variable at the top of libtabula.bkl instead.
         
         Having done that, you can generate Makefile.mingw from that
         file using the Windows port of Bakefile (http://bakefile.org/):
@@ -52,7 +52,7 @@ Prerequisite: Libtabula C Development Files
 
 Building the Library and Example Programs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    With the prerequisites above taken care of, you can build Libtabula++
+    With the prerequisites above taken care of, you can build Libtabula
     with this command:
 
         mingw32-make -f Makefile.mingw
@@ -63,16 +63,16 @@ Building the Library and Example Programs
 
     Speaking of Cygwin and MSYS, if you have either these or any other
     Unix emulation environment installed, be sure their executables
-    aren't in the PATH when building Libtabula++.  MinGW's version of GNU
+    aren't in the PATH when building Libtabula.  MinGW's version of GNU
     make does some funny things if it thinks it's running in the
-    presence of Unixy tools, which will break the Libtabula++ build.
+    presence of Unixy tools, which will break the Libtabula build.
 
     Once the library is built, you should run the examples.  At minimum,
     run resetdb and simple1.
 
     Once you're satisfied that the library is working correctly, you can
     run install.hta to automatically install the library files and
-    headers in subdirectories under c:\mysql++.
+    headers in subdirectories under c:\libtabula.
 
 
 Cygwin and MinGW Coexistence
@@ -108,7 +108,7 @@ Cygwin and MinGW Coexistence
 
 Building on Linux
 ~~~~~~~~~~~~~~~~~
-    You might wish to build Libtabula++ with MinGW because you're
+    You might wish to build Libtabula with MinGW because you're
     not actually running Windows, but need Windows executables.
     The thought being that this lets you use GCC, the same compiler
     you're probably using to make native executables.  There are
@@ -129,14 +129,14 @@ Building on Linux
            ZIP file version of Libtabula in a place where Wine can find it.
            You don't need to run a Windows Libtabula server under Wine.
            We're only doing this to get the Libtabula C API library and
-           its headers, which Libtabula++ builds against.  The resulting
-           MinGW build of Libtabula++ can talk to a native Libtabula server
+           its headers, which Libtabula builds against.  The resulting
+           MinGW build of Libtabula can talk to a native Libtabula server
            out in Wine's host environment or on some other machine.
 
         4. Modify Makefile.mingw to match the install location for
            the Libtabula C API files.
 
-        5. Build Libtabula++ with:
+        5. Build Libtabula with:
         
            $ wine mingw32-make -f Makefile.mingw
 

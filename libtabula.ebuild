@@ -1,12 +1,12 @@
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/dev-db/mysql++/mysql++-2.3.2.ebuild,v 1.3 2008/04/21 03:00:49 dirtyepic Exp $
+# $Header: /var/cvsroot/gentoo-x86/dev-db/libtabula/libtabula-2.3.2.ebuild,v 1.3 2008/04/21 03:00:49 dirtyepic Exp $
 
 inherit eutils
 
-DESCRIPTION="C++ API interface to the MySQL database"
-HOMEPAGE="http://tangentsoft.net/mysql++/"
-SRC_URI="http://www.tangentsoft.net/mysql++/releases/${P}.tar.gz"
+DESCRIPTION="C++ wrapper for multiple C DBMS APIs"
+HOMEPAGE="http://libtabula.org/"
+SRC_URI="http://libtabula.org/releases/${P}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="0"
