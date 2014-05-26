@@ -6,7 +6,7 @@
 ]>
 <article>
 	<articleinfo>
-		<title>Libtabula v@LIBTABULA_VERSION_MAJOR@.@MYSQLPP_VERSION_MINOR@.@MYSQLPP_VERSION_BUGFIX@ User Manual</title>
+		<title>Libtabula v@LIBTABULA_VERSION_MAJOR@.@LIBTABULA_VERSION_MINOR@.@LIBTABULA_VERSION_BUGFIX@ User Manual</title>
 
 		<authorgroup>
 			<author>
