@@ -53,13 +53,14 @@
     Contributed patches were either ignored or put up on the MySQL++ web
     site for users to try, without any official blessing.</para>
 
-    <para>In early August of 2004, Warren Young of
-    <ulink="http://etr-usa.com">Educational Technology Resources</ulink>
+    <para>In early August of 2004, Warren Young of <ulink
+    url="http://etr-usa.com">Educational Technology Resources</ulink>
     got fed up with this lack of movement and took over maintenance of
     MySQL++. He released 1.7.10 later that month, which did little more
-    than make the code build with GCC 3.3 without warnings. MySQL++ grew
-    and improved greatly via prototypical spurts-and-lulls open source
-    development, culminating in MySQL++ 3.2.1 in December 2013.</para>
+    than make the code build with GCC 3.3 without warnings. MySQL++
+    grew and improved greatly via prototypical spurts-and-lulls open
+    source development, culminating in MySQL++ 3.2.1 in December
+    2013.</para>
 
     <para>In May 2014, Warren forked libtabula from MySQL++ in order to
     reignite the old dream of DBMS independence, reasoning that it would
@@ -70,7 +71,7 @@
     desire of people to write the code to add that support.</para>
 
     <para>This is a benign fork, not an angry fork. In a very real
-    sense, libtabula is &ldqou;MySQL++ 4.0.&rdquo; It is a fork rather
+    sense, libtabula is &#x201C;MySQL++ 4.0.&#x201D; It is a fork rather
     than just a new name since it moved to a new code repository and web
     site, and there is a chance that MySQL++ will continue to get some
     bug fixes and enhancements as libtabula stabilizes. At some point,
