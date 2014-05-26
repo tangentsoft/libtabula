@@ -16,7 +16,7 @@
   generally I/O-bound, not processor-bound. That is, if
   your program&#x2019;s bottleneck is libtabula, the ultimate
   cause is usually the I/O overhead of using a DBMS, particularly
-  if you&rsquo;re using the client/server sort. Doubling the number of threads will just let your
+  if you&#x2019;re using the client/server sort. Doubling the number of threads will just let your
   program get back to waiting for I/O twice as fast. Since <ulink
   url="http://www.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-1.pdf">threads
   are evil</ulink> and generally can&#x2019;t help libtabula, the only
@@ -300,7 +300,7 @@
     across threads, but we only do the work in this area where people
     find and report problems. There may still be use cases where you
     cannot safely do this. By way of illustration, allow me explain one
-    aspect of this problem and how we solved it in libtabula&rsquo;s
+    aspect of this problem and how we solved it in libtabula&#x2019;s
     predecessor, MySQL++.</para>
 
     <para>When you issue a database query that returns rows, you

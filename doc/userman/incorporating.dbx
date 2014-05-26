@@ -67,7 +67,7 @@
           C:\libtabula\lib</filename></para>
 
           <para>Connector/C does include debug libraries, but you
-          will probably not need to use them.</p>
+          will probably not need to use them.</para>
         </listitem>
 
         <listitem>
@@ -236,7 +236,7 @@
     in mind, and uses its standard rules implicitly. Those rules
     are designed to use these two variables separately like this.
     If you were writing your own compilation rules, you could write
-    them in such a way that you didn&rsquo;t have to do this.</para>
+    them in such a way that you didn&#x2019;t have to do this.</para>
 
     <para>Beyond that, we have a pretty vanilla
     <filename>Makefile</filename>, thanks in large part to the fact
@@ -299,7 +299,7 @@
       the past, at least, MinGW <filename>make</filename>
       had some funny rules about whether commands in target
       rules would get run with <filename>sh.exe</filename>
-      or with <filename>cmd.exe</filename>. I can&rsquo;t
+      or with <filename>cmd.exe</filename>. I can&#x2019;t
       currently get my installation of MinGW to do anything
       but use <filename>sh.exe</filename> by default, but that
       may be because I have Cygwin installed, which provides
@@ -307,7 +307,7 @@
       line in the file, which overrides the default shell with
       <filename>cmd.exe</filename>, purely to get consistent
       behavior across platforms. If you knew all your platforms
-      would have a better shell, you&rsquo;d probably want to use
+      would have a better shell, you&#x2019;d probably want to use
       that instead.</para>
 
       <para>Note the use of forward slashes in the path to the MySQL

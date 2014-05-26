@@ -13,11 +13,11 @@
     <title>The Location of the C API Development Files</title>
 
     <para>Libtabula can be built against several C DBMS
-    APIs such as <filename>libsqlite3<.filename> and <ulink
+    APIs such as <filename>libsqlite3</filename> and <ulink
     url="https://dev.mysql.com/downloads/connector/c/">Connector/C</ulink>.
     The library build process tries to find these automattically,
     but sometimes it needs guidance, particularly when you install
-    these files somewhere nonstandard. I&rsquo;ts a particular problem
+    these files somewhere nonstandard. I&#x2019;ts a particular problem
     on Windows, where installation directories are often versioned,
     so each release of libtabula just has to guess at a few version
     numbers common at the time of release.</para>
@@ -27,9 +27,9 @@
     Xcode IDE), Cygwin... Basically, Unix or anything that works
     like it.</para></footnote>, the <filename>configure</filename>
     script can usually figure out the location of the C API
-    development files by itself<footnote><para>I don&rsquo;t say
-    &ldquo;Connector/C&rdquo; here because the name change generally
-    hasn&rsquo;t percolated out to Unixy systems. It&rsquo;s more
+    development files by itself<footnote><para>I don&#x2019;t say
+    &#x201C;Connector/C&#x201D; here because the name change generally
+    hasn&#x2019;t percolated out to Unixy systems. It&#x2019;s more
     commonly used on Windows systems, since the separate Connector/C
     download lets them avoid installing a MySQL server just to get
     development headers and libraries.</para></footnote> It simply

@@ -35,14 +35,14 @@
       to <filename>*tabula*</filename>. On Unixy platforms, this
       means the actual library file will be called something
       like <filename>libtabula.*</filename>, which is where the
-      new name comes from. (I didn&rsquo;t want to call it just
-      &ldquo;Tabula.&rdquo;)</para>
+      new name comes from. (I didn&#x2019;t want to call it just
+      &#x201C;Tabula.&#x201D;)</para>
 
-      <para><classname>namespace::mysqlpp<classname> is now
-      <classname>namespace::libtabula<classname>.</para>
+      <para><classname>namespace::mysqlpp</classname> is now
+      <classname>namespace::libtabula</classname>.</para>
 
-      <para><filename>#include &lt;mysql++.h&gt;<filename> is now
-      <filename>#include &lt;libtabula.h&gt;<filename>.</para>
+      <para><filename>#include &lt;mysql++.h&gt;</filename> is now
+      <filename>#include &lt;libtabula.h&gt;</filename>.</para>
     </sect3>
   </sect2>
 
@@ -52,7 +52,7 @@
 
     <para>Since several of the API changes between MySQL++ and
     libtabula also affect the ABI, for the initial release we are
-    not documenting any ABI changes. We shouldn&rsquo;t have to do
+    not documenting any ABI changes. We shouldn&#x2019;t have to do
     that until libtabula 5.0, since the ABI is intended to be stable
     through to the next major version.</para>
   </sect2>

@@ -13,7 +13,7 @@
   as easy as working with STL containers.</para>
 
   <para>The latest version of libtabula can be found at <ulink
-  url="http://libtabula.org/"></para>
+  url="http://libtabula.org/">libtabula.org</ulink>.</para>
 
   <para>Support for libtabula can be had on <ulink
   url="http://libtabula.org/ml/">the mailing list</ulink>. That
@@ -46,7 +46,7 @@
     Sinisa officially with 1.2, and ceased to have any involvement with
     the library&#x2019;s maintenance. Sinisa went on to maintain the
     library through 1.7.9, released in mid-2001. During this time, the
-    library&rsquo;s database-independent parts were left undeveloped,
+    library&#x2019;s database-independent parts were left undeveloped,
     for obvious reasons.</para>
 
     <para>With version 1.7.9, MySQL++ went into a period of
@@ -112,12 +112,12 @@
 
     <para>Libtabula is still primarily maintained by Warren Young of
     Educational Technology Resources, as is MySQL++. In a very real
-    sense, libtabula is &ldqou;MySQL++ 4.0.&rdquo; It is a benign fork,
+    sense, libtabula is &#x201C;MySQL++ 4.0.&#x201D; It is a benign fork,
     not an angry fork.</para>
     
     <para>MySQL++ will likely get very little new code following
     this fork, but that is no different than what would have
-    happened if we&rsquo;d called it MySQL++ 4.0 and kept it in
+    happened if we&#x2019;d called it MySQL++ 4.0 and kept it in
     the same code repository. MySQL++ has never haad the notion of
     development and stable branches, with parallel development on
     both. Instead, MySQL++ (and now libtabula) experiences occasional

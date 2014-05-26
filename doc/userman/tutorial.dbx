@@ -161,7 +161,7 @@ GRANT ALL PRIVILEGES ON libtabula.* TO test@'%';</screen>
     <programlisting><xi:include href="simple1.txt" parse="text"
     xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
 
-    <para>This example simply gets the entire &ldquo;item&rdquo;
+    <para>This example simply gets the entire &#x201C;item&#x201D;
     column from the example table, and prints those values out.</para>
 
     <para>Notice that libtabula&#x2019;s <ulink
@@ -1166,7 +1166,7 @@ cout &lt;&lt; int(myfield) &lt;&lt; endl;</programlisting>
     look like a single mechanism.</para>
 
     <para>The per-connection option defaults in your DBMS
-    engine&rsquo;s C API tend to be set correctly for typical
+    engine&#x2019;s C API tend to be set correctly for typical
     programs already, so only one of the libtabula example
     programs make any connection option changes. Here is
     <filename>examples/multiquery.cpp</filename>:</para>
@@ -1209,10 +1209,10 @@ cout &lt;&lt; int(myfield) &lt;&lt; endl;</programlisting>
     never has to run for more than 8 hours or reliably queries the
     database more often than that. And, it&#x2019;s a good thing
     for the database server, because even an idle connection takes
-    up server resources. If you&rsquo;re using libtabula with some
+    up server resources. If you&#x2019;re using libtabula with some
     other networked DBMS<footnote><para>Embedded DBMSes such as
-    MySQL Embedded and SQLite generally don&rsquo; have connection
-    timeouts.</para></footnote>, it may have a different timeout.<para>
+    MySQL Embedded and SQLite generally don&#x2019; have connection
+    timeouts.</para></footnote>, it may have a different timeout.</para>
 
     <para>Many programs must run continually, however, and may
     experience long idle periods, such as nights and weekends
@@ -1313,7 +1313,7 @@ cout &lt;&lt; int(myfield) &lt;&lt; endl;</programlisting>
 
     <para>An important limitation of the MySQL C API library &mdash;
     which libtabula is built atop, so it shares this limitation if
-    you&rsquo;re using it with MySQL &mdash; is that you can only
+    you&#x2019;re using it with MySQL &mdash; is that you can only
     have one query in progress on each connection to the database
     server. If you try to issue a second query while one is still in
     progress, you get an obscure error message about &#x201C;Commands

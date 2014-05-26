@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding='UTF-8'?>
+<?xml version="1.0" encoding='UTF-8'?>
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
@@ -43,7 +43,7 @@
     immense inertia preventing a widespread move away from 8-bit
     characters. MySQL and C++ come out of these older traditions, and
     so they share the same practical limitations. Libtabula currently
-    doesn&rsquo;t have any code in it for Unicode conversions; it
+    doesn&#x2019;t have any code in it for Unicode conversions; it
     just passes data along unchanged from the underlying DBMS C API,
     so you still need to be aware of these underlying issues.</para>
 
@@ -102,7 +102,7 @@
     <para>Each Windows API function that takes a string
     actually comes in two versions. One version supports only
     1-byte &#x201C;ANSI&#x201D; characters<footnote><para>A
-    superset of ASCII<para></footnote> so they end in
+    superset of ASCII</para></footnote> so they end in
     'A'. The first Unicode-aware versions of Windows
     supported a 2-byte subset of Unicode called <ulink
     url="http://en.wikipedia.org/wiki/UCS-2">UCS-2</ulink>. Since
@@ -129,11 +129,11 @@
     aware of natively uses UTF-16 &mdash; you might as well use
     platform-specific functions to do this translation. Libtabula
     ships with two Visual C++ specific examples showing how to do this
-    in a GUI program.<footnote><para>The console examples don&rsquo;t
+    in a GUI program.<footnote><para>The console examples don&#x2019;t
     bother with such conversions since console programs are relatively
     rare on Windows. If you want them to run correctly on Windows, you
     can run them under the Cygwin MinTTY terminal, as it is natively
-    UTF-8 aware. You don&rsquo;t need to <emphasis>build</emphasis>
+    UTF-8 aware. You don&#x2019;t need to <emphasis>build</emphasis>
     the console programs as native Cygwin programs for this to
     work, just run the ones you built under VC++ in the Cygwin
     terminal.</para></footnote></para>
