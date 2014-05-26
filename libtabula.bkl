@@ -468,7 +468,7 @@
       <depends-on-file>src/*.cpp</depends-on-file>
       <depends-on-file>src/*.h</depends-on-file>
       <command>
-        cd lib ; doxygen > /dev/null
+        cd src ; doxygen > /dev/null
       </command>
     </action>
 
