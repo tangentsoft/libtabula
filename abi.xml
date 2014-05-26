@@ -1,9 +1,0 @@
-<version>
-    4.@MYSQLPP_VERSION_MINOR@.@MYSQLPP_VERSION_BUGFIX@
-</version>
-<headers>
-    lib
-</headers>
-<libs>
-    .
-</libs>
