@@ -1,8 +1,8 @@
 /// \file libtabula.h
 /// \brief The main Libtabula header file.
 ///
-/// This file brings in all Libtabula headers except for custom.h and
-/// custom-macros.h which are a strictly optional feature of Libtabula.
+/// This file brings in all Libtabula headers except for ssqls.h.  SSQLS
+/// is a strictly optional feature of Libtabula.
 ///
 /// There is no point in trying to optimize which headers you include,
 /// because the Libtabula headers are so intertwined.  You can only get
@@ -121,9 +121,9 @@ LIBTABULA_EXPORT unsigned int get_library_version();
 	\section files Major Files
 
 	The only two header files your program ever needs to include
-	are libtabula.h, and optionally custom.h. (The latter implements
-	the SSQLS mechanism.) All of the other files are used within
-	the library only.
+	are libtabula.h, and optionally ssqls.h. (The latter implements
+	the optional SSQLS mechanism.) All of the other files are used
+	within the library only.
 
 
 	\section user_questions If You Have Questions...
