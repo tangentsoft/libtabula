@@ -499,7 +499,7 @@
       <!-- Set up package directory -->
       <command>
         for d in config doc/html/refman doc/html/userman \
-            doc/refman doc/userman examples lib src/ssx test ; \
+            doc/refman doc/userman examples src src/ssx test ; \
         do \
           mkdir -p $(PKGNAME)/$(DDD) ; \
         done
@@ -508,9 +508,9 @@
       <!-- Copy files into package directory -->
       <!-- top directory -->
       <command>
-        cp -RL *.bat *.in *.txt Bakefiles.bkgen bootstrap ChangeLog \
+        cp -RL *.bat *.in *.txt Bakefiles.bkgen bootstrap ChangeLog.txt \
           cleanmf config.guess config.sub configure* dtest exrun \
-          install* Makefile.* libtabula.* osver Wishlist $(PKGNAME)
+          install* Makefile.* libtabula.* osver Wishlist.txt $(PKGNAME)
       </command>
 
       <!-- VC++ project file subdirs -->
@@ -567,9 +567,9 @@
         done
       </command>
 
-      <!-- lib subdir -->
+      <!-- src subdir -->
       <command>
-        cp src/*.cpp src/*.h src/*.in src/*.pl $(PKGNAME)/lib
+        cp src/*.cpp src/*.h src/*.in src/*.pl $(PKGNAME)/src
       </command>
 
       <!-- test subdir -->
