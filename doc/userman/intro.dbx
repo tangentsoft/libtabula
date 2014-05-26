@@ -5,19 +5,17 @@
 <sect1 id="intro">
   <title>Introduction</title>
 
-  <para>Libtabula is a powerful C++ wrapper for multiple
-  C database access libraries. The initial version supports
-  MySQL<footnote><para>The MySQL C API is also known as <ulink
-  url="https://dev.mysql.com/downloads/connector/c/">Connector/C</ulink>.</para></footnote>,
-  MariaDB, and SQLite. Its purpose is to make working with SQL queries
-  as easy as working with STL containers.</para>
+  <para>Libtabula is a powerful C++ wrapper for multiple C database
+  access libraries. The initial version supports MySQL, MariaDB, and
+  SQLite. Its purpose is to make working with SQL queries as easy as
+  working with STL containers.</para>
 
   <para>The latest version of libtabula can be found at <ulink
   url="http://libtabula.org/">libtabula.org</ulink>.</para>
 
   <para>Support for libtabula can be had on <ulink
   url="http://libtabula.org/ml/">the mailing list</ulink>. That
-  page hosts the mailing list archives, and tells you how you can
+  page hosts the mailing list archives and tells you how you can
   subscribe.</para>
 
 
@@ -82,21 +80,20 @@
   <sect2 id="asking-questions">
     <title>If You Have Questions...</title>
 
-    <para>If you want to email someone to ask questions about
-    this library, we greatly prefer that you send mail to the
-    <ulink url="http://libtabula.org/ml/">MySQL++ mailing
-    list</ulink>. The mailing list is archived, so if you have
-    questions, do a search to see if the question has been asked
-    before.</para>
+    <para>If you want to email someone to ask questions about this
+    library, we greatly prefer that you send mail to the <ulink
+    url="http://libtabula.org/ml/">mailing list</ulink>. The mailing
+    list is archived, so if you have questions, do a search to see
+    if the question has been asked before.</para>
 
-    <para>You may find people&#x2019;s individual email addresses in various
-    files within the MySQL++ distribution. Please do not send mail
-    to them unless you are sending something that is inherently
-    personal. Not all of the principal developers of MySQL++ are still
-    active in its development; those who have dropped out have no wish
-    to be bugged about MySQL++. Those of us still active in MySQL++
-    development monitor the mailing list, so you aren&#x2019;t getting any
-    extra &#x201C;coverage&#x201D; by sending messages to additional
-    email addresses.</para>
+    <para>You may find people&#x2019;s individual email addresses
+    in various files within the libtabula distribution. Please do
+    not send mail to them unless you are sending something that
+    is inherently personal. Not all of the principal developers of
+    libtabula are still active in its development; those who have
+    dropped out have no wish to be bugged about libtabula. Those of us
+    still active in libtabula development monitor the mailing list,
+    so you aren&#x2019;t getting any extra &#x201C;coverage&#x201D;
+    by sending messages to additional email addresses.</para>
   </sect2>
 </sect1>
