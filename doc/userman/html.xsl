@@ -23,6 +23,7 @@
 
 	<!-- HTML-specific XSL parameters -->
 	<xsl:param name="chunk.fast" select="0"/>
+	<xsl:param name="chunker.output.encoding" select="'UTF-8'"/>
 	<xsl:param name="html.stylesheet" select="'tangentsoft.css'"/>
 	<xsl:param name="use.id.as.filename" select="1"/>
 
