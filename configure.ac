@@ -14,7 +14,7 @@
 # USA
 
 # Standard autotools stuff
-AC_INIT(libtabula, 4.0.0, ltusers@libtabula.org, libtabula)
+AC_INIT(libtabula, 3.9.9.1, ltusers@libtabula.org, libtabula)
 AC_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR([config])
 AC_CANONICAL_SYSTEM
