@@ -44,7 +44,7 @@
 
     <para>If you need to modify the build system files, per-platform
     instructions are in
-    <filename>README-Visual-C++.txt</filename>,
+    <filename>README-Visual-Studio.txt</filename>,
     <filename>README-MinGW.txt</filename>, and
     <filename>README-Mac-OS-X.txt</filename>.</para>
   </sect2>

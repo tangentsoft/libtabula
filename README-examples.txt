@@ -139,7 +139,7 @@ Dedicated Windows Examples
 
         examples\vstudio\wforms.vcproj: The same thing, only written in
             C++/CLI and using Windows Forms.  Please follow the
-            instructions in README-Visual-C++.txt before trying to
+            instructions in README-Visual-Studio.txt before trying to
             build and run this example.  The Libtabula library build
             settings must be modified and the library rebuilt first.
 

@@ -81,7 +81,7 @@
         of MySQL, you should have only one version of the C
         API library, which should be thread-aware. If you have
         two, you probably just have separate debug and optimized
-        builds. See <filename>README-Visual-C++.txt</filename> or
+        builds. See <filename>README-Visual-Studio.txt</filename> or
         <filename>README-MinGW.txt</filename> for details.</para>
 
         <para>If you build MySQL from source, you might only get

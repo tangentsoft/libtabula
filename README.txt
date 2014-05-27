@@ -68,7 +68,7 @@ Building the Library
     Visual C++:
         We ship Visual Studio 2003, 2005, and 2008 project files.
         No older version of Visual C++ will build Libtabula, due to
-        compiler limitations.  See README-Visual-C++.txt for more
+        compiler limitations.  See README-Visual-Studio.txt for more
         details.
 
     Xcode:
