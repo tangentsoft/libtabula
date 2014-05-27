@@ -5,7 +5,7 @@
 <sect1 id="intro">
   <title>Introduction</title>
 
-  <para>Libtabula is a powerful C++ wrapper for multiple C database
+  <para>libtabula is a powerful C++ wrapper for multiple C database
   access libraries. The initial version supports MySQL, MariaDB, and
   SQLite. Its purpose is to make working with SQL queries as easy as
   working with STL containers.</para>
@@ -20,7 +20,7 @@
 
 
   <sect2 id="history">
-    <title>A Brief History of Libtabula</title>
+    <title>A Brief History of libtabula</title>
 
     <para>libtabula is a fork of <ulink
     url="http://tangentsoft.net/mysql++/">MySQL++ 3.2.1</ulink>. (More

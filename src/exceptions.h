@@ -1,5 +1,5 @@
 /// \file exceptions.h
-/// \brief Declares the Libtabula-specific exception classes.
+/// \brief Declares the libtabula-specific exception classes.
 ///
 /// When exceptions are enabled for a given libtabula::OptionalExceptions
 /// derivative, any of these exceptions can be thrown on error.
@@ -10,20 +10,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -40,7 +40,7 @@
 
 namespace libtabula {
 
-/// \brief Base class for all Libtabula custom exceptions
+/// \brief Base class for all libtabula custom exceptions
 
 class LIBTABULA_EXPORT Exception : public std::exception
 {
@@ -265,7 +265,7 @@ public:
 /// \brief Exception thrown when the database server encounters a problem
 /// while processing your query.
 ///
-/// Unlike most other Libtabula exceptions, which carry just an error
+/// Unlike most other libtabula exceptions, which carry just an error
 /// message, this type carries an error number to preserve
 /// Connection::errnum()'s return value at the point the exception is 
 /// thrown.  We do this because when using the Transaction class, the
@@ -274,10 +274,10 @@ public:
 /// should always succeed, so this effect can fool code that relies on
 /// Connection::errnum() into believing that there was no error.
 ///
-/// Beware that in older versions of Libtabula, this was effectively the
+/// Beware that in older versions of libtabula, this was effectively the
 /// generic exception type.  (This is most especially true in v1.7.x,
 /// but it continued to a lesser extent through the v2.x series.)  When
-/// converting old code to new versions of Libtabula, it's therefore
+/// converting old code to new versions of libtabula, it's therefore
 /// possible to get seemingly "new" exceptions thrown, which could crash
 /// your program if you don't also catch a more generic type like
 /// libtabula::Exception or std::exception.
@@ -343,7 +343,7 @@ public:
 	///
 	/// If the error number is 0, it means that the error message
 	/// doesn't come from the underlying database API, but rather from
-	/// Libtabula itself.  This happens when an error condition is
+	/// libtabula itself.  This happens when an error condition is
 	/// detected up at this higher level instead of letting the
 	/// underlying database API do it.
 	int errnum() const { return errnum_; }
@@ -374,7 +374,7 @@ public:
 	///
 	/// If the error number is 0, it means that the error message
 	/// doesn't come from the underlying database API, but rather from
-	/// Libtabula itself.  This happens when an error condition is
+	/// libtabula itself.  This happens when an error condition is
 	/// detected up at this higher level instead of letting the
 	/// underlying database API do it.
 	int errnum() const { return errnum_; }
@@ -411,7 +411,7 @@ public:
 };
 
 
-/// \brief Used within Libtabula's test harness only.
+/// \brief Used within libtabula's test harness only.
 
 class LIBTABULA_EXPORT SelfTestFailed : public Exception
 {

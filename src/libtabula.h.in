@@ -1,11 +1,11 @@
 /// \file libtabula.h
-/// \brief The main Libtabula header file.
+/// \brief The main libtabula header file.
 ///
-/// This file brings in all Libtabula headers except for ssqls.h.  SSQLS
-/// is a strictly optional feature of Libtabula.
+/// This file brings in all libtabula headers except for ssqls.h.  SSQLS
+/// is a strictly optional feature of libtabula.
 ///
 /// There is no point in trying to optimize which headers you include,
-/// because the Libtabula headers are so intertwined.  You can only get
+/// because the libtabula headers are so intertwined.  You can only get
 /// trivial compile time benefits, at the expense of clarity.
 
 /***********************************************************************
@@ -14,20 +14,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -35,7 +35,7 @@
 #ifndef LIBTABULA_LIBTABULA_H
 #define LIBTABULA_LIBTABULA_H
 
-/// \brief Encode Libtabula library version number.
+/// \brief Encode libtabula library version number.
 ///
 /// This macro takes major, minor and bugfix numbers (e.g. 1, 2, and 3)
 /// and encodes them like 0x010203.
@@ -44,10 +44,10 @@
 
 /// \brief Get the library version number that libtabula.h comes from
 ///
-/// Libtabula Version number that the libtabula.h header file comes from,
+/// libtabula Version number that the libtabula.h header file comes from,
 /// encoded by LIBTABULA_VERSION macro.  Compare this value to what
 /// get_library_version() returns in order to ensure that your program
-/// is using header files from the same version of Libtabula as the
+/// is using header files from the same version of libtabula as the
 /// actual library you're linking to.
 #define LIBTABULA_HEADER_VERSION LIBTABULA_VERSION(@LIBTABULA_VERSION_MAJOR@, @LIBTABULA_VERSION_MINOR@, @LIBTABULA_VERSION_BUGFIX@)
 
@@ -62,12 +62,12 @@
 
 namespace libtabula {
 
-/// \brief Get the current Libtabula library version number
+/// \brief Get the current libtabula library version number
 ///
-/// Libtabula version number that the program is actually linked to,
+/// libtabula version number that the program is actually linked to,
 /// encoded by LIBTABULA_VERSION macro.  Compare this value to the
 /// LIBTABULA_HEADER_VERSION constant in order to ensure that your
-/// program is using header files from the same version of Libtabula as
+/// program is using header files from the same version of libtabula as
 /// the actual library you're linking to.
 LIBTABULA_EXPORT unsigned int get_library_version();
 
@@ -90,7 +90,7 @@ LIBTABULA_EXPORT unsigned int get_library_version();
 
 
 /**
-	\mainpage Libtabula Reference Manual
+	\mainpage libtabula Reference Manual
 
 	\section getting_started Getting Started
 
@@ -101,20 +101,20 @@ LIBTABULA_EXPORT unsigned int get_library_version();
 
 	\section classes Major Classes
 
-	In Libtabula, the main user-facing classes are
+	In libtabula, the main user-facing classes are
 	libtabula::Connection, libtabula::Query, libtabula::Row,
 	libtabula::StoreQueryResult, and libtabula::UseQueryResult.
 
-	In addition, Libtabula has a mechanism called Specialized SQL
+	In addition, libtabula has a mechanism called Specialized SQL
 	Structures (SSQLS), which allow you to create C++ structures
 	that parallel the definition of the tables in your database
 	schema. These let you manipulate the data in your database using
 	native C++ data structures. Programs using this feature often
-	include very little SQL code, because Libtabula can generate most
+	include very little SQL code, because libtabula can generate most
 	of what you need automatically when using SSQLSes. There is a
 	whole chapter in the user manual on how to use this feature of
 	the library, plus a section in the user manual's tutorial chapter
-	to introduce it. It's possible to use Libtabula effectively without
+	to introduce it. It's possible to use libtabula effectively without
 	using SSQLS, but it sure makes some things a lot easier.
 
 
@@ -129,25 +129,25 @@ LIBTABULA_EXPORT unsigned int get_library_version();
 	\section user_questions If You Have Questions...
 
 	If you want to email someone to ask questions about this library,
-	we greatly prefer that you send mail to the Libtabula mailing list,
+	we greatly prefer that you send mail to the libtabula mailing list,
 	which you can subscribe to here: http://lists.mysql.com/plusplus
 
 	That mailing list is archived, so if you have questions, do a
 	search to see if the question has been asked before.
 
 	You may find people's individual email addresses in various
-	files within the Libtabula distribution. Please do not send mail
+	files within the libtabula distribution. Please do not send mail
 	to them unless you are sending something that is inherently
-	personal. Questions that are about Libtabula usage may well be
+	personal. Questions that are about libtabula usage may well be
 	ignored if you send them to our personal email accounts. Those of
-	us still active in Libtabula development monitor the mailing list,
+	us still active in libtabula development monitor the mailing list,
 	so you aren't getting any extra "coverage" by sending messages
 	to those addresses in addition to the mailing list.
 
 
 	\section licensing Licensing
 
-	Libtabula is licensed under the GNU Lesser General Public License,
+	libtabula is licensed under the GNU Lesser General Public License,
 	which you should have received with the distribution package in
 	a file called "LGPL" or "LICENSE". You can also view it here:
 	http://www.gnu.org/licenses/lgpl.html or receive a copy by

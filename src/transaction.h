@@ -11,20 +11,20 @@
  in this file.  See the CREDITS.txt file in the top directory of the
  distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -130,7 +130,7 @@ private:
 ///
 /// This was created for use with InsertPolicy, used by
 /// Query::insertfrom().  You might use it when your code already
-/// wraps a given sequence of Libtabula calls in a transaction and does
+/// wraps a given sequence of libtabula calls in a transaction and does
 /// an insertfrom() as part of that.  MySQL doesn't support nested
 /// transactions, so you need to suppress the one insertfrom() would
 /// normally start.

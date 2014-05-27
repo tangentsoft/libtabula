@@ -3,10 +3,10 @@
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
 <sect1 id="threads">
-  <title>Using Libtabula in a Multithreaded Program</title>
+  <title>Using libtabula in a Multithreaded Program</title>
 
-  <para>Libtabula is not &#x201C;thread safe&#x201D; in any
-  meaningful sense. Libtabula contains very little code that
+  <para>libtabula is not &#x201C;thread safe&#x201D; in any
+  meaningful sense. libtabula contains very little code that
   actively prevents trouble with threads, and all of it is
   optional. We have done some work in libtabula to make thread
   safety <emphasis>achievable</emphasis>, but it doesn&#x2019;t come
@@ -225,7 +225,7 @@
     That&#x2019;s no good because the above example is the most complex
     in libtabula, so if it were mandatory to use connection pools, the
     whole library would be that much more complex to use. The whole
-    point of libtabula is to make using the database easier. Libtabula
+    point of libtabula is to make using the database easier. libtabula
     offers the connection pool mechanism for those that really need it,
     but an option it must remain.</para>
   </sect2>
@@ -294,9 +294,9 @@
 
 
   <sect2 id="thread-data-sharing">
-    <title>Sharing Libtabula Data Structures</title>
+    <title>Sharing libtabula Data Structures</title>
 
-    <para>Libtabula is designed to allow you to share data structures
+    <para>libtabula is designed to allow you to share data structures
     across threads, but we only do the work in this area where people
     find and report problems. There may still be use cases where you
     cannot safely do this. By way of illustration, allow me explain one

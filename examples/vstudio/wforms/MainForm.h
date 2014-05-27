@@ -1,25 +1,25 @@
 /***********************************************************************
- MainForm.cpp - Defines the dialog box behavior for the Libtabula
+ MainForm.cpp - Defines the dialog box behavior for the libtabula
     C++/CLI Windows Forms example.
 
  Copyright © 2007 by Educational Technology Resources, Inc.  Others 
  may also hold copyrights on code in this file.  See the CREDITS.txt
  file in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -78,7 +78,7 @@ namespace wforms {
 			resultsList_->Items->Clear();
 
 			// Translate the Unicode text we get from the UI into the UTF-8
-			// form that Libtabula wants.
+			// form that libtabula wants.
 			const int kInputBufSize = 100;
 			char acServerAddress[kInputBufSize];
 			char acUserName[kInputBufSize];
@@ -135,20 +135,20 @@ namespace wforms {
 		}
 
 		// Returns a setting from underneath the given registry key.
-		// Assumes that it's a string value under the Libtabula examples' 
+		// Assumes that it's a string value under the libtabula examples' 
 		// settings area.
 		String^ LoadSetting(RegistryKey^ key, String^ name)
 		{
 			return (String^)key->GetValue(name);
 		}
 
-		// Returns a reference to the Libtabula examples' settings area in the
+		// Returns a reference to the libtabula examples' settings area in the
 		// registry.
 		RegistryKey^ OpenSettingsRegistryKey()
 		{
 			RegistryKey^ key = Registry::CurrentUser->OpenSubKey(L"Software",
 					true);
-			return key ? key->CreateSubKey(L"Libtabula Examples") : nullptr;
+			return key ? key->CreateSubKey(L"libtabula Examples") : nullptr;
 		}
 
 		// Saves the input fields' values to the registry, except for the
@@ -335,7 +335,7 @@ namespace wforms {
 			this->MinimizeBox = false;
 			this->Name = L"MainForm";
 			this->ShowIcon = false;
-			this->Text = L"Libtabula Windows Forms Examples";
+			this->Text = L"libtabula Windows Forms Examples";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 

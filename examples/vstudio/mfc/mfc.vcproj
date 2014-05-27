@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\lib, C:\Program Files\Libtabula\Libtabula Server 5.0\include"
+				AdditionalIncludeDirectories="..\..\..\lib, C:\Program Files\libtabula\libtabula Server 5.0\include"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -70,7 +70,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libtabula_d.lib libmysql.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\..\vc2005\Debug,C:\Program Files\Libtabula\Libtabula Server 5.0\lib\debug"
+				AdditionalLibraryDirectories="..\..\..\vc2005\Debug,C:\Program Files\libtabula\libtabula Server 5.0\lib\debug"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\lib, C:\Program Files\Libtabula\Libtabula Server 5.0\include"
+				AdditionalIncludeDirectories="..\..\..\lib, C:\Program Files\libtabula\libtabula Server 5.0\include"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
@@ -154,7 +154,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libtabula.lib libmysql.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\..\vc2005\Release,C:\Program Files\Libtabula\Libtabula Server 5.0\lib\opt"
+				AdditionalLibraryDirectories="..\..\..\vc2005\Release,C:\Program Files\libtabula\libtabula Server 5.0\lib\opt"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

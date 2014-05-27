@@ -10,20 +10,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -143,7 +143,7 @@ private:
 
 /// \brief SQL field type information
 ///
-/// \internal Used within Libtabula for mapping SQL types to C++ types
+/// \internal Used within libtabula for mapping SQL types to C++ types
 /// and vice versa.
 class LIBTABULA_EXPORT mysql_type_info
 {
@@ -265,7 +265,7 @@ public:
 
 	/// \brief The internal constant we use for our string type.
 	///
-	/// We expose this because other parts of Libtabula need to know
+	/// We expose this because other parts of libtabula need to know
 	/// what the string constant is at the moment.
 	static const enum_field_types string_type =
 #if MYSQL_VERSION_ID > 40000
@@ -289,7 +289,7 @@ private:
 	/// This function is used in mapping from MySQL type information
 	/// (a type enum, and flags indicating whether it is unsigned and
 	/// whether it can be 'null') to the closest C++ types available
-	/// within Libtabula.  Notice that nulls have to be handled specially:
+	/// within libtabula.  Notice that nulls have to be handled specially:
 	/// the SQL null concept doesn't map directly onto the C++ type
 	/// system.  See null.h for details.
 	///
@@ -299,7 +299,7 @@ private:
 	/// \param _null if true, indicates the variant of the MySQL type
 	/// that can also hold an SQL 'null' instead of regular data.
 	///
-	/// While Libtabula is tied to MySQL, \c t is just an abstraction
+	/// While libtabula is tied to MySQL, \c t is just an abstraction
 	/// of enum_field_types from mysql_com.h.
 	static unsigned char type(enum_field_types t,
 			bool _unsigned, bool _null = false);

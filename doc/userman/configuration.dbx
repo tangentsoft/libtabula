@@ -3,7 +3,7 @@
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
 <sect1 id="configuration">
-  <title>Configuring Libtabula</title>
+  <title>Configuring libtabula</title>
 
   <para>The default configuration of libtabula is suitable for most
   purposes, but there are a few things you can change to make it meet
@@ -12,7 +12,7 @@
   <sect2 id="mysql-loc">
     <title>The Location of the C API Development Files</title>
 
-    <para>Libtabula can be built against several C DBMS
+    <para>libtabula can be built against several C DBMS
     APIs such as <filename>libsqlite3</filename> and <ulink
     url="https://dev.mysql.com/downloads/connector/c/">Connector/C</ulink>.
     The library build process tries to find these automattically,
@@ -53,7 +53,7 @@
   <sect2 id="max-fields">
     <title>The Maximum Number of Fields Allowed</title>
 
-    <para>Libtabula offers two ways to automatically build
+    <para>libtabula offers two ways to automatically build
     SQL queries at run time: <xref linkend="tquery"/> and <link
     linkend="ssqls">SSQLS</link>. There&#x2019;s a limit on the number
     of fields these mechanisms support, defaulting to 25 fields in the
@@ -182,21 +182,21 @@ perl querydef.pl -f 50</screen>
   <sect2 id="c99">
     <title>Building on Systems Without Complete C99 Support</title>
 
-    <para>Libtabula uses the <ulink
+    <para>libtabula uses the <ulink
     url="http://en.wikipedia.org/wiki/C_(programming_language)#C99">C99</ulink>
     header <filename>stdint.h</filename> for portable fixed-size
     integer typedefs where possible. The C99 extensions
     aren&#x2019;t yet officially part of the C++ Standard, so
     there are still some C++ compilers that don&#x2019;t offer this
-    header. Libtabula works around the lack of this header where it
+    header. libtabula works around the lack of this header where it
     knows it needs to, but your platform might not be recognized,
     causing the build to break. If this happens, you can define the
     <varname>LIBTABULA_NO_STDINT_H</varname> macro to make libtabula
     use its best guess for suitable integer types instead of relying
     on <filename>stdint.h</filename>.</para>
 
-    <para>Libtabula also uses C99&#x2019;s <type>long long</type>
-    data type where available. Libtabula has workarounds for platforms
+    <para>libtabula also uses C99&#x2019;s <type>long long</type>
+    data type where available. libtabula has workarounds for platforms
     where this is known not to be available, but if you get errors
     in <filename>common.h</filename> about this type, you can define
     the macro <varname>LIBTABULA_NO_LONG_LONGS</varname> to make

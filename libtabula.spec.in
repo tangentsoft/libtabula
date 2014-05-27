@@ -10,7 +10,7 @@ BuildRoot:  %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 BuildRequires: mysql-devel
 
 %description
-Libtabula makes working with database server SQL queries as easy as
+libtabula makes working with database server SQL queries as easy as
 working with STL containers.  This package contains only the libraries
 needed to run libtabula-based programs.  If you are building your own
 libtabula-based programs, you also need to install the -devel package.

@@ -1,5 +1,5 @@
 The installation procedure depends on the compiler you use to build
-Libtabula and the OS you build it on.  There are platform-specific
+libtabula and the OS you build it on.  There are platform-specific
 instructions for all popular platforms:
 
 	README-Cygwin.txt        - for Cygwin
@@ -13,4 +13,4 @@ If you're on some Unix variant (Linux, OS X, *BSD, Solaris, Cygwin...)
 there are additional general instructions in README-Unix.txt.
 
 See the main README.txt file for high-level instructions that apply
-to all platforms Libtabula works on.
+to all platforms libtabula works on.

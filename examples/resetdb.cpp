@@ -10,20 +10,20 @@
  also hold copyrights on code in this file.  See the CREDITS file in
  the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -39,7 +39,7 @@
 using namespace std;
 
 
-// Convert a packed version number in the format used within Libtabula
+// Convert a packed version number in the format used within libtabula
 // to a printable string.
 static string
 version_str(int packed)
@@ -57,7 +57,7 @@ int
 main(int argc, char *argv[])
 {
 	// Ensure that we're not mixing library and header file versions.
-	// This is really easy to do if you have Libtabula on your system and
+	// This is really easy to do if you have libtabula on your system and
 	// are trying to build a new version, and run the examples directly
 	// instead of through exrun.
 	if (libtabula::get_library_version() != LIBTABULA_HEADER_VERSION) {
@@ -155,7 +155,7 @@ main(int argc, char *argv[])
 		// Notice that we don't give a sixth parameter in these calls,
 		// so the default value of "stock" is used.  Also notice that
 		// the first row is a UTF-8 encoded Unicode string!  All you
-		// have to do to store Unicode data in recent versions of Libtabula
+		// have to do to store Unicode data in recent versions of libtabula
 		// is use UTF-8 encoding.
 		cout << "Populating stock table..." << flush;
 		query.execute("Nürnberger Brats", 97, 1.5, 8.79, "2005-03-10");
@@ -203,7 +203,7 @@ main(int argc, char *argv[])
 		return 1;
 	}
 	catch (const libtabula::Exception& er) {
-		// Catch-all for any other Libtabula exceptions
+		// Catch-all for any other libtabula exceptions
 		cerr << endl << "Error: " << er.what() << endl;
 		return 1;
 	}

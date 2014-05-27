@@ -1,14 +1,14 @@
-Libtabula User Manual License
+libtabula User Manual License
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 I. COPYRIGHT
 
-    The copyright to the Libtabula User Manual is owned by its authors.
+    The copyright to the libtabula User Manual is owned by its authors.
 
 
 II. LICENSE
 
-    The Libtabula User Manual may be reproduced and distributed
+    The libtabula User Manual may be reproduced and distributed
     in whole or in part, in any medium physical or electronic,
     provided that this license notice is displayed in the
     reproduction. Commercial redistribution is permitted and
@@ -45,12 +45,12 @@ II. LICENSE
                 in advance of redistribution, if an email address is
                 provided in the document.
 
-        Mere aggregation of the Libtabula User Manual with other
+        Mere aggregation of the libtabula User Manual with other
         documents or programs on the same media shall not cause this
         license to apply to those other works.
 
         All translations, derivative documents, or modified documents
-        that incorporate the Libtabula User Manual may not have more
+        that incorporate the libtabula User Manual may not have more
         restrictive license terms than these, except that you may
         require distributors to make the resulting document available
         in source format.

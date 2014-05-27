@@ -7,20 +7,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -44,7 +44,7 @@ namespace libtabula {
 /// This class does as little as possible to adapt between its public
 /// interface and the interface required by the underlying C API.  That
 /// is, in fact, its only mission.  The high-level interfaces indended
-/// for use by Libtabula users are in Connection, Query, Result, and
+/// for use by libtabula users are in Connection, Query, Result, and
 /// ResUse, all of which delegate the actual database communication to
 /// an object of this type, created by Connection.  If you really need
 /// access to the low-level database driver, get it via
@@ -144,7 +144,7 @@ public:
 
 	/// \brief Drop the connection to the database server
 	///
-	/// This method should only be used by Libtabula library internals.
+	/// This method should only be used by libtabula library internals.
 	/// Unless you use the default constructor, this object should
 	/// always be connected.
 	void disconnect();
@@ -178,7 +178,7 @@ public:
 	/// \brief Return error message for last MySQL error associated with
 	/// this connection.
 	///
-	/// Can return a Libtabula DBDriver-specific error message if there
+	/// Can return a libtabula DBDriver-specific error message if there
 	/// is one.  If not, it simply wraps \c mysql_error() in the MySQL C API.
 	const char* error()
 	{
@@ -485,7 +485,7 @@ public:
 	/// structures.
 	///
 	/// Wraps \c mysql_refresh() in the MySQL C API.  There is no
-	/// corresponding interface for this in higher level Libtabula classes
+	/// corresponding interface for this in higher level libtabula classes
 	/// because it was undocumented until recently, and it's a pretty
 	/// low-level thing.  It's designed for things like MySQL
 	/// Administrator.
@@ -610,13 +610,13 @@ public:
 		return mysql_store_result(&mysql_);
 	}
 
-	/// \brief Returns true if Libtabula and the underlying MySQL C API
+	/// \brief Returns true if libtabula and the underlying MySQL C API
 	/// library were both compiled with thread awareness.
 	///
 	/// This is based in part on a MySQL C API function
 	/// mysql_thread_safe().  We deliberately don't call this wrapper
 	/// thread_safe() because it's a misleading name: linking to
-	/// thread-aware versions of the Libtabula and C API libraries doesn't
+	/// thread-aware versions of the libtabula and C API libraries doesn't
 	/// automatically make your program "thread-safe".  See the
 	/// <a href="../userman/threads.html">chapter on threads</a> in the
 	/// user manual for more information and guidance.
@@ -649,7 +649,7 @@ public:
 	///
 	/// \retval True if there was no problem
 	///
-	/// The Libtabula user manual's <a href="../userman/threads.html">chapter
+	/// The libtabula user manual's <a href="../userman/threads.html">chapter
 	/// on threads</a> details two major strategies for dealing with
 	/// connections in the face of threads.  If you take the simpler
 	/// path, creating one DBDriver object per thread, it is never
@@ -659,7 +659,7 @@ public:
 	/// management strategy where it's possible for one thread to
 	/// establish a connection that another thread uses, you must call
 	/// this from each thread that can use the database before it creates
-	/// any Libtabula objects.  If you use a DBDriverPool object, this
+	/// any libtabula objects.  If you use a DBDriverPool object, this
 	/// applies; DBDriverPool isn't smart enough to call this for you,
 	/// and the MySQL C API won't do it, either.
 	static bool thread_start()

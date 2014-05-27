@@ -5,20 +5,20 @@
  Others may also hold copyrights on code in this file.  See the
  CREDITS.txt file in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -48,7 +48,7 @@ is_connected_(false)
 {
 	// We won't allow calls to mysql_*() functions that take a MYSQL
 	// object until we get a connection up.  Such calls are nonsense.
-	// Libtabula coped with them before, but this masks bugs.
+	// libtabula coped with them before, but this masks bugs.
 	memset(&mysql_, 0, sizeof(mysql_));
 }
 
@@ -342,11 +342,11 @@ bool
 DBDriver::thread_aware()
 {
 #if defined(LIBTABULA_PLATFORM_WINDOWS) || defined(HAVE_PTHREAD) || defined(HAVE_SYNCH_H)
-	// Okay, good, Libtabula itself is thread-aware, but only return true
+	// Okay, good, libtabula itself is thread-aware, but only return true
 	// if the underlying C API library is also thread-aware.
 	return mysql_thread_safe();
 #else
-	// Libtabula itself isn't thread-aware, so we don't need to do any
+	// libtabula itself isn't thread-aware, so we don't need to do any
 	// further tests.  All pieces must be thread-aware to return true.
 	return false;	
 #endif

@@ -56,7 +56,7 @@ echo.
 echo It's important that the three numbers match the actual library version
 echo number, or else programs that check this (like resetdb) will fail.
 echo.
-echo Alternately, if you've also got Libtabula installed on some Unixy type
+echo Alternately, if you've also got libtabula installed on some Unixy type
 echo system, you can let its bootstrap procedure create libtabula.h and then
 echo copy it to the Windows machine.
 echo.

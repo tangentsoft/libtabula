@@ -1,7 +1,7 @@
 /***********************************************************************
  ssqls4.cpp - Example very similar to ssqls1.cpp, except that it
 	stores its result set in an STL set container.  This demonstrates
-	how one can manipulate Libtabula result sets in a very natural C++
+	how one can manipulate libtabula result sets in a very natural C++
 	style.
 
  Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
@@ -9,20 +9,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -92,7 +92,7 @@ main(int argc, char *argv[])
 		return -1;
 	}
 	catch (const libtabula::Exception& er) {
-		// Catch-all for any other Libtabula exceptions
+		// Catch-all for any other libtabula exceptions
 		cerr << "Error: " << er.what() << endl;
 		return -1;
 	}

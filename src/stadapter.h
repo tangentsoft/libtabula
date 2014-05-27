@@ -7,20 +7,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -50,7 +50,7 @@ class LIBTABULA_EXPORT String;
 /// This class provides implicit conversion between many C++ types and
 /// SQL-formatted string representations of that data without losing
 /// important type information.  This class is not for direct use
-/// outside Libtabula itself.  It exists for those interfaces in the
+/// outside libtabula itself.  It exists for those interfaces in the
 /// library that need to accept a value of any reasonable data type
 /// which it will use in building a query string.
 ///
@@ -87,7 +87,7 @@ public:
 	/// deep copy, use one of the ctors that takes a string.
 	SQLTypeAdapter(const SQLTypeAdapter& other);
 
-	/// \brief Create a copy of a Libtabula string
+	/// \brief Create a copy of a libtabula string
 	///
 	/// This does reference-counted buffer sharing with the other 
 	/// object.  If you need a deep copy, pass the result of 
@@ -206,7 +206,7 @@ public:
 
 	/// \brief Replaces contents of object with a SQL null
 	///
-	/// \param n typically, the Libtabula global object libtabula::null
+	/// \param n typically, the libtabula global object libtabula::null
 	///
 	/// \retval *this
 	SQLTypeAdapter& assign(const null_type& n);
@@ -320,7 +320,7 @@ private:
 	/// \brief Our internal string buffer
 	RefCountedBuffer buffer_;
 
-	/// \brief If true, one of the Libtabula manipulators has processed
+	/// \brief If true, one of the libtabula manipulators has processed
 	/// the string data.
 	///
 	/// "Processing" is escaping special SQL characters, and/or adding

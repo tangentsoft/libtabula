@@ -1,5 +1,5 @@
 /// \file mystring.h
-/// \brief Declares String class, Libtabula's generic std::string-like
+/// \brief Declares String class, libtabula's generic std::string-like
 /// class, used for holding data received from the database server.
 
 /***********************************************************************
@@ -8,20 +8,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -497,7 +497,7 @@ public:
 
 	/// \brief Equality comparison operator
 	///
-	/// For checking object against Libtabula's global \c null constant
+	/// For checking object against libtabula's global \c null constant
 	bool operator ==(const libtabula::null_type&) const
 	{
 		return is_null();
@@ -515,7 +515,7 @@ public:
 
 	/// \brief Inequality comparison operator
 	///
-	/// For checking object against Libtabula's global \c null constant
+	/// For checking object against libtabula's global \c null constant
 	bool operator !=(const libtabula::null_type&) const
 	{
 		return !is_null();
@@ -732,7 +732,7 @@ template <> LIBTABULA_EXPORT bool String::conv(bool) const;
 ///
 /// SSQLSes populate their data members from the raw field data by
 /// calling row["fieldname"].conv().  The raw field data is stored in a
-/// String, and the Libtabula native BLOB type is String.  Since we're
+/// String, and the libtabula native BLOB type is String.  Since we're
 /// dealing with generated code, we need this specialization which hand-
 /// written code wouldn't need.  Prove the truth of this to yourself by
 /// removing this and counting how many pieces examples/cgi_jpeg.cpp
@@ -744,21 +744,21 @@ template <> LIBTABULA_EXPORT std::string String::conv(std::string) const;
 
 /// \brief Specialization of String::conv<Type>() for libtabula::Date
 ///
-/// This is necessary because as of Libtabula v3, Date no longer has an
+/// This is necessary because as of libtabula v3, Date no longer has an
 /// implicit conversion ctor from String, and SSQLS uses conv() instead
 /// of the C++ type conversion system anyway.
 template <> LIBTABULA_EXPORT Date String::conv(Date) const;
 
 /// \brief Specialization of String::conv<Type>() for libtabula::DateTime
 ///
-/// This is necessary because as of Libtabula v3, DateTime no longer has
+/// This is necessary because as of libtabula v3, DateTime no longer has
 /// an implicit conversion ctor from String, and SSQLS uses conv()
 /// instead of the C++ type conversion system anyway.
 template <> LIBTABULA_EXPORT DateTime String::conv(DateTime) const;
 
 /// \brief Specialization of String::conv<Type>() for libtabula::Time
 ///
-/// This is necessary because as of Libtabula v3, Time no longer has an
+/// This is necessary because as of libtabula v3, Time no longer has an
 /// implicit conversion ctor from String, and SSQLS uses conv() instead
 /// of the C++ type conversion system anyway.
 template <> LIBTABULA_EXPORT Time String::conv(Time) const;

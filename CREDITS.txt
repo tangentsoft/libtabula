@@ -1,7 +1,7 @@
 MySQL was created by Kevin Atkinson during 1998.  From version
 1.0 (released in June 1999) through 1.7.9 (May 2001), the primary
 maintainer was Sinisa Milivojevic <sinisa@mysql.com>.  Neither Kevin
-nor Sinisa are currently involved in Libtabula development.
+nor Sinisa are currently involved in libtabula development.
 The current maintainer is Warren Young <wyoung@libtabula.org>,
 starting with MySQL++ 1.7.10 in August of 2004.
 
@@ -67,7 +67,7 @@ apparently written by Kevin Atkinson:
 
     Fredric Fredricson - For a long talk about automatic conversions.
 
-    Michael Widenius - Libtabula developer who has been very supportive of
+    Michael Widenius - libtabula developer who has been very supportive of
         my efforts.
 
     Paul J. Lucas - For the original idea of treating the query object
@@ -92,7 +92,7 @@ between the many versions of this library.
 
 
 Please do not email any of these people with general questions about
-Libtabula. All of us who are still active in Libtabula development
+libtabula. All of us who are still active in libtabula development
 read the mailing list, so questions sent there do get to us:
 
     http://lists.mysql.com/plusplus

@@ -5,7 +5,7 @@
 <sect1 id="overview">
   <title>Overview</title>
 
-  <para>Libtabula has a lot of complexity and power to cope with the
+  <para>libtabula has a lot of complexity and power to cope with the
   variety of DBMSes and uses for them, but at bottom it doesn&#x2019;t
   work all that differently than other database access APIs. The
   usage pattern looks like this:</para>
@@ -116,7 +116,7 @@
     </sect3>
 
     <sect3 id="StoreQueryResult">
-      <title>Queries That Return Data: Libtabula Data Structures</title>
+      <title>Queries That Return Data: libtabula Data Structures</title>
 
       <para>The most direct way to retrieve a result set is to use
       <methodname>Query::store()</methodname>. This returns a <ulink

@@ -1,6 +1,6 @@
 /***********************************************************************
- deadlock.cpp - Demonstrates how Libtabula's deadlock detection interacts
-	with Libtabula's Transaction class an exception handling mechanism.
+ deadlock.cpp - Demonstrates how libtabula's deadlock detection interacts
+	with libtabula's Transaction class an exception handling mechanism.
 	Run one copy of this program with the -m1 command line switch, then
 	while it's waiting for you to press Enter, run another copy with -m2
 	instead.
@@ -10,20 +10,20 @@
  in this file.  See the CREDITS.txt file in the top directory of the
  distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -67,13 +67,13 @@ main(int argc, char *argv[])
 		// Start a transaction set.  Transactions create mutex locks on
 		// modified rows, so if two programs both touch the same pair of
 		// rows but in opposite orders at the wrong time, one of the two
-		// programs will deadlock.  The Libtabula server knows how to detect
-		// this situation, and its error return causes Libtabula to throw
+		// programs will deadlock.  The libtabula server knows how to detect
+		// this situation, and its error return causes libtabula to throw
 		// a BadQuery exception.  The point of this example is that if
 		// you want to detect this problem, you would check the value of
 		// BadQuery::errnum(), not Connection::errnum(), because the
 		// transaction rollback process executes a query which succeeds,
-		// setting the Libtabula C API's "last error number" value to 0.
+		// setting the libtabula C API's "last error number" value to 0.
 		// The exception object carries its own copy of the error number
 		// at the point the exception was thrown for this very reason.
 		libtabula::Query query = con.query();

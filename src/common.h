@@ -11,20 +11,20 @@
  in this file.  See the CREDITS.txt file in the top directory of the
  distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -114,7 +114,7 @@
 	// If not VC++, MinGW, or Xcode, we assume we're on a system using
 	// autoconf, so bring in the config.h file it wrote containing the
 	// config test results.  Only do this during the library build, and
-	// even then, not if included from a Libtabula header file, since
+	// even then, not if included from a libtabula header file, since
 	// config.h cannot be safely installed with the other headers.
 #	if defined(LIBTABULA_NOT_HEADER) && !defined(MYSQLPP_XCODE)
 #		include "config.h"
@@ -167,7 +167,7 @@ typedef long long longlong;
 ///
 /// This is not to be used within the library or directly by end-user
 /// code.  It exists to make the MySQL C API headers happy: my_global.h
-/// defines it, but we can't use it in Libtabula, so we do it ourselves.
+/// defines it, but we can't use it in libtabula, so we do it ourselves.
 typedef unsigned long ulong;
 #endif
 

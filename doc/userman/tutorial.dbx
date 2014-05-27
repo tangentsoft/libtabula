@@ -39,7 +39,7 @@
 
     <para>Actually, there&#x2019;s a problem with that. It assumes that
     the libtabula library is already installed in a directory that the
-    operating system&#x2019;s dynamic linker can find. (Libtabula is
+    operating system&#x2019;s dynamic linker can find. (libtabula is
     almost never built statically.) Unless you&#x2019;re installing
     from RPMs, you&#x2019;ve had to build the library from source, and
     you should run at least a few of the examples before installing
@@ -49,7 +49,7 @@
     installed, we&#x2019;ve created a few helper scripts to help run
     the examples.</para>
 
-    <para>Libtabula comes with the <filename>exrun</filename> shell
+    <para>libtabula comes with the <filename>exrun</filename> shell
     script for Unixy systems, and the <filename>exrun.bat</filename>
     batch file for Windows. You pass the example program and its
     arguments to the <filename>exrun</filename> helper, which sets up
@@ -281,10 +281,10 @@ GRANT ALL PRIVILEGES ON libtabula.* TO test@'%';</screen>
     it could be its parent, or it could be a child created before
     you disabled optional exceptions.</para>
 
-    <para>Libtabula throws some exceptions unconditionally:</para>
+    <para>libtabula throws some exceptions unconditionally:</para>
 
     <itemizedlist>
-      <listitem><para>Libtabula checks array indices,
+      <listitem><para>libtabula checks array indices,
       always. For instance, if your code said
       &#x201C;<varname>row[21]</varname>&#x201D; on a
       row containing only 5 fields, you&#x2019;d get a
@@ -502,7 +502,7 @@ query &lt;&lt; "SELECT * FROM stock WHERE item = " &lt;&lt; quote &lt;&lt; s; </
     drop the <type>NOT NULL</type> part, the corresponding C++ type is
     <classname>libtabula::sql_tinyint_unsigned_null</classname>.</para>
 
-    <para>Libtabula doesn&#x2019;t force you to use these typedefs. It
+    <para>libtabula doesn&#x2019;t force you to use these typedefs. It
     tries to be flexible with regard to data conversions, so
     you could probably use <type>int</type> anywhere you use
     <classname>libtabula::sql_tinyint_unsigned</classname>,
@@ -651,9 +651,9 @@ cout &lt;&lt; int(myfield) &lt;&lt; endl;</programlisting>
 
 
   <sect2 id="string-types">
-    <title>Libtabula&#x2019;s Special String Types</title>
+    <title>libtabula&#x2019;s Special String Types</title>
 
-    <para>Libtabula has two classes that work like
+    <para>libtabula has two classes that work like
     <classname>std::string</classname> to some degree: <ulink
     type="classref" url="String"/> and <ulink type="classref"
     url="SQLTypeAdapter"/>. These classes exist to provide
@@ -1040,7 +1040,7 @@ cout &lt;&lt; int(myfield) &lt;&lt; endl;</programlisting>
     fact. A MySQL database server stores data compactly on disk,
     but it returns query data to the client in a textual form. This
     results in a kind of data bloat that affects numeric and BLOB
-    types the most.  Libtabula and the underlying C API library
+    types the most.  libtabula and the underlying C API library
     also have their own memory overheads in addition to this. So,
     if you happen to know that the database server stores every
     record of a particular table in 1 KB, pulling a million records
@@ -1373,7 +1373,7 @@ UseQueryResult r2 = query.use("select blah from bonk where bletch='smurf'");</pr
         <methodname>Query::store()</methodname>, you only get
         back the first query&#x2019;s results with that call, and
         then have to call <methodname>store_next()</methodname>
-        to get the subsequent query results. Libtabula provides
+        to get the subsequent query results. libtabula provides
         <methodname>Query::more_results()</methodname> so
         you know whether you&#x2019;re done, or need to call
         <methodname>store_next()</methodname> again.  Until you reach

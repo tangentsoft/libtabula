@@ -1,7 +1,7 @@
 /// \file connection.h
 /// \brief Declares the Connection class.
 ///
-/// Every program using Libtabula must create a Connection object, which
+/// Every program using libtabula must create a Connection object, which
 /// manages information about the connection to the database server, and
 /// performs connection-related operations once the connection is up.
 /// Subordinate classes, such as Query and Row take their defaults as
@@ -14,20 +14,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -94,7 +94,7 @@ public:
 	///   supports it
 	/// - \b "/some/domain/socket/path": If the passed string doesn't
 	///   match one of the previous alternatives and we're on a system
-	///   that supports Unix domain sockets, Libtabula will test it to see
+	///   that supports Unix domain sockets, libtabula will test it to see
 	///   if it names one, and use it if we have permission.
 	/// - \b "host.name.or.ip:port": If the previous test fails, or if
 	///   the system doesn't support Unix domain sockets at all, it
@@ -180,7 +180,7 @@ public:
 	/// \brief Return error message for last error associated with
 	/// this connection.
 	///
-	/// Returns either a Libtabula-specific error message if one exists,
+	/// Returns either a libtabula-specific error message if one exists,
 	/// or one from the current database driver otherwise.
 	const char* error() const;
 
@@ -213,7 +213,7 @@ public:
 	///	}
 	/// \endcode
 	///
-	/// Prior to Libtabula v3, the object was always falsy when we
+	/// Prior to libtabula v3, the object was always falsy when we
 	/// weren't connected.  Now a true return simply indicates a lack of
 	/// errors.  If you've been using this to test for whether the
 	/// connection is still up, you need to call connected() instead.
@@ -297,7 +297,7 @@ public:
 	/// \brief Returns information about database server's status
 	std::string server_status() const;
 
-	/// \brief Returns true if both Libtabula and database driver we're
+	/// \brief Returns true if both libtabula and database driver we're
 	/// using were compiled with thread awareness.
 	static bool thread_aware();
 
@@ -320,7 +320,7 @@ public:
 	/// the underlying database driver to set up any per-thread data
 	/// structures it needs.
 	///
-	/// The Libtabula user manual's <a href="../userman/threads.html">chapter
+	/// The libtabula user manual's <a href="../userman/threads.html">chapter
 	/// on threads</a> details two major strategies for dealing with
 	/// connections in the face of threads.  The Connection-per-thread
 	/// option frees you from ever having to call this method.  The
@@ -349,7 +349,7 @@ protected:
 			unsigned int& port, std::string& socket_name);
 
 	//// Subclass data
-	mutable std::string error_message_;	///< Libtabula specific error, if any
+	mutable std::string error_message_;	///< libtabula specific error, if any
 
 private:
 	DBDriver* driver_;

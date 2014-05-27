@@ -11,20 +11,20 @@
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -85,7 +85,7 @@ const null_type null = null_type();
 
 
 /// \brief Class for objects that define SQL null in terms of
-/// Libtabula's null_type.
+/// libtabula's null_type.
 ///
 /// Returns a null_type instance when you ask what null is, and is
 /// "(NULL)" when you insert it into a C++ stream.
@@ -158,7 +158,7 @@ struct NullIsBlank
 ///
 /// It's important to realize that this class doesn't hold nulls,
 /// it holds data that \e can \e be null.  It can hold a non-null
-/// value, you can then assign null to it (using Libtabula's global
+/// value, you can then assign null to it (using libtabula's global
 /// \c null object), and then assign a regular value to it again; the
 /// object will behave as you expect throughout this process.
 ///

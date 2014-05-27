@@ -4,7 +4,7 @@ hints and commentary you may find helpful.
 
 Code Repository Access
 ~~~~~~~~~~~~~~~~~~~~~~
-    Libtabula 4.0 and newer uses the Fossil distributed version
+    libtabula 4.0 and newer uses the Fossil distributed version
     control system.  (http://fossil-scm.org/)
 
     To clone the code repository, say:
@@ -12,7 +12,7 @@ Code Repository Access
         $ fossil clone http://libtabula.org/code libtabula.fossil
 
     That will get you a file called libtabula.fossil containing the
-    full history of Libtabula from just after the MySQL++ 3.2.1 fork.
+    full history of libtabula from just after the MySQL++ 3.2.1 fork.
     (If you want to browse the MySQL++ code repository, see its
     HACKERS.txt file.)  You can call that clone file anything you like.
     Even the .fossil ending is just a convention, not a requirement.
@@ -271,7 +271,7 @@ Submitting Patches
     for not being able to make unified diffs.  :)
 
 
-The Libtabula Code Style
+The libtabula Code Style
 ~~~~~~~~~~~~~~~~~~~~~~~~
     Every code base should have a common code style.  Love it or
     hate it, here are libtabula's current code style rules:
@@ -345,7 +345,7 @@ The Libtabula Code Style
 
 Testing Your Proposed Change
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Libtabula includes a self-test mechanism called dtest.  It's a
+    libtabula includes a self-test mechanism called dtest.  It's a
     Bourne shell script, run much like exrun:
 
         $ ./dtest [-s server_addr] [-u user] [-p password]

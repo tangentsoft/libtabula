@@ -11,20 +11,20 @@
  this file.  See the CREDITS.txt file in the top directory of the
  distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -141,11 +141,11 @@ main(int argc, char *argv[])
 
 	try {
 		// Enable multi-queries.  Notice that you almost always set
-		// Libtabula connection options before establishing the server
+		// libtabula connection options before establishing the server
 		// connection, and options are always set using this one
 		// interface.  If you're familiar with the underlying C API,
 		// you know that there is poor consistency on these matters;
-		// Libtabula abstracts these differences away.
+		// libtabula abstracts these differences away.
 		Connection con;
 		con.set_option(new MultiStatementsOption(true));
 
@@ -169,7 +169,7 @@ main(int argc, char *argv[])
 		print_multiple_results(query);
 
 #if MYSQL_VERSION_ID >= 50000
-		// If it's Libtabula v5.0 or higher, also test stored procedures, which
+		// If it's libtabula v5.0 or higher, also test stored procedures, which
 		// return their results the same way multi-queries do.
 		query << "DROP PROCEDURE IF EXISTS get_stock; " <<
 				"CREATE PROCEDURE get_stock" <<
@@ -193,7 +193,7 @@ main(int argc, char *argv[])
 	}
 	catch (const BadOption& err) {
 		cerr << err.what() << endl;
-		cerr << "This example requires Libtabula 4.1.1 or later." << endl;
+		cerr << "This example requires libtabula 4.1.1 or later." << endl;
 		return 1;
 	}
 	catch (const ConnectionFailed& err) {
@@ -202,7 +202,7 @@ main(int argc, char *argv[])
 		return 1;
 	}
 	catch (const Exception& er) {
-		// Catch-all for any other Libtabula exceptions
+		// Catch-all for any other libtabula exceptions
 		cerr << "Error: " << er.what() << endl;
 		return 1;
 	}

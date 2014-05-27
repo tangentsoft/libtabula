@@ -6,20 +6,20 @@
  Others may also hold copyrights on code in this file.  See the
  CREDITS.txt file in the top directory of the distribution for details.
 
- This file is part of Libtabula.
+ This file is part of libtabula.
 
- Libtabula is free software; you can redistribute it and/or modify it
+ libtabula is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation; either version 2.1 of the License, or
  (at your option) any later version.
 
- Libtabula is distributed in the hope that it will be useful, but WITHOUT
+ libtabula is distributed in the hope that it will be useful, but WITHOUT
  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
  License for more details.
 
  You should have received a copy of the GNU Lesser General Public
- License along with Libtabula; if not, write to the Free Software
+ License along with libtabula; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
  USA
 ***********************************************************************/
@@ -36,7 +36,7 @@ namespace libtabula {
 
 /// \brief Class to hold information about a SQL field
 ///
-/// This is a cut-down version of MYSQL_FIELD, using Libtabula and generic
+/// This is a cut-down version of MYSQL_FIELD, using libtabula and generic
 /// C++ types instead of the C types it uses, and hiding all fields
 /// behind accessors.  It leaves out data members we have decided aren't
 /// very useful.  Given a good argument, we're willing to mirror more of

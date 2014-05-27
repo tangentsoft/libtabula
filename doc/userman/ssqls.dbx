@@ -62,13 +62,13 @@ sql_create_6(stock, 1, 6,
 
     <para>Sometimes you have no choice but to use special libtabula
     data types to fully express the database schema. Consider the
-    <varname>description</varname> field. Libtabula&#x2019;s
+    <varname>description</varname> field. libtabula&#x2019;s
     <type>sql_mediumtext</type> type is just an alias for
     <type>std::string</type>, since we don&#x2019;t need
     anything fancier to hold a SQL <type>MEDIUMTEXT</type> value.
     It&#x2019;s the SQL NULL attribute that causes trouble: it
     <link linkend="sql-null">has no equivalent in the C++ type
-    system</link>. Libtabula offers the <ulink type="classref"
+    system</link>. libtabula offers the <ulink type="classref"
     url="Null"/> template, which bridges this difference between the
     two type systems.</para>
 
@@ -214,7 +214,7 @@ vector&lt;stock_subset&gt; res;
 query.storein(res);
 // ...etc...</programlisting>
 
-    <para>Libtabula is flexible about populating
+    <para>libtabula is flexible about populating
     SSQLSes.<footnote><para>Programs built against versions of
     libtabula prior to 3.0 would crash at almost any mismatch between
     the database schema and the SSQLS definition. It&#x2019;s no
@@ -263,7 +263,7 @@ query.storein(res);
   <sect2 id="ssqls-adding">
     <title>Adding data</title>
 
-    <para>Libtabula offers several ways to insert data in SSQLS form
+    <para>libtabula offers several ways to insert data in SSQLS form
     into a database table.</para>
 
     <sect3 id="ssqls-add-one">
@@ -275,7 +275,7 @@ query.storein(res);
       <programlisting><xi:include href="ssqls2.txt" parse="text" 
       xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
 
-      <para>That&#x2019;s all there is to it! Libtabula even takes
+      <para>That&#x2019;s all there is to it! libtabula even takes
       care of <link linkend="qescape">quoting and escaping</link> the
       data when building queries from SSQLS structures. It&#x2019;s
       efficient, too: libtabula is smart enough to quote and escape
@@ -287,7 +287,7 @@ query.storein(res);
       
       <para>Inserting a single row is useful, to be sure,
       but you might want to be able to insert many SSQLSes or
-      <classname>Row</classname> objects at once. Libtabula knows
+      <classname>Row</classname> objects at once. libtabula knows
       how to do that, too, sparing you the necessity of writing
       the loop. Plus, libtabula uses an optimized implementation of
       this algorithm, packing everything into a single SQL query,
@@ -341,7 +341,7 @@ query.insert(lots_of_stuff.begin(), lots_of_stuff.end()).execute();</programlist
       get efficient operation without exceeding the packet size
       limit.</para>
 
-      <para>Libtabula already knows how to do that, too,
+      <para>libtabula already knows how to do that, too,
       with <methodname>Query::insertfrom()</methodname>.
       We gave it a different name instead of adding yet another
       <methodname>insert()</methodname> overload because it
@@ -371,7 +371,7 @@ query.insert(lots_of_stuff.begin(), lots_of_stuff.end()).execute();</programlist
       because there is no single &#x201C;right&#x201D; choice for
       the decisions it makes.</para>
 
-      <para>Libtabula ships with three different insertion policy
+      <para>libtabula ships with three different insertion policy
       classes, which should cover most situations.</para>
 
       <para><classname>MaxPacketInsertPolicy</classname>, demonstrated
@@ -810,7 +810,7 @@ doc/ssqls-pretty &lt; myprog.cpp | less</programlisting>
     equality. The only place this is tricky is with floating-point
     numbers, since rounding errors can make two &#x201C;equal&#x201D;
     values compare as distinct. This property of floating-point numbers
-    means we almost never want to do exact comparison. Libtabula
+    means we almost never want to do exact comparison. libtabula
     lets you specify the precision you want it to use. If the
     difference between two values is under a given threshold, libtabula
     considers the values equal. The default threshold is 0.00001. This
@@ -840,7 +840,7 @@ doc/ssqls-pretty &lt; myprog.cpp | less</programlisting>
     want to use Cygwin.</para>
 
     <para>If you&#x2019;re on a system that uses autoconf, building
-    Libtabula automatically updates <filename>ssqls.h</filename>
+    libtabula automatically updates <filename>ssqls.h</filename>
     any time <filename>ssqls.pl</filename> changes. Otherwise,
     you&#x2019;ll need to run the Perl interpreter by hand:</para>
 
@@ -893,7 +893,7 @@ public:
     having these contructors, so our <classname>Derived</classname>
     above is-not-a <classname>Base</classname>, and so it isn&#x2019;t
     an SSQLS. If you try to use <classname>Derived</classname> as
-    an SSQLS, you&#x2019;ll get compiler errors wherever Libtabula
+    an SSQLS, you&#x2019;ll get compiler errors wherever libtabula
     tries to access one of these other constructors.</para>
 
     <para>There&#x2019;s another minor flaw, as well. Our lone
@@ -1040,7 +1040,7 @@ public:
       to <filename>src</filename> in libtabula.</para></footnote>
       before you build and install the library.</para></listitem>
 
-      <listitem><para>Libtabula 4.0.0 introduces the SSQLS v2 feature
+      <listitem><para>libtabula 4.0.0 introduces the SSQLS v2 feature
 			which may work on VC++ 2003 since it
 			is&#x2019;nt based on huge macros.  It has
 			not been tested, however.</para></listitem>

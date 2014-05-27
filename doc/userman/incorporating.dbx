@@ -3,7 +3,7 @@
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
 <sect1 id="incorporating">
-  <title>Using Libtabula in Your Own Project</title>
+  <title>Using libtabula in Your Own Project</title>
 
   <para>Up to now, this manual has only discussed libtabula
   in conjunction with the example programs that come with the
@@ -14,13 +14,13 @@
   <filename>libtabula.h</filename> in each module
   that uses libtabula. In modules that use <link
   linkend="ssqls">SSQLS v1</link>, you also need to include
-  <filename>ssqls.h</filename>.<footnote><para>Libtabula has many header
+  <filename>ssqls.h</filename>.<footnote><para>libtabula has many header
   files, but the only one that isn&#x2019;t intertwined with the rest is
   <filename>ssqls.h</filename>. <filename>libtabula.h</filename> brings
   in all of the others in the correct order. Some have tried to speed
   their build times by finding a subset of libtabula headers to include,
   but <filename>libtabula.h</filename> already does as much of this as
-  is practical. Libtabula&#x2019;s monolithic nature rules out finding
+  is practical. libtabula&#x2019;s monolithic nature rules out finding
   a true subset of the library headers.</para></footnote></para>
 
   <para>At this point, your project probably still won&#x2019;t compile,
@@ -35,7 +35,7 @@
     <title>Visual C++</title>
 
     <sect3 id="inc-vstudio-mfc">
-      <title>Using Libtabula in an MFC Project</title>
+      <title>Using libtabula in an MFC Project</title>
 
       <para>If you don&#x2019;t already have a project set up, open
       Visual Studio, say File | New | Project, then choose Visual C++
@@ -96,7 +96,7 @@
 
 
     <sect3 id="inc-vstudio-wforms">
-      <title>Using Libtabula in a Windows Forms C++/CLI Project</title>
+      <title>Using libtabula in a Windows Forms C++/CLI Project</title>
 
       <para>Before you start work on getting libtabula working with your
       own program, you need to make some changes to the libtabula build

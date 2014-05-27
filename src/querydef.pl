@@ -3,27 +3,27 @@
 ########################################################################
 # querydef.pl - Generates querydef.h, which defines a number of macros
 #	used in query.h that differ only in the number of arguments.  That
-#	number limits the number of parameters a Libtabula template query can
+#	number limits the number of parameters a libtabula template query can
 #	accept.  This value can be changed from its default, below.
 #
 # Copyright © 2006-2010 by Educational Technology Resources, Inc.
 # Others may also hold copyrights on code in this file.  See the CREDITS
 # file in the top directory of the distribution for details.
 #
-# This file is part of Libtabula.
+# This file is part of libtabula.
 #
-# Libtabula is free software; you can redistribute it and/or modify it
+# libtabula is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License as published
 # by the Free Software Foundation; either version 2.1 of the License, or
 # (at your option) any later version.
 #
-# Libtabula is distributed in the hope that it will be useful, but WITHOUT
+# libtabula is distributed in the hope that it will be useful, but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 # FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
 # License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public
-# License along with Libtabula; if not, write to the Free Software
+# License along with libtabula; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
 # USA
 ########################################################################

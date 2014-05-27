@@ -614,19 +614,19 @@
 
   <?hard-pagebreak?>
   <sect2 id="userman-license">
-    <title>Libtabula User Manual License</title>
+    <title>libtabula User Manual License</title>
 
     <sect3 id="userman-license-copyright">
       <title>I. COPYRIGHT</title>
 
-      <para>The copyright to the Libtabula User Manual is owned by its
+      <para>The copyright to the libtabula User Manual is owned by its
       authors.</para>
     </sect3>
 
     <sect3 id="userman-license-main">
       <title>II. LICENSE</title>
 
-      <para>The Libtabula User Manual may be reproduced and distributed in
+      <para>The libtabula User Manual may be reproduced and distributed in
       whole or in part, in any medium physical or electronic, provided
       that this license notice is displayed in the reproduction.
       Commercial redistribution is permitted and encouraged. Thirty days
@@ -671,12 +671,12 @@
           is provided in the document.</para></listitem>
         </orderedlist>
 
-        <para>Mere aggregation of the Libtabula User Manual with other
+        <para>Mere aggregation of the libtabula User Manual with other
         documents or programs on the same media shall not cause this
         license to apply to those other works.</para>
 
         <para>All translations, derivative documents, or modified
-        documents that incorporate the Libtabula User Manual may not have
+        documents that incorporate the libtabula User Manual may not have
         more restrictive license terms than these, except that you may
         require distributors to make the resulting document available in
         source format.</para>

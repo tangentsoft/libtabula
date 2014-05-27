@@ -2,12 +2,12 @@
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
     "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<sect1 id="unicode" xreflabel="Using Unicode with Libtabula">
-  <title>Using Unicode with Libtabula</title>
+<sect1 id="unicode" xreflabel="Using Unicode with libtabula">
+  <title>Using Unicode with libtabula</title>
 
   <sect2 id="unicode-history">
     <title>A Short History of Unicode</title>
-    <subtitle>...with a focus on relevance to Libtabula</subtitle>
+    <subtitle>...with a focus on relevance to libtabula</subtitle>
 
     <para>In the old days, computer operating systems only dealt with
     8-bit character sets. That only allows for 256 possible characters,
@@ -42,7 +42,7 @@
     too late for Unix and C. Those decades of legacy created an
     immense inertia preventing a widespread move away from 8-bit
     characters. MySQL and C++ come out of these older traditions, and
-    so they share the same practical limitations. Libtabula currently
+    so they share the same practical limitations. libtabula currently
     doesn&#x2019;t have any code in it for Unicode conversions; it
     just passes data along unchanged from the underlying DBMS C API,
     so you still need to be aware of these underlying issues.</para>
@@ -124,10 +124,10 @@
     <para>Most open source DBMSes these days use the UTF-8 Unicode
     encoding by preference but Windows uses UTF-16 instead.  Because
     of that, you probably need to convert data when passing text
-    between Libtabula and the Windows API. Since there&#x2019;s no
+    between libtabula and the Windows API. Since there&#x2019;s no
     point in trying for portability &mdash; no other OS I&#x2019;m
     aware of natively uses UTF-16 &mdash; you might as well use
-    platform-specific functions to do this translation. Libtabula
+    platform-specific functions to do this translation. libtabula
     ships with two Visual C++ specific examples showing how to do this
     in a GUI program.<footnote><para>The console examples don&#x2019;t
     bother with such conversions since console programs are relatively
