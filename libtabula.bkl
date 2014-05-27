@@ -169,11 +169,11 @@
     <optimize>$(OPTIMIZE_FLAG)</optimize>
 
     <if cond="FORMAT in ['autoconf', 'gnu', 'mingw', 'xcode2']">
-      <include>lib</include>
+      <include>src</include>
       <lib-path>.</lib-path>
     </if>
     <if cond="FORMAT in ['msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
-      <include>../lib</include>
+      <include>../src</include>
     </if>
 
     <if cond="FORMAT=='xcode2'">
