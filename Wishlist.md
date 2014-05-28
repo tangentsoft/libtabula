@@ -114,6 +114,7 @@ either the API or the ABI.
         their employees, assigns, mistresses, and, ah, hired help.
         If you use doubles, anyway.
 
+
 Must Be Done in v4.0
 -------------
 
@@ -510,10 +511,6 @@ v4.0 ships.
     so you lose accuracy in the fractional part.  Don't forget to
     include an `is_null` flag to cope with conversion from infinite
     or `NaN` float values; that's how MySQL stores these.
-
-
-These items do not break the ABI, but may extend the API.  Some may end
-up in v4.0, while others will not appear until later.
 
 
 Not Until v5.0 At Earliest
