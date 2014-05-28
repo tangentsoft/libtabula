@@ -508,9 +508,9 @@
       <!-- Copy files into package directory -->
       <!-- top directory -->
       <command>
-        cp -RL *.bat *.in *.txt Bakefiles.bkgen bootstrap ChangeLog.txt \
+        cp -RL *.bat *.in *.md *.txt Bakefiles.bkgen bootstrap \
           cleanmf config.guess config.sub configure* dtest exrun \
-          install* Makefile.* libtabula.* osver Wishlist.txt $(PKGNAME)
+          install* Makefile.* libtabula.* osver $(PKGNAME)
       </command>
 
       <!-- VC++ project file subdirs -->
@@ -530,7 +530,7 @@
           cp -RL doc/README* doc/pdf doc/ssqls-pretty $(PKGNAME)/doc
         </command>
         <command>
-          for f in fo2pdf LICENSE.txt Makefile Makefile.hello.* mktxt README.txt \*.dbx \*.in \*.mod \*.txt \*.xsl ; \
+          for f in fo2pdf Makefile Makefile.hello.* mktxt \*.dbx \*.in \*.md \*.mod \*.txt \*.xsl ; \
           do \
             cp doc/userman/$(DDF) $(PKGNAME)/doc/userman ; \
           done

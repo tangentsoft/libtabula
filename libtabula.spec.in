@@ -81,12 +81,12 @@ rm -rf %{buildroot} doc/examples
 
 %files
 %defattr(-,root,root,-)
-%doc ChangeLog.txt COPYING.txt CREDITS.txt LICENSE.txt README.txt
+%doc ChangeLog.md COPYING.md CREDITS.md LICENSE.md README.md
 %{_libdir}/libtabula.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%doc doc/examples doc/README-devel-RPM.txt README-examples.txt Wishlist.txt
+%doc doc/examples doc/README-devel-RPM.txt README-examples.md Wishlist.md
 %{_includedir}/libtabula
 %{_libdir}/libtabula.so
 
