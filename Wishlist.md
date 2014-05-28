@@ -176,6 +176,139 @@ point, 5.0.
             on non-autoconf systems, or at least pass in options that
             let the user select them?
 
+*   If `pkg-config` is available, register ourselves with it using
+    information discovered by `configure`.  Also, write out a
+    `libtabula-config` script, which either wraps `pkg-config` or
+    reinvents it, poorly, for systems that don't have it.
+
+*   Add `String::operator==(const libtabula::null_type&)`.  Needed to
+    allow comparison of `row[x]` returns to SQL `null`.  Change one of
+    the examples to show it?
+
+*   Memory "leak" and C API library init fixes:
+
+    -   Add `DBDriver::library_begin()` and `library_end()`, wrapping
+        similarly named functions in the C API.
+
+    -   Create `Process` class, which you create at the top of `main()`
+        on the stack, purely to call these automatically.
+
+    -   Update userman to recommend creating `Process` object in
+        `ConnectionPool` derivatives, instead.
+
+    -   Create `Thread` class to call existing
+        `DBDriver::thread_start()` and `thread_end()`, similar to
+        Process, created on the stack of the thread entry function.
+
+    -   Move memory leak FAQ into userman, rewriting it to cover
+        all this.
+
+*   `libtabula::execute` manipulator.  Immediately executes built
+    query string.  Works best with exceptions, as that's the only
+    way to detect failures.
+
+*   Chris Frey's `packarray` class
+
+*   Create adaptors for `std::bitset`, for storing binary data in a
+    table.  Make two options available, one for storing the return
+    from `bitset::to_ulong()` in an `UNSIGNED INTEGER` column, and
+    another for storing a larger set of bits in a more flexible way,
+    perhaps as a `BLOB`.
+
+*   Has experience with new thread awareness changed our mind on
+    atomic inc/dec of reference counts in `RefCounted*`?
+
+*   Optional checked conversions in `String` for numerics.
+
+    Throw `BadConversion` on range overflow?
+
+*   Add `Query::storein_if()`, mirroring `store_if()`
+
+*   Add a method to `libtabula::String` to return a widened version of the
+    string.  Probably make return type templatized so we can return
+    `wstring`, C++/CLI native strings, etc.  Then convert examples that
+    do this conversion to use this new mechanism.
+
+*   Try to add operator `std::string` to `String`.  If it doesn't work,
+    explain why not in the userman and in `Row::operator[]` refman.
+  
+*   Subclass `libtabula::Blob` from `libtabula::String`, differing
+    only in that it knows that it should be automatically quoted and
+    escaped when inserted into a SQL query.
+
+*   If SSQLSv2 does use a common base class, change `Query` template
+    methods taking SSQLS into concrete methods taking `SsqlsBase&`.
+
+*   Make `Query::insert()`, `replace()` and `update()` execute their
+    queries immediately.  Requires an ABI break, because they'll
+    have to return `SimpleResult`.
+
+    Ensure that calling `execute()` on the resulting auto-reset `Query`
+    object is a no-op.
+
+*   Switch Query's safe `bool` to overload `basic_ios<>::operator
+    void*()` instead.  We create an ambiguous conversion in `bool`
+    context with some C++ standard libraries otherwise.
+
+*   Templatize `libtabula::String` on `value_type` so it can be used to
+    hold wide characters.  Then the method that converts UTF-8 to the
+    platform's best wide character type can just return a different
+    variant of `libtabula::String`.
+
+*   `Transaction` class should check an "in transaction" flag on
+    `Connection` (or `DBDriver`) before sending `BEGIN`, defaulting to
+    false.  If set, the `Transaction` object does nothing.  If not
+    set, set it and send the query.  This prevents it from trying
+    to set up nested queries, which MySQL doesn't support.
+
+*   Remove throw-spec for `std::out_of_range` from
+    `SQLTypeAdapter::at()`.  It no longer throws this, and throw-specs
+    are passe&eacute; anyway.
+
+*   Store failed query string in `BadQuery` exception object, to make
+    logging and debugging easier.  One could have a try block wrapping
+    many queries, and be able to recover the failed query string from
+    the exception object, instead of somehow keeping track yourself.
+    ([Patch](http://lists.mysql.com/plusplus/8374))
+
+*   `Query` and `SQLStream` could have a common base class that would
+    allow the stream manipulator functions to catch and modify
+    strings based on only one `dynamic_cast` instead of requiring
+    two as it does since the addition of the `SQLStream` class.
+
+*   Make internal call chain steps like `Query::execute(SQLQueryParms&)`
+    protected?  No good reason for end users to call it, and making
+    it part of the public API causes people to try calling it, and
+    discovering that it's not a very elegant interface, compared to
+    the ones taking `SQLString`.
+
+*   SQL time type allows &plusmn; 839 hours of range.  We currently
+    can't cope with negative times, and if we change it to use signed
+    integers, we'll still only get &plusmn; 127 hours instead of +255.
+    Need to switch the hour field to a `signed short` to get the
+    full range.
+
+*   Get rid of two-step create in `DBDriver`, requiring a connection to
+    be established in ctor for object to be valid?  RAII.  The
+    DB-specific functions that don't require a connection can be
+    static methods.  Tricky bit: a failed `Connection::connect()` call
+    will likely be followed by an indirect call to `DBDriver::err*()`.
+    Does `Connection` cache the error value and message?  If we can pull
+    this off, we can drop the `DBDriver::is_connected_` flag and change
+    `Connection::connected()` to `return driver_ != 0`.
+
+*   Audit library for non-virtual methods that could be profitably
+    made virtual.  Many are non-overridable now purely because
+    changing them would break the ABI, so now's the time to fix that.
+
+
+v4.1 or Later
+----
+
+Items in this section could go in v4.0, as they do not break the ABI,
+but they will probably have to wait for round-tuits to appear after
+v4.0 ships.
+
 *   Finish [SSQLS v2](http://lists.mysql.com/plusplus/6929):
 
     -   C++ code generator, from walking DSL parse tree.
@@ -338,18 +471,16 @@ point, 5.0.
         now use SSQLS v2.  Wrap it in a check for
         `LIBTABULA_ALLOW_SSQLS_V1`, so people can disable the warning.
 
-*   Add `Query::storein<Container, T>(container)`, getting table
-    name from `container::value_type.table()` instead.
+	-   Add `Query::storein<Container, T>(container)`, getting table
+		name from `container::value_type.table()` instead.
 
 *   Define `operator<<` for `Fields`, `Row`, `StoreQueryResult`, etc.
 
     Make output format selectable: CSV, XML and JSON to start?  Could
     add YAML, BSON, etc. later.
 
-*   Remove `libexcommon`.  Between above and SSQLSv2, we should have
-    everything we need to get equivalent output without special
-    purpose code.  There should be no *ad hoc* data dumping code in
-    the examples.
+	This and SSQLS v2 will allow us to get rid of `libexcommon`, since
+	we won't need hand-rolled data dumping code.
 
 *   Bring back mandatory quoting for manipulators?  If someone says
     `os << libtabula::escape << foo` do they not really really
@@ -358,139 +489,6 @@ point, 5.0.
 
 *   Configure script should try to get MySQL C API directories
     from `mysql_config`.
-
-*   If `pkg-config` is available, register ourselves with it using
-    information discovered by `configure`.  Also, write out a
-    `libtabula-config` script, which either wraps `pkg-config` or
-    reinvents it, poorly, for systems that don't have it.
-
-*   Add `String::operator==(const libtabula::null_type&)`.  Needed to
-    allow comparison of `row[x]` returns to SQL `null`.  Change one of
-    the examples to show it?
-
-*   Memory "leak" and C API library init fixes:
-
-    -   Add `DBDriver::library_begin()` and `library_end()`, wrapping
-        similarly named functions in the C API.
-
-    -   Create `Process` class, which you create at the top of `main()`
-        on the stack, purely to call these automatically.
-
-    -   Update userman to recommend creating `Process` object in
-        `ConnectionPool` derivatives, instead.
-
-    -   Create `Thread` class to call existing
-        `DBDriver::thread_start()` and `thread_end()`, similar to
-        Process, created on the stack of the thread entry function.
-
-    -   Move memory leak FAQ into userman, rewriting it to cover
-        all this.
-
-*   `libtabula::execute` manipulator.  Immediately executes built
-    query string.  Works best with exceptions, as that's the only
-    way to detect failures.
-
-*   Chris Frey's `packarray` class
-
-*   Create adaptors for `std::bitset`, for storing binary data in a
-    table.  Make two options available, one for storing the return
-    from `bitset::to_ulong()` in an `UNSIGNED INTEGER` column, and
-    another for storing a larger set of bits in a more flexible way,
-    perhaps as a `BLOB`.
-
-*   Has experience with new thread awareness changed our mind on
-    atomic inc/dec of reference counts in `RefCounted*`?
-
-*   Optional checked conversions in `String` for numerics.
-
-    Throw `BadConversion` on range overflow?
-
-*   Add `Query::storein_if()`, mirroring `store_if()`
-
-*   Add a method to `libtabula::String` to return a widened version of the
-    string.  Probably make return type templatized so we can return
-    `wstring`, C++/CLI native strings, etc.  Then convert examples that
-    do this conversion to use this new mechanism.
-
-*   Try to add operator `std::string` to `String`.  If it doesn't work,
-    explain why not in the userman and in `Row::operator[]` refman.
-  
-*   Subclass `libtabula::Blob` from `libtabula::String`, differing
-    only in that it knows that it should be automatically quoted and
-    escaped when inserted into a SQL query.
-
-*   If SSQLSv2 does use a common base class, change `Query` template
-    methods taking SSQLS into concrete methods taking `SsqlsBase&`.
-
-*   Make `Query::insert()`, `replace()` and `update()` execute their
-    queries immediately.  Requires an ABI break, because they'll
-    have to return `SimpleResult`.
-
-    Ensure that calling `execute()` on the resulting auto-reset `Query`
-    object is a no-op.
-
-*   Switch Query's safe `bool` to overload `basic_ios<>::operator
-    void*()` instead.  We create an ambiguous conversion in `bool`
-    context with some C++ standard libraries otherwise.
-
-*   Templatize `libtabula::String` on `value_type` so it can be used to
-    hold wide characters.  Then the method that converts UTF-8 to the
-    platform's best wide character type can just return a different
-    variant of `libtabula::String`.
-
-*   `Transaction` class should check an "in transaction" flag on
-    `Connection` (or `DBDriver`) before sending `BEGIN`, defaulting to
-    false.  If set, the `Transaction` object does nothing.  If not
-    set, set it and send the query.  This prevents it from trying
-    to set up nested queries, which MySQL doesn't support.
-
-*   Remove throw-spec for `std::out_of_range` from
-    `SQLTypeAdapter::at()`.  It no longer throws this, and throw-specs
-    are passe&eacute; anyway.
-
-*   Store failed query string in `BadQuery` exception object, to make
-    logging and debugging easier.  One could have a try block wrapping
-    many queries, and be able to recover the failed query string from
-    the exception object, instead of somehow keeping track yourself.
-    ([Patch](http://lists.mysql.com/plusplus/8374))
-
-*   `Query` and `SQLStream` could have a common base class that would
-    allow the stream manipulator functions to catch and modify
-    strings based on only one `dynamic_cast` instead of requiring
-    two as it does since the addition of the `SQLStream` class.
-
-*   Make internal call chain steps like `Query::execute(SQLQueryParms&)`
-    protected?  No good reason for end users to call it, and making
-    it part of the public API causes people to try calling it, and
-    discovering that it's not a very elegant interface, compared to
-    the ones taking `SQLString`.
-
-*   SQL time type allows &plusmn; 839 hours of range.  We currently
-    can't cope with negative times, and if we change it to use signed
-    integers, we'll still only get &plusmn; 127 hours instead of +255.
-    Need to switch the hour field to a `signed short` to get the
-    full range.
-
-*   Get rid of two-step create in `DBDriver`, requiring a connection to
-    be established in ctor for object to be valid?  RAII.  The
-    DB-specific functions that don't require a connection can be
-    static methods.  Tricky bit: a failed `Connection::connect()` call
-    will likely be followed by an indirect call to `DBDriver::err*()`.
-    Does `Connection` cache the error value and message?  If we can pull
-    this off, we can drop the `DBDriver::is_connected_` flag and change
-    `Connection::connected()` to `return driver_ != 0`.
-
-*   Audit library for non-virtual methods that could be profitably
-    made virtual.  Many are non-overridable now purely because
-    changing them would break the ABI, so now's the time to fix that.
-
-
-v4.1 or Later
-----
-
-Items in this section could go in v4.0, as they do not break the ABI,
-but they will probably have to wait for round-tuits to appear after
-v4.0 ships.
 
 *   Create a backtick manipulator for use by `field_list()` in `row.h`
     and `ssqls.h`.  These currently use `do_nothing0`, but that prevents
