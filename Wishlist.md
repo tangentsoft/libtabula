@@ -134,7 +134,47 @@ point, 5.0.
 
 *   Database independence:
 
-    -   Use libdbi or similar?  http://libdbi.sf.net/
+    -   Pass a single string parameter to Connection::connect(), being
+        a URL scheme which we pass to DBDriver::create(), a virtual
+        ctor which looks at the bit before the colon to figure out which
+        subclass to create.  Examples:
+
+        -   `mysql://[user][:password][@][host][:port][/db]` = MySQL
+            driver with optional parameters.  If you give only
+            "mysql://", it uses default user name, no password,
+            localhost, default port, and selects no DB to start.
+            You can give any combination of other optional parts,
+            within reason; you must give @ if you give either user
+            or password, but can leave it off if you are using the
+            defaults, for example.
+
+        -   `db://...` = Generic form of `mysql://` URL scheme.  We
+            infer the DB type based on the URL parameters.  If nothing
+            in the string gives us reason to prefer a driver, it
+            tries the first compatible driver.  For instance, if
+            you pass a port, it won't try to use the SQLite driver,
+            but if you have two network DBMS drivers compiled in and
+            the port is 3306, it infers MySQLDriver.
+
+        -   `odbc://[user:password@]DSN` = ODBC
+
+        -   `sqlite3:///path/to/foo.db` = Most specific form of SQLite
+            URL, specifying the SQLite v3 API, with the assumption
+            that we will one day have a sqlite4 URL scheme, allowing
+            libtabula to support both APIs if they differ enough to
+            matter to libtabula.
+
+        -   `sqlite:///path/to/foo.db` = Generic "any SQLite" form;
+            dunno whether it should imply sqlite3 or sqlite4 if
+            both are compiled in.  On the one hand, sqlite3 would be
+            forward-compatible, whereas by not specifying, the code
+            could arguably be electing not to care.
+
+        -   `file:///path/to/foo.db` = Most generic form for local
+            file-based DBMSes, where we have to do either process
+            of elimination or magic byte checks to figure out what
+            driver to use.  If only SQLite is built in, it must be
+            a SQLite DB.
 
     -   Make DBDriver class purely abstract; move its entire functional
         contents to new MysqlDriver.
@@ -479,16 +519,16 @@ v4.0 ships.
         now use SSQLS v2.  Wrap it in a check for
         `LIBTABULA_ALLOW_SSQLS_V1`, so people can disable the warning.
 
-	-   Add `Query::storein<Container, T>(container)`, getting table
-		name from `container::value_type.table()` instead.
+    -   Add `Query::storein<Container, T>(container)`, getting table
+        name from `container::value_type.table()` instead.
 
 *   Define `operator<<` for `Fields`, `Row`, `StoreQueryResult`, etc.
 
     Make output format selectable: CSV, XML and JSON to start?  Could
     add YAML, BSON, etc. later.
 
-	This and SSQLS v2 will allow us to get rid of `libexcommon`, since
-	we won't need hand-rolled data dumping code.
+    This and SSQLS v2 will allow us to get rid of `libexcommon`, since
+    we won't need hand-rolled data dumping code.
 
 *   Bring back mandatory quoting for manipulators?  If someone says
     `os << libtabula::escape << foo` do they not really really
@@ -518,6 +558,9 @@ v4.0 ships.
     so you lose accuracy in the fractional part.  Don't forget to
     include an `is_null` flag to cope with conversion from infinite
     or `NaN` float values; that's how MySQL stores these.
+
+*   Create libdbi or SOCI DBDriver subclasses?  Will give a fast path
+    to other DBMSes, at the expense of doubled abstraction layers.
 
 
 Not Until v5.0 At Earliest
