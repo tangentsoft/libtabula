@@ -179,6 +179,9 @@ point, 5.0.
     -   Make DBDriver class purely abstract; move its entire functional
         contents to new MysqlDriver.
 
+	-   Map C API error numbers to libtabula constants in
+	    DBDriver::errnum().  Rename to error_code()?
+
     -   Must create at least two other DBDriver subclasses to
         ensure base class is reusable before releasing v4.0.
         PostgresDriver and SqlLiteDriver?
