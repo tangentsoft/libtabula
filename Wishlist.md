@@ -302,6 +302,13 @@ point, 5.0.
     made virtual.  Many are non-overridable now purely because
     changing them would break the ABI, so now's the time to fix that.
 
+*   Connection has some query-building functions (e.g. ping()) that do
+    explicit checks on the connection state before running, while the
+    main execution paths (exec(), use(), etc.) do not.  We should remove
+    all the explicit checks.  The underlying DBDriver level will detect
+    the error, thus ensuring that we handle this problem in a consistent
+    way.
+
 
 v4.1 or Later
 ----
