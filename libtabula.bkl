@@ -62,7 +62,7 @@
     <dll id="libtabula">
       <dllname>libtabula$(DEBUG_SUFFIX)</dllname>
       <libname>libtabula$(DEBUG_SUFFIX)</libname>
-      <so_version>4.0.0</so_version>
+      <so_version>3.9.9</so_version>
 
       <sources>
         src/beemutex.cpp
