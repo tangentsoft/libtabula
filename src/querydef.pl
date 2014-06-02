@@ -6,7 +6,7 @@
 #	number limits the number of parameters a libtabula template query can
 #	accept.  This value can be changed from its default, below.
 #
-# Copyright © 2006-2010 by Educational Technology Resources, Inc.
+# Copyright © 2006-2010, 2014 by Educational Technology Resources, Inc.
 # Others may also hold copyrights on code in this file.  See the CREDITS
 # file in the top directory of the distribution for details.
 #
@@ -60,8 +60,8 @@ print OUT << "---";
 
 ---
 
-## Build mysql_query_define0 macro
-print OUT "#define mysql_query_define0(RETURN, FUNC) \\\n";
+## Build libtabula_query_define0 macro
+print OUT "#define libtabula_query_define0(RETURN, FUNC) \\\n";
 for (my $i = 1; $i < $max_parameters; ++$i) {
 	print OUT "\tRETURN FUNC(";
 	for (my $j = 0; $j < $i + 1; ++$j) {
@@ -78,8 +78,8 @@ for (my $i = 1; $i < $max_parameters; ++$i) {
 }
 print OUT "\n";
 
-## Add mysql_query_define1 macro
-print OUT "#define mysql_query_define1(FUNC) \\\n";
+## Add libtabula_query_define1 macro
+print OUT "#define libtabula_query_define1(FUNC) \\\n";
 for (my $i = 1; $i < $max_parameters; ++$i) {
 	print OUT "\ttemplate <class T> void FUNC(T& container";
 	for (my $j = 0; $j < $i + 1; ++$j) {

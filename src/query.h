@@ -1291,13 +1291,13 @@ public:
 	// to keep the above code clear, but also so that we may hide them
 	// from Doxygen, which gets confused by macro instantiations that look
 	// like method declarations.
-	mysql_query_define0(std::string, str)
-	mysql_query_define0(SimpleResult, execute)
-	mysql_query_define0(StoreQueryResult, store)
-	mysql_query_define0(UseQueryResult, use)
-	mysql_query_define1(storein_sequence)
-	mysql_query_define1(storein_set)
-	mysql_query_define1(storein)
+	libtabula_query_define0(std::string, str)
+	libtabula_query_define0(SimpleResult, execute)
+	libtabula_query_define0(StoreQueryResult, store)
+	libtabula_query_define0(UseQueryResult, use)
+	libtabula_query_define1(storein_sequence)
+	libtabula_query_define1(storein_set)
+	libtabula_query_define1(storein)
 #endif // !defined(DOXYGEN_IGNORE)
 
 	/// \brief The default template parameters
