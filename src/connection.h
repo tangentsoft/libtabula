@@ -157,13 +157,14 @@ public:
 
 	/// \brief Returns a reference to the current database driver
 	///
-	/// \internal This exists mostly for the benefit of Query, Result
-	/// and ResUse.  If there is something you want to use in the
-	/// DBDriver interface, look for something similar in one of these
-	/// classes instead.  If you still can't find it, send a message to
-	/// the mailing list asking about it.  Unless you're doing something
-	/// very low-level, there should never be a reason to use the 
-	/// driver directly.
+	/// \internal This exists mostly for the benefit of Query, the
+	/// ResultBase hierarchy, and SQLStream.  If DBDriver exposes a
+	/// feature you want, you can probably get access to it through
+	/// one of these higher-level classes instead.  If you truly can't
+	/// find an equivalent feature in the library's high-level classes,
+	/// send a message to the mailing list asking about it.  Unless
+	/// you're doing something very low-level, there should never be
+	/// a reason to use the driver directly.
 	DBDriver* driver() { return driver_; }
 
 	/// \brief Asks the database server to drop (destroy) a database
