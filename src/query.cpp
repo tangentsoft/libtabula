@@ -110,15 +110,8 @@ size_t
 Query::escape_string(std::string* ps, const char* original,
 		size_t length) const
 {
-	if (conn_ && *conn_) {
-		// Normal case
-		return conn_->driver()->escape_string(ps, original, length);
-	}
-	else {
-		// Should only happen in test/test_manip.cpp, since it doesn't
-		// want to open a DB connection just to test the manipulators.
-		return DBDriver::escape_string_no_conn(ps, original, length);
-	}
+	SQLStream ss(conn_);
+	return ss.escape_string(ps, original, length);
 }
 
 
@@ -126,15 +119,8 @@ size_t
 Query::escape_string(char* escaped, const char* original,
 		size_t length) const
 {
-	if (conn_ && *conn_) {
-		// Normal case
-		return conn_->driver()->escape_string(escaped, original, length);
-	}
-	else {
-		// Should only happen in test/test_manip.cpp, since it doesn't
-		// want to open a DB connection just to test the manipulators.
-		return DBDriver::escape_string_no_conn(escaped, original, length);
-	}
+	SQLStream ss(conn_);
+	return ss.escape_string(escaped, original, length);
 }
 
 
