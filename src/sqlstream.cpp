@@ -58,9 +58,19 @@ SQLStream::escape_string(std::string* ps, const char* original,
 		return conn_->driver()->escape_string(ps, original, length);
 	}
 	else {
-		// Should only happen in test/test_manip.cpp, since it doesn't
-		// want to open a DB connection just to test the manipulators.
-		return DBDriver::escape_string_no_conn(ps, original, length);
+		// We need a connection to escape a SQL string for two reasons:
+		//
+		// 1. Two different DBMS C APIs might not escape a given string
+		//    the same way if their SQL dialects differ enough.
+		//
+		// 2. Some DBMSes change their escaping rules depending on the
+		//    current character set, and that may be context dependent;
+		//    e.g. which DB we have selected.
+		//
+		// Calling this without a working connection is a blatant usage
+		// error.  Either we were called out of sequence, or conn was
+		// dropped and caller didn't set up automatic reconnect.
+		throw ConnectionFailed("Cannot escape SQL without a connection");
 	}
 }
 
@@ -74,9 +84,8 @@ SQLStream::escape_string(char* escaped, const char* original,
 		return conn_->driver()->escape_string(escaped, original, length);
 	}
 	else {
-		// Should only happen in test/test_manip.cpp, since it doesn't
-		// want to open a DB connection just to test the manipulators.
-		return DBDriver::escape_string_no_conn(escaped, original, length);
+		// See above for reason we throw unconditionally here
+		throw ConnectionFailed("Cannot escape SQL without a connection");
 	}
 }
 

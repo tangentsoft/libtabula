@@ -203,10 +203,6 @@ public:
 	/// extra to say, so use either, as makes sense in your program.
 	const char* error() const;
 
-	/// \brief Returns information about the most recently executed
-	/// query.
-	std::string info();
-
 	/// \brief Get ID generated for an AUTO_INCREMENT column in the
 	/// previous INSERT query.
 	///
@@ -754,12 +750,7 @@ public:
 	void storein_sequence(Sequence& con, const SQLTypeAdapter& s)
 	{
 		if (UseQueryResult result = use(s)) {
-			while (1) {
-				MYSQL_ROW d = result.fetch_raw_row();
-				if (!d) break;
-				Row row(d, &result, result.fetch_lengths(),
-						throw_exceptions());
-				if (!row) break;
+			while (Row row = result.fetch_row()) {
 				con.push_back(typename Sequence::value_type(row));
 			}
 		}
@@ -825,12 +816,7 @@ public:
 	void storein_set(Set& con, const SQLTypeAdapter& s)
 	{
 		if (UseQueryResult result = use(s)) {
-			while (1) {
-				MYSQL_ROW d = result.fetch_raw_row();
-				if (!d) break;
-				Row row(d, &result, result.fetch_lengths(),
-						throw_exceptions());
-				if (!row) break;
+			while (Row row = result.fetch_row()) {
 				con.insert(typename Set::value_type(row));
 			}
 		}

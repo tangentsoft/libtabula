@@ -33,20 +33,13 @@
 namespace libtabula {
 
 
-ResultBase::ResultBase(MYSQL_RES* res, DBDriver* dbd, bool te) :
+ResultBase::ResultBase(Impl* res, DBDriver* dbd, bool te) :
 OptionalExceptions(te),
 driver_(res ? dbd : 0),
-fields_(Fields::size_type(res ? dbd->num_fields(res) : 0)),
 current_field_(0)
 {
-	if (res) {
-		Fields::size_type i = 0;
-		const MYSQL_FIELD* pf;
-		while ((i < fields_.size()) && (pf = dbd->fetch_field(res))) {
-			fields_[i++] = pf;
-		}
-		dbd->field_seek(res, 0);		// semantics break otherwise!
-
+	if (driver_) {
+		driver_->fetch_fields(fields_, *res);
 		names_ = new FieldNames(this);
 		types_ = new FieldTypes(this);
 	}
@@ -96,22 +89,15 @@ ResultBase::field_num(const std::string& i) const
 }
 
 
-StoreQueryResult::StoreQueryResult(MYSQL_RES* res, DBDriver* dbd,
-		bool te) :
+StoreQueryResult::StoreQueryResult(Impl* res, DBDriver* dbd,
+		list_type::size_type num_rows, bool te) :
 ResultBase(res, dbd, te),
-list_type(list_type::size_type(res && dbd ? dbd->num_rows(res) : 0)),
+list_type(num_rows),
 copacetic_(res && dbd)
 {
 	if (copacetic_) {
 		iterator it = begin();
-		while (MYSQL_ROW row = dbd->fetch_row(res)) {
-			if (const unsigned long* lengths = dbd->fetch_lengths(res)) {
-				*it = Row(row, this, lengths, throw_exceptions());
-				++it;
-			}
-		}
-
-		dbd->free_result(res);
+		while (Row row = dbd->fetch_row(*this, *res)) *it++ = row;
 	}
 }
 
@@ -129,11 +115,11 @@ StoreQueryResult::copy(const StoreQueryResult& other)
 }
 
 
-UseQueryResult::UseQueryResult(MYSQL_RES* res, DBDriver* dbd, bool te) :
+UseQueryResult::UseQueryResult(Impl* res, DBDriver* dbd, bool te) :
 ResultBase(res, dbd, te)
 {
 	if (res) {
-		result_ = res;
+		pimpl_ = res;
 	}
 }
 
@@ -143,11 +129,11 @@ UseQueryResult::copy(const UseQueryResult& other)
 {
 	if (this != &other) {
 		ResultBase::copy(other);
-		if (other.result_) {
-			result_ = other.result_;
+		if (other.pimpl_) {
+			pimpl_ = other.pimpl_->clone();
 		}
 		else {
-			result_ = 0;
+			pimpl_ = 0;
 		}
 	}
 
@@ -158,14 +144,14 @@ UseQueryResult::copy(const UseQueryResult& other)
 const unsigned long*
 UseQueryResult::fetch_lengths() const
 {
-	return driver_->fetch_lengths(result_.raw());
+	return driver_->fetch_lengths(*pimpl_);
 }
 
 
 Row
-UseQueryResult::fetch_row() const
+UseQueryResult::fetch_row()
 {
-	if (!result_) {
+	if (!pimpl_) {
 		if (throw_exceptions()) {
 			throw UseQueryError("Results not fetched");
 		}
@@ -174,11 +160,10 @@ UseQueryResult::fetch_row() const
 		}
 	}
 
-	MYSQL_ROW row = driver_->fetch_row(result_.raw());
-	if (row) {
+	if (Row row = driver_->fetch_row(*this, impl())) {
 		const unsigned long* lengths = fetch_lengths();
 		if (lengths) {
-			return Row(row, this, lengths, throw_exceptions());
+			return row;
 		}
 		else {
 			if (throw_exceptions()) {
@@ -197,14 +182,6 @@ UseQueryResult::fetch_row() const
 		return Row();
 	}
 }
-
-
-MYSQL_ROW
-UseQueryResult::fetch_raw_row() const
-{
-	return driver_->fetch_row(result_.raw());
-}
-
 
 } // end namespace libtabula
 

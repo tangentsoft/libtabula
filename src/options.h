@@ -2,14 +2,14 @@
 /// \brief Declares the Option class hierarchy, used to implement
 /// connection options in Connection and DBDriver classes.
 ///
-/// This is tied closely enough to DBDriver that there's a pure-OO
-/// argument that it should be declared as protected or private members
-/// within DBDriver.  We do it outside DBDriver because there's so much
-/// of it.  It'd overwhelm everything else that's going on in that class
-/// totally out of proprortion to the importance of options.
+/// These classes are very closely tied to the operation of DBDriver,
+/// but they're outside it to abstract DBMS options away from the
+/// implementation details of individual DBMSes.  We could declare
+/// them as member classes of DBDriver, but there's just so much of
+/// it that it would crowd dbdriver.h.
 
 /***********************************************************************
- Copyright © 2007-2009 by Educational Technology Resources, Inc.
+ Copyright © 2007-2009, 2014 by Educational Technology Resources, Inc.
  Others may also hold copyrights on code in this file.  See the
  CREDITS file in the top directory of the distribution for details.
 
@@ -67,7 +67,25 @@ public:
 	};
 	
 	virtual ~Option() { }					///< Destroy object
-	virtual Error set(DBDriver* dbd) = 0;	///< Apply option
+
+protected:
+	/// \brief Apply option
+	///
+	/// The call sequence is:
+	///
+	/// 1. Connection::set_option()
+	/// 2. DBDriver::set_option()
+	/// 3. If conn is up, Option::set(), else queue opt til connected
+	/// 4. Leaf class implementation of set() passes *this to
+	///    DBDriver::set_option_impl(const T), where T is the
+	///    leaf class's type.
+	/// 
+	/// This crazy mechanism resolves the leaf class type so that the
+	/// C API level option setting code can live in DBDriver instead
+	/// of in Option.
+	virtual Error set(DBDriver* dbd) = 0;
+
+	friend class DBDriver;
 };
 
 
@@ -78,6 +96,7 @@ class LIBTABULA_EXPORT DataOption : public Option
 {
 public:
 	typedef T ArgType;						///< Alias for template param
+	const T arg() const { return arg_; } 	///< Argument accessor
 
 protected:
 	DataOption(const T& arg) : arg_(arg) { }///< Construct object
@@ -265,8 +284,7 @@ private:
 };
 
 
-#if MYSQL_VERSION_ID > 40000		// only in 4.0 +
-/// \brief Set type of protocol to use
+/// \brief Set protocol version to use in communicating with DBMS
 class LIBTABULA_EXPORT ProtocolOption : public IntegerOption
 {
 #if !defined(DOXYGEN_IGNORE)
@@ -277,7 +295,6 @@ private:
 	Error set(DBDriver* dbd);
 #endif
 };
-#endif
 
 
 /// \brief Override use of my.cnf
@@ -437,6 +454,13 @@ public:
 		if (capath)	capath_.assign(capath);
 		if (cipher)	cipher_.assign(cipher);
 	}
+
+	// Accessors
+	const char* key() const { return key_.size() ? key_.c_str() : 0; }
+	const char* cert() const { return cert_.size() ? cert_.c_str() : 0; }
+	const char* ca() const { return ca_.size() ? ca_.c_str() : 0; }
+	const char* capath() const { return capath_.size() ? capath_.c_str() : 0; }
+	const char* cipher() const { return cipher_.size() ? cipher_.c_str() : 0; }
 
 private:
 	std::string key_, cert_, ca_, capath_, cipher_;

@@ -194,7 +194,7 @@ Query::execute(const char* str, size_t len)
 			// Not a template query, so auto-reset
 			reset();
 		}
-		return SimpleResult(conn_, insert_id(), affected_rows(), info());
+		return SimpleResult(conn_, insert_id(), affected_rows());
 	}
 	else if (throw_exceptions()) {
 		throw BadQuery(error(), errnum());
@@ -202,13 +202,6 @@ Query::execute(const char* str, size_t len)
 	else {
 		return SimpleResult();
 	}
-}
-
-
-std::string
-Query::info()
-{
-	return conn_->driver()->query_info();
 }
 
 
@@ -514,7 +507,7 @@ Query::store(const char* str, size_t len)
 		AutoFlag<> af(template_defaults.processing_);
 		return store(SQLQueryParms() << str << len );
 	}
-	MYSQL_RES* res = 0;
+	StoreQueryResult res;
 	if ((copacetic_ = conn_->driver()->execute(str, len)) == true) {
 		res = conn_->driver()->store_result();
 	}
@@ -524,7 +517,7 @@ Query::store(const char* str, size_t len)
 			// Not a template query, so auto-reset
 			reset();
 		}
-		return StoreQueryResult(res, conn_->driver(), throw_exceptions());
+		return res;
 	}
 	else {
 		// Either result set is empty, or there was a problem executing
@@ -558,10 +551,9 @@ Query::store_next()
 	DBDriver::nr_code rc = conn_->driver()->next_result();
 	if (rc == DBDriver::nr_more_results) {
 		// There are more results, so return next result set.
-		MYSQL_RES* res = conn_->driver()->store_result();
+		StoreQueryResult res = conn_->driver()->store_result();
 		if (res) {
-			return StoreQueryResult(res, conn_->driver(),
-					throw_exceptions());
+			return res;
 		}
 		else {
 			// Result set is null, but throw an exception only i it is
@@ -652,7 +644,7 @@ Query::use(const char* str, size_t len)
 		AutoFlag<> af(template_defaults.processing_);
 		return use(SQLQueryParms() << str << len );
 	}
-	MYSQL_RES* res = 0;
+	UseQueryResult res;
 	if ((copacetic_ = conn_->driver()->execute(str, len)) == true) {
 		res = conn_->driver()->use_result();
 	}

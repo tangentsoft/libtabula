@@ -92,8 +92,7 @@ public:
 	/// testing), then DBDriver provides a static version of the function 
 	/// that doesn't use a database connection.
 	///
-	/// \see comments for DBDriver::escape_string(char*, const char*, size_t),
-	/// DBDriver::escape_string_no_conn(char*, const char*, size_t)
+	/// \see comments for DBDriver::escape_string(char*, const char*, size_t)
 	/// for further details.
 	size_t escape_string(char* escaped, const char* original,
 			size_t length) const;

@@ -65,6 +65,8 @@
       <so_version>3.9.9</so_version>
 
       <sources>
+        src/mysql/driver.cpp
+
         src/beemutex.cpp
         src/cmdline.cpp
         src/connection.cpp
@@ -105,6 +107,8 @@
       <cxx-exceptions>on</cxx-exceptions>
       
       <install-to>$(LIBDIR)</install-to>
+
+      <include>src</include>
       
       <if cond="PLATFORM_WINDOWS_NATIVE=='yes'">
         <define>UNICODE</define>
