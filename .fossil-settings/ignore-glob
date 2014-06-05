@@ -1,0 +1,14 @@
+*.o
+*/*.sln, */*.vcproj
+libtabula.xcodeproj
+Makefile*
+bk-deps
+libtabula.so*
+aclocal.m4, autoconf_inc.m4, autom4te.cache, config.cache, config.guess, config.h*, config.log, config.status, config.sub, configure, install-sh, libtool, ltmain.sh
+tags, version
+abi.xml, install.hta, libtabula.spec, doc/userman/userman.dbx
+src/Doxyfile, src/ssx/Doxyfile
+src/libtabula.h, src/querydef.h, src/ssqls.h
+cgi_jpeg, cpool, dbinfo, deadlock, fieldinf, for_each, load_jpeg, multiquery, resetdb, simple[1-3], ssqls[1-6]*, store_if, tquery[1-4]*, transaction
+test_*
+
