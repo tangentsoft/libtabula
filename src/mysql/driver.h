@@ -153,13 +153,6 @@ public:
 	/// always be connected.
 	void disconnect();
 
-	/// \brief Drop a database
-	///
-	/// \param db name of database to destroy
-	///
-	/// \return true if database was dropped successfully
-	bool drop_db(const std::string& db) const;
-
 	/// \brief Return error message for last MySQL error associated with
 	/// this connection.
 	///
