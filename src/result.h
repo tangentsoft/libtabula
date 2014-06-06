@@ -105,12 +105,7 @@ class LIBTABULA_EXPORT ResultBase : public OptionalExceptions
 public:
 	/// \brief Base class for drivers to extend so they can stash
 	/// driver-sprcific result info result sets
-	class Impl
-	{
-	public:
-		virtual ~Impl() { }
-		virtual Impl* clone() const = 0;
-	};
+	class Impl { public: virtual ~Impl() { } };
 
 	/// \brief Destroy object
 	virtual ~ResultBase() { }
@@ -299,7 +294,7 @@ public:
 	}
 	
 	/// \brief Destroy object
-	~UseQueryResult() { delete pimpl_; }
+	~UseQueryResult() { }
 
 	/// \brief Copy another UseQueryResult object's data into this object
 	UseQueryResult& operator =(const UseQueryResult& rhs)
@@ -364,13 +359,13 @@ public:
 	///
 	/// If you need the underlying driver-level implementation object,
 	/// you probably want to call impl() instead.
-	operator Impl*() const { return pimpl_; };
+	operator Impl*() { return pimpl_.raw(); };
 	
 private:
 	/// \brief Copy another ResultBase object's contents into this one.
 	UseQueryResult& copy(const UseQueryResult& other);
 
-	Impl* pimpl_;		///< Driver-level result set info
+	RefCountedPointer<Impl> pimpl_;		///< Driver-level result set info
 };
 
 

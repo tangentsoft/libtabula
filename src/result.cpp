@@ -116,11 +116,9 @@ StoreQueryResult::copy(const StoreQueryResult& other)
 
 
 UseQueryResult::UseQueryResult(Impl* res, DBDriver* dbd, bool te) :
-ResultBase(res, dbd, te)
+ResultBase(res, dbd, te),
+pimpl_(res)
 {
-	if (res) {
-		pimpl_ = res;
-	}
 }
 
 
@@ -130,7 +128,7 @@ UseQueryResult::copy(const UseQueryResult& other)
 	if (this != &other) {
 		ResultBase::copy(other);
 		if (other.pimpl_) {
-			pimpl_ = other.pimpl_->clone();
+			pimpl_ = other.pimpl_;
 		}
 		else {
 			pimpl_ = 0;
@@ -144,7 +142,7 @@ UseQueryResult::copy(const UseQueryResult& other)
 const unsigned long*
 UseQueryResult::fetch_lengths() const
 {
-	return driver_->fetch_lengths(*pimpl_);
+	return driver_->fetch_lengths(impl());
 }
 
 
