@@ -167,8 +167,7 @@ public:
 	/// Otherwise, it wraps \c mysql_error() in the MySQL C API.
 	const char* error()
 	{
-		const char* pe = DBDriver::error();
-		return pe ? pe : mysql_error(&mysql_);
+		return mysql_error(&mysql_);
 	}
 
 	/// \brief Return last MySQL error number associated with this
