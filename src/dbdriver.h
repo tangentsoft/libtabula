@@ -34,10 +34,6 @@
 #include "options.h"
 #include "result.h"
 
-//#include <typeinfo>
-
-//#include <limits.h>
-
 namespace libtabula {
 
 #if !defined(DOXYGEN_IGNORE)
@@ -349,7 +345,7 @@ protected:
 	/// \brief Called after a connection is established, this sends
 	/// all the queued Option objects to the leaf class's set_option()
 	/// implementation.
-	virtual bool apply_pending_options();
+	virtual bool apply_pending_options(bool quit_on_first_failure);
 
 	/// \brief Returns true if connect() has successfully been called
 	/// on this object without a following disconnect().

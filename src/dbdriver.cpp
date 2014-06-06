@@ -26,12 +26,6 @@
 #define LIBTABULA_NOT_HEADER
 #include "dbdriver.h"
 
-//#include "exceptions.h"
-
-//#include <cstring>
-//#include <memory>
-//#include <sstream>
-
 using namespace std;
 
 namespace libtabula {
@@ -53,17 +47,30 @@ DBDriver::~DBDriver()
 
 
 bool
-DBDriver::apply_pending_options()
+DBDriver::apply_pending_options(bool quit_on_first_failure)
 {
+	OptionList failed_options(pending_options_.size());
+
 	option_error_ = Option::err_NONE;
 	for (OptionListIt it = pending_options_.begin();
 			it != pending_options_.end(); ++it) {
-		if (!set_option(*it)) return false;
+		if (!set_option(*it)) {
+			if (quit_on_first_failure) return false;
+			else failed_options.push_back(*it);
+		}
 	}
 
-	// The pending Option object pointers got moved to applied_options_,
-	// so don't delete them.  They'll get deleted in ~DBDriver().
-	pending_options_.clear();
+	// The successfully applied Option object pointers got added to
+	// applied_options_, and we kept the others aside if we weren't
+	// asked to quit on first failure.  The first set are deleted in
+	// ~DBDriver() and the next set may be retried again later.
+	if (failed_options.empty()) {
+		pending_options_.clear();
+	}
+	else {
+		copy(failed_options.begin(), failed_options.end(),
+				pending_options_.begin());
+	}
 	return true;
 }
 
@@ -72,7 +79,7 @@ bool
 DBDriver::connect(const char*, const char*, unsigned int, 
 		const char*, const char*, const char*)
 {
-	return is_connected_ && apply_pending_options();
+	return apply_pending_options(true);	// quit on first failure
 }
 
 
