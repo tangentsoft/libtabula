@@ -108,7 +108,7 @@ public:
 	class Impl
 	{
 	public:
-		virtual ~Impl() = 0;
+		virtual ~Impl() { }
 		virtual Impl* clone() const = 0;
 	};
 
