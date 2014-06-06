@@ -48,6 +48,13 @@
     <if cond="FORMAT in ['msvs2003prj', 'msvs2005prj', 'msvs2008prj', 'xcode2'] and BUILD=='debug'">_d</if>
   </set>
 
+  <!-- Figure out what library file will be called; follow the system's
+       normal library naming convention. -->
+  <set var="LIBTABULA_NAME">libtabula$(DEBUG_SUFFIX)</set>
+  <set var="LIBTABULA_NAME">
+    <if cond="FORMAT in ['autoconf', 'gnu', 'xcode2']">tabula</if>
+  </set>
+
   <set var="BUILDDOCS">yes</set>
   <set var="BUILDEXAMPLES">yes</set>
   <set var="BUILDLIBRARY">yes</set>
@@ -60,8 +67,8 @@
 
   <if cond="BUILDLIBRARY=='yes'">
     <dll id="libtabula">
-      <dllname>libtabula$(DEBUG_SUFFIX)</dllname>
-      <libname>libtabula$(DEBUG_SUFFIX)</libname>
+      <dllname>$(LIBTABULA_NAME)</dllname>
+      <libname>$(LIBTABULA_NAME)</libname>
       <so_version>3.9.9</so_version>
 
       <sources>
@@ -197,7 +204,7 @@
       <cxxflags>@PTHREAD_CFLAGS@</cxxflags>
       <ldflags>-l@MYSQL_C_LIB_NAME@ @PTHREAD_LIBS@ @LIBTABULA_EXTRA_LIBS@</ldflags>
       <warnings>max</warnings>
-      <sys-lib>libtabula</sys-lib>
+      <sys-lib>tabula</sys-lib>
     </if>
 
     <if cond="FORMAT=='mingw'">
@@ -208,28 +215,28 @@
       <include>"$(MYSQL_WIN_DIR)\include"</include>
       <lib-path>"$(MYSQL_WIN_DIR)\lib"</lib-path>
       <sys-lib>mysql</sys-lib>
-      <sys-lib>libtabula$(DEBUG_SUFFIX)</sys-lib>
+      <sys-lib>$(LIBTABULA_NAME)</sys-lib>
     </if>
 
     <if cond="FORMAT in ['msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
       <lib-path>$(BUILD)</lib-path>
       <include>$(MYSQL_WIN_DIR)\include</include>
       <lib-path>$(MYSQL_WIN_DIR)\lib</lib-path>
-      <sys-lib>libtabula$(DEBUG_SUFFIX)</sys-lib>
+      <sys-lib>$(LIBTABULA_NAME)</sys-lib>
       <sys-lib>libmysql</sys-lib>
     </if>
 
     <if cond="FORMAT=='gnu'">
       <include>/usr/include/mysql</include>
       <include>/usr/include/libtabula</include>
-      <sys-lib>libtabula</sys-lib>
+      <sys-lib>tabula</sys-lib>
       <sys-lib>mysqlclient</sys-lib>
     </if>
 
     <if cond="FORMAT=='xcode2'">
       <include>/usr/local/mysql/include</include>
       <sys-lib>mysqlclient</sys-lib>
-      <sys-lib>libtabula$(DEBUG_SUFFIX)</sys-lib>
+      <sys-lib>tabula$(DEBUG_SUFFIX)</sys-lib>
     </if>
   </template>
 
@@ -237,7 +244,6 @@
     <!-- SSQLS v2 parser convenience library -->
     <lib id="ssqls2parse" template="programs">
       <depends>libtabula</depends>
-      <libname>libtabula_ssqls2parse</libname>
       <sources>src/ssx/parsev2.cpp</sources>
     </lib>
 
@@ -246,8 +252,7 @@
       <sources>src/ssx/genv2.cpp</sources>
       <sources>src/ssx/main.cpp</sources>
       <depends>ssqls2parse</depends>
-      <sys-lib>libtabula_ssqls2parse</sys-lib>
-      <sys-lib>libtabula</sys-lib>
+      <sys-lib>$(LIBTABULA_NAME)</sys-lib>
     </exe>
   </if>
 
@@ -296,8 +301,7 @@
       <exe id="test_ssqls2" template="programs">
         <sources>test/ssqls2.cpp</sources>
         <depends>ssqls2parse</depends>
-        <sys-lib>libtabula_ssqls2parse</sys-lib>
-        <sys-lib>libtabula</sys-lib>
+        <sys-lib>$(LIBTABULA_NAME)</sys-lib>
       </exe>
     </if>
     <if cond="FORMAT!='msvs2003prj'">
@@ -322,12 +326,10 @@
     <!-- Options specific to examples that depend on libexcommon -->
     <template id="libexcommon-user">
       <depends>excommon</depends>
-      <sys-lib>libtabula_excommon</sys-lib>
     </template>
 
     <!-- Convenience library of routines used by most examples -->
     <lib id="excommon" template="programs">
-      <libname>libtabula_excommon</libname>
       <sources>examples/printdata.cpp</sources>
     </lib>
 
