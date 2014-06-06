@@ -122,6 +122,18 @@ Items in this section are big or break the library's ABI, so they have
 to be done in 4.0, else they must wait for the next allowed ABI breakage
 point, 5.0.
 
+*   Reimplement the ostringstream interface in SQLStream, drop the
+    inheritance, and include an ostreamstring instance as a member
+    instead of deriving from it.  There is some evidence that VC++ has
+    problems with dynamic linkage to libraries that export classes
+    derived from Standard C++ classes.
+
+    Derive Query from SQLStream instead of std::ostream?
+
+    That might be enough.  All other derivations from Standard C++
+    Library classes derive from vector and exception, which are much
+    less likely to be a problem.
+
 *   Convert from Bakefile to CMake
 
     -   Migrate libtabula.bkl and Bakefiles.bkgen
@@ -179,8 +191,8 @@ point, 5.0.
     -   Make DBDriver class purely abstract; move its entire functional
         contents to new MysqlDriver.
 
-	-   Map C API error numbers to libtabula constants in
-	    DBDriver::errnum().  Rename to error_code()?
+    -   Map C API error numbers to libtabula constants in
+        DBDriver::errnum().  Rename to error_code()?
 
     -   Must create at least two other DBDriver subclasses to
         ensure base class is reusable before releasing v4.0.
