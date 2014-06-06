@@ -26,12 +26,6 @@
 #define LIBTABULA_NOT_HEADER
 #include "driver.h"
 
-//#include "exceptions.h"
-
-//#include <cstring>
-//#include <memory>
-//#include <sstream>
-
 // An argument was added to mysql_shutdown() in MySQL 4.1.3 and 5.0.1.
 #if ((MYSQL_VERSION_ID >= 40103) && (MYSQL_VERSION_ID <= 49999)) || (MYSQL_VERSION_ID >= 50001)
 #	define SHUTDOWN_ARG ,SHUTDOWN_DEFAULT
@@ -81,8 +75,9 @@ MySQLDriver::connect(const char* host, const char* socket_name,
 	disconnect();			// no-op if already disconnected
 	mysql_init(&mysql_);
 	return is_connected_ =
-			mysql_real_connect(&mysql_, host, user, password, db,
-				port, socket_name, mysql_.client_flag) &&
+			apply_pending_options(false) &&	// some opts modify client_flag
+			(mysql_real_connect(&mysql_, host, user, password, db,
+				port, socket_name, mysql_.client_flag) == &mysql_) &&
 			DBDriver::connect(host, socket_name, port, db, user, password);
 }
 
