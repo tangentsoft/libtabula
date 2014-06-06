@@ -252,7 +252,7 @@
       <sources>src/ssx/genv2.cpp</sources>
       <sources>src/ssx/main.cpp</sources>
       <depends>ssqls2parse</depends>
-      <sys-lib>$(LIBTABULA_NAME)</sys-lib>
+      <sys-lib>ssqls2parse</sys-lib>
     </exe>
   </if>
 
