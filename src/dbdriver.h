@@ -108,13 +108,6 @@ public:
 	/// same DBMS as this object.
 	virtual DBDriver* clone() = 0;
 
-	/// \brief Ask the database server to create a database
-	///
-	/// \param db name of database to create
-	///
-	/// \return true if database was created successfully
-	virtual bool create_db(const char* db) const = 0;
-
 	/// \brief Drop the connection to the database server
 	///
 	/// This method should only be used by libtabula library internals.

@@ -131,13 +131,6 @@ public:
 	/// within this same DBMS.
 	DBDriver* clone();
 
-	/// \brief Ask the database server to create a database
-	///
-	/// \param db name of database to create
-	///
-	/// \return true if database was created successfully
-	bool create_db(const char* db) const;
-
 	/// \brief Seeks to a particular row within the result set
 	///
 	/// Wraps mysql_data_seek() in MySQL C API.
