@@ -198,6 +198,9 @@ public:
 			return Row(raw, &res, fetch_lengths(impl),
 					res.throw_exceptions());
 		}
+		else {
+			return Row();
+		}
 	}
 
 	/// \brief Returns the lengths of the fields in the current row
