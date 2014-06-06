@@ -141,8 +141,8 @@ public:
 	/// original is 0, also holds the original data to be escaped
 	/// \param original if given, pointer to the character buffer to
 	/// escape instead of contents of *ps
-	/// \param length if both this and original are given, number of
-	/// characters to escape instead of ps->length()
+	/// \param length if you give original, the number of
+	/// characters to escape; otherwise, uses ps->length()
 	///
 	/// \retval number of characters placed in *ps
 	///
