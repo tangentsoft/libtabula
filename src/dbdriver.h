@@ -120,13 +120,6 @@ public:
 	/// This method should only be used by libtabula library internals.
 	virtual void disconnect() = 0;
 
-	/// \brief Drop a database
-	///
-	/// \param db name of database to destroy
-	///
-	/// \return true if database was dropped successfully
-	virtual bool drop_db(const std::string& db) const = 0;
-
 	/// \brief Return error message for the last C API failure.
 	virtual const char* error() = 0;
 
