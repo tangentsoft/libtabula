@@ -482,7 +482,7 @@ public:
 	/// \brief Execute a query that can return rows, returning all
 	/// of the rows in a random-access container
 	///
-	/// \param str if this object is set up as a template query, this is
+	/// \param sta if this object is set up as a template query, this is
 	/// the value to substitute for the first template query parameter;
 	/// else, it is the SQL query string to execute
 	///
@@ -496,7 +496,8 @@ public:
 	/// type (25 total, by default; see \c lib/querydef.pl), each taking
 	/// one more SQLTypeAdapter object than the previous one.  See the
 	/// template query overview above for more about this topic.
-	StoreQueryResult store(const SQLTypeAdapter& str);
+	StoreQueryResult store(const SQLTypeAdapter& sta)
+			{ return store(sta.data(), sta.length()); }
 
 	/// \brief Execute a query that can return rows, returning all
 	/// of the rows in a random-access container

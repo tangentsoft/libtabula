@@ -479,24 +479,6 @@ Query::store(SQLQueryParms& p)
 
 
 StoreQueryResult
-Query::store(const SQLTypeAdapter& s)
-{
-	if ((parse_elems_.size() == 2) && !template_defaults.processing_) {
-		// We're a template query and this isn't a recursive call, so
-		// take s to be a lone parameter for the query.  We will come
-		// back in here with a completed query, but the processing_
-		// flag will be set, allowing us to avoid an infinite loop.
-		AutoFlag<> af(template_defaults.processing_);
-		return store(SQLQueryParms() << s);
-	}
-	else {
-		// Take s to be the entire query string
-		return store(s.data(), s.length());
-	}
-}
-
-
-StoreQueryResult
 Query::store(const char* str, size_t len)
 {
 	if ((parse_elems_.size() == 2) && !template_defaults.processing_) {
