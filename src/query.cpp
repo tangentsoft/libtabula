@@ -1,10 +1,10 @@
 /***********************************************************************
  query.cpp - Implements the Query class.
 
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2009 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ and © 2004-2009, 2014 by Educational Technology Resources, Inc.
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -612,24 +612,6 @@ Query::use(SQLQueryParms& p)
 {
 	AutoFlag<> af(template_defaults.processing_);
 	return use(str(p));
-}
-
-
-UseQueryResult
-Query::use(const SQLTypeAdapter& s)
-{
-	if ((parse_elems_.size() == 2) && !template_defaults.processing_) {
-		// We're a template query and this isn't a recursive call, so
-		// take s to be a lone parameter for the query.  We will come
-		// back in here with a completed query, but the processing_
-		// flag will be set, allowing us to avoid an infinite loop.
-		AutoFlag<> af(template_defaults.processing_);
-		return use(SQLQueryParms() << s);
-	}
-	else {
-		// Take s to be the entire query string
-		return use(s.data(), s.length());
-	}
 }
 
 

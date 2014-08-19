@@ -2,10 +2,10 @@
 /// \brief Defines a class for building and executing SQL queries.
 
 /***********************************************************************
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2011 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ and © 2004-2011, 2014 by Educational Technology Resources, Inc.
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -418,7 +418,7 @@ public:
 	/// \brief Execute a query that can return rows, with access to
 	/// the rows in sequence
 	///
-	/// \param str if this object is set up as a template query, this is
+	/// \param sta if this object is set up as a template query, this is
 	/// the value to substitute for the first template query parameter;
 	/// else, it is the SQL query string to execute
 	///
@@ -432,7 +432,8 @@ public:
 	/// type (25 total, by default; see \c lib/querydef.pl), each taking
 	/// one more SQLTypeAdapter object than the previous one.  See the
 	/// template query overview above for more about this topic.
-	UseQueryResult use(const SQLTypeAdapter& str);
+	UseQueryResult use(const SQLTypeAdapter& sta)
+			{ return use(sta.data(), sta.length()); }
 
 	/// \brief Execute a query that can return rows, with access to
 	/// the rows in sequence
