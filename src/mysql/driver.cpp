@@ -37,8 +37,8 @@ using namespace std;
 
 namespace libtabula {
 
-MySQLDriver::MySQLDriver() :
-DBDriver()
+MySQLDriver::MySQLDriver(bool te) :
+DBDriver(te)
 {
 	// We won't allow calls to mysql_*() functions that take a MYSQL
 	// object until we get a connection up.  Such calls are nonsense.
@@ -57,7 +57,7 @@ MySQLDriver::~MySQLDriver()
 DBDriver*
 MySQLDriver::clone()
 {
-	MySQLDriver* other = new MySQLDriver();
+	MySQLDriver* other = new MySQLDriver(throw_exceptions());
 	mysql_init(&other->mysql_);
 	other->is_connected_ =
 			mysql_real_connect(&mysql_, mysql_.host, mysql_.user,

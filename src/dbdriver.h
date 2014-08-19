@@ -55,7 +55,7 @@ class Row;
 /// implementation-level class, primarily wrapped by Connection and
 /// Query.
 
-class LIBTABULA_EXPORT DBDriver
+class LIBTABULA_EXPORT DBDriver : public OptionalExceptions
 {
 public:
 	/// \brief Result code returned by next_result()
@@ -67,7 +67,15 @@ public:
 	};
 
 	/// \brief Create object
-	DBDriver();
+	///
+	/// \param te If true, the driver throws exceptions on error.
+	/// Otherwise, it attempts to return error codes or tests as false
+	/// in bool context to indicate problems.  This value is inherited
+	/// from the corresponding flag set on the Connection object when
+	/// it creates the DBDriver leaf class instance.  DBDriver doesn't
+	/// throw many exceptions itself, but we need the flag to pass on
+	/// to other objects that may do so.
+	DBDriver(bool te = true);
 
 	/// \brief Destroy object
 	virtual ~DBDriver();

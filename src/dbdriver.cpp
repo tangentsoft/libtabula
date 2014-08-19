@@ -30,7 +30,8 @@ using namespace std;
 
 namespace libtabula {
 
-DBDriver::DBDriver() :
+DBDriver::DBDriver(bool te) :
+OptionalExceptions(te),
 is_connected_(false),
 option_error_(Option::err_NONE)
 {

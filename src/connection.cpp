@@ -38,7 +38,7 @@ namespace libtabula {
 
 Connection::Connection(bool te) :
 OptionalExceptions(te),
-driver_(new MySQLDriver()),
+driver_(new MySQLDriver(te)),
 copacetic_(true)
 {
 }

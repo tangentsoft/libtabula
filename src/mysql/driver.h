@@ -97,7 +97,7 @@ private:
 
 public:
 	/// \brief Create object
-	MySQLDriver();
+	MySQLDriver(bool te = true);
 
 	/// \brief Destroy object
 	virtual ~MySQLDriver();
@@ -404,9 +404,8 @@ public:
 	StoreQueryResult store_result()
 	{
 		if (MYSQL_RES* pres = mysql_store_result(&mysql_)) {
-			// FIXME: We've let the te parameter default
 			return StoreQueryResult(new ResultImpl(pres), this,
-					mysql_num_rows(pres));
+					mysql_num_rows(pres), throw_exceptions());
 		}
 		else {
 			return StoreQueryResult();
@@ -483,8 +482,8 @@ public:
 	UseQueryResult use_result()
 	{
 		if (MYSQL_RES* pres = mysql_use_result(&mysql_)) {
-			// FIXME: We've let the te parameter default
-			return UseQueryResult(new ResultImpl(pres), this);
+			return UseQueryResult(new ResultImpl(pres), this,
+					throw_exceptions());
 		}
 		else {
 			return UseQueryResult();
