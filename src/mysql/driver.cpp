@@ -40,9 +40,10 @@ namespace libtabula {
 MySQLDriver::MySQLDriver(bool te) :
 DBDriver(te)
 {
-	// We won't allow calls to mysql_*() functions that take a MYSQL
-	// object until we get a connection up.  Such calls are nonsense.
-	memset(&mysql_, 0, sizeof(mysql_));
+	// We have to init the mysql_ object in the ctors even though we
+	// never call mysql_*() until after connect() because some of the
+	// set_option() paths modify mysql_.client_flag.
+	mysql_init(&mysql_);
 }
 
 
@@ -73,7 +74,6 @@ MySQLDriver::connect(const char* host, const char* socket_name,
 		const char* password)
 {
 	disconnect();			// no-op if already disconnected
-	mysql_init(&mysql_);
 	return is_connected_ =
 			apply_pending_options(false) &&	// some opts modify client_flag
 			(mysql_real_connect(&mysql_, host, user, password, db,

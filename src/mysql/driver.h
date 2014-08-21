@@ -505,7 +505,6 @@ public:
 		}
 	}
 
-
 private:
 	/// \brief Enable or disable multi-statements
 	///
