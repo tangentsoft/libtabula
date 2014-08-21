@@ -33,13 +33,55 @@
 # - Add libssqlsxlat convenience library
 # - Add libexcommon convenience library
 # - Add examples/*
+# - Add doc/*
 # - Update README-* with new build info
-# - Replace old bootstrap script options:
+# - Allow separate build/debug building, with VC++ and XCode at least
+# - Add configure_file calls for the rest of *.in
+# - Get unit tests and bmark.txt testing working
+#
+# - Replace old bootstrap script verbs with CMake options:
 #   - nodoc
 #   - noex
 #   - nolib
 #   - noopt
+#   - notest
 #   - pedantic
+#
+# - Replicate existing autoconf behavior:
+#   - Library, header and function checks
+#   - Find MySQL C API files automatically
+#   - Let user specifiy location of same
+#   - Detect existence of <slist> etc.
+#   - Thread awareness selection
+#   - SSL support detection in mysqlclient
+#
+# - Add other build options
+#   - 32/64 bit
+#   - Move --with-field-limit from configure.ac to bootstrap
+#
+# - Get it working on:
+#   - Visual C++ 2003
+#   - Visual C++ 2005
+#   - Visual C++ 2008 (32- and 64-bit)
+#   - Visual C++ 2010 Express
+#   - Visual C++ 2012 Express
+#   - Visual C++ 2013 (32- and 64-bit)
+#   - MinGW
+#   - Cygwin
+#   - Ubuntu 14.04 LTS
+#   - CentOS 7
+#   - CentOS 5
+#   - CentOS 3?
+#   - XCode
+#   - OpenIndiana
+#
+# - For each success above with CMake < 2.8, lower minimum requirement
+#
+# - Convert non-core top-level targets
+#   - tags
+#   - dist
+#   - rpm/deb/ebuild; CPack?
+#   - abicheck
 #
 # ---------------------
 
