@@ -111,15 +111,6 @@
 	// We need to use the DOS/Windows path separator here
 	#define LIBTABULA_PATH_SEPARATOR '\\'
 #else
-	// If not VC++, MinGW, or Xcode, we assume we're on a system using
-	// autoconf, so bring in the config.h file it wrote containing the
-	// config test results.  Only do this during the library build, and
-	// even then, not if included from a libtabula header file, since
-	// config.h cannot be safely installed with the other headers.
-#	if defined(LIBTABULA_NOT_HEADER) && !defined(MYSQLPP_XCODE)
-#		include "config.h"
-#	endif
-
 	// Make DLL stuff a no-op on this platform.
 	#define LIBTABULA_EXPORT
 
