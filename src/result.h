@@ -105,7 +105,12 @@ class LIBTABULA_EXPORT ResultBase : public OptionalExceptions
 public:
 	/// \brief Base class for drivers to extend so they can stash
 	/// driver-sprcific result info result sets
-	class Impl { public: virtual ~Impl() { } };
+	class Impl
+	{
+	public:
+		Impl() { }
+		virtual ~Impl() { } 
+	};
 
 	/// \brief Destroy object
 	virtual ~ResultBase() { }
@@ -156,13 +161,12 @@ public:
 protected:
 	/// \brief Create empty object
 	ResultBase() :
-	driver_(0),
 	current_field_(0)
 	{
 	}
 	
 	/// \brief Create the object, fully initialized
-	ResultBase(Impl* pri, DBDriver* dbd, bool te = true);
+	ResultBase(Impl* pri, DBDriver* driver, bool te);
 	
 	/// \brief Create object as a copy of another ResultBase
 	ResultBase(const ResultBase& other) :
@@ -174,7 +178,6 @@ protected:
 	/// \brief Copy another ResultBase object's contents into this one.
 	ResultBase& copy(const ResultBase& other);
 
-	DBDriver* driver_;	///< Access to DB driver; fully initted if nonzero
 	Fields fields_;		///< list of fields in result
 
 	/// \brief list of field names in result
@@ -182,6 +185,9 @@ protected:
 
 	/// \brief list of field types in result
 	RefCountedPointer<FieldTypes> types_;
+
+	/// \brief Reference to the DBDriver instance that created us
+	DBDriver* driver_;
 
 	/// \brief Default field index used by fetch_field()
 	///
@@ -194,7 +200,7 @@ protected:
 };
 
 
-/// \brief StoreQueryResult set type for "store" queries
+/// \brief Result set type for "store" queries
 ///
 /// This is the obvious C++ implementation of a class to hold results 
 /// from a SQL query that returns rows: a specialization of std::vector
@@ -223,10 +229,6 @@ public:
 	copacetic_(false)
 	{
 	}
-	
-	/// \brief Fully initialize object
-	StoreQueryResult(Impl* pri, DBDriver* dbd,
-			list_type::size_type num_rows, bool te = true);
 
 	/// \brief Initialize object as a copy of another StoreQueryResult
 	/// object
@@ -237,6 +239,9 @@ public:
 	{
 		copy(other);
 	}
+	
+	/// \brief Fully initialize object
+	StoreQueryResult(Impl* pri, size_t rows, DBDriver* dbd, bool te);
 
 	/// \brief Destroy result set
 	~StoreQueryResult() { }
@@ -269,7 +274,7 @@ private:
 };
 
 
-/// \brief StoreQueryResult set type for "use" queries
+/// \brief Result set type for "use" queries
 ///
 /// See the user manual for the reason you might want to use this even
 /// though its interface is less friendly than StoreQueryResult's.
@@ -283,15 +288,15 @@ public:
 	{
 	}
 	
-	/// \brief Create the object, fully initialized
-	UseQueryResult(Impl* pri, DBDriver* dbd, bool te = true);
-	
 	/// \brief Create a copy of another UseQueryResult object
 	UseQueryResult(const UseQueryResult& other) :
 	ResultBase()
 	{
 		copy(other);
 	}
+	
+	/// \brief Create the object, fully initialized
+	UseQueryResult(Impl* pri, DBDriver* dbd, bool te);
 	
 	/// \brief Destroy object
 	~UseQueryResult() { }

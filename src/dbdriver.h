@@ -326,7 +326,7 @@ public:
 	/// \brief Saves the results of the query just execute()d in memory
 	///
 	/// \sa use_result()
-	virtual StoreQueryResult store_result() = 0;
+	virtual ResultBase::Impl* store_result() = 0;
 
 	/// \brief Returns true if libtabula and the C API underlying this
 	/// driver were both compiled with thread awareness.
@@ -347,7 +347,7 @@ public:
 	/// result sets in memory.
 	///
 	/// \sa store_result
-	virtual UseQueryResult use_result() = 0;
+	virtual ResultBase::Impl* use_result() = 0;
 
 protected:
 	/// \brief Called after a connection is established, this sends

@@ -76,26 +76,40 @@ struct RefCountedPointerDestroyer<MYSQL_RES>
 
 class LIBTABULA_EXPORT MySQLDriver : public DBDriver
 {
-private:
+public:
 #if !defined(DOXYGEN_IGNORE)
 	// MySQL-specific result set info
 	class ResultImpl : public ResultBase::Impl
 	{
 	public:
-		ResultImpl(MYSQL_RES* res) : res_(res) { }
-		ResultImpl(RefCountedPointer<MYSQL_RES>& res) : res_(res) { }
+		ResultImpl(RefCountedPointer<MYSQL_RES>& res, size_t rows = 0) :
+		ResultBase::Impl(),
+		res_(res),
+		rows_(rows)
+		{
+		}
+
 		~ResultImpl() { /* implicit mysql_free_result(res_.raw()) */  }
 		operator MYSQL_RES*() const { return res_.raw(); }
-		ResultImpl* clone() const { return new ResultImpl(res_); }
+
+		// FIXME: Do we still need this?  Can't see who calls it.
+		ResultImpl* clone() const
+		{
+			return new ResultImpl(res_, rows());
+		}
+
+		size_t rows() const { return rows_; }
 
 	private:
 		// Has to be mutable because so many Connector/C APIs take
 		// non-const MYSQL_RES*, and we call those from const methods.
 		mutable RefCountedPointer<MYSQL_RES> res_;
+
+		// Nonzero only for store() queries
+		size_t rows_;		
 	};
 #endif
 
-public:
 	/// \brief Create object
 	MySQLDriver(bool te = true);
 
@@ -312,6 +326,9 @@ public:
 	/// Wraps \c mysql_num_rows() in MySQL C API.
 	ulonglong num_rows(ResultBase::Impl& impl) const
 	{
+		// FIXME: Do we still need this?  It might have been used only
+		// as part of the "store" query implementation.  Recommend
+		// calling res.length() instead?
 		return mysql_num_rows(MYSQL_RES_FROM_IMPL(impl));
 	}
 
@@ -394,21 +411,20 @@ public:
 		return mysql_stat(&mysql_);
 	}
 
-	/// \brief Saves the results of the query just execute()d in memory
-	/// and returns a pointer to the MySQL C API data structure the
-	/// results are stored in.
+	/// \brief Saves the results of the query just execute()d into an
+	/// object that can be used to instantiate a StoreQueryResult.
 	///
 	/// \sa use_result()
 	///
 	/// Wraps \c mysql_store_result() in the MySQL C API.
-	StoreQueryResult store_result()
+	ResultBase::Impl* store_result()
 	{
 		if (MYSQL_RES* pres = mysql_store_result(&mysql_)) {
-			return StoreQueryResult(new ResultImpl(pres), this,
-					mysql_num_rows(pres), throw_exceptions());
+			RefCountedPointer<MYSQL_RES> res(pres);
+			return new ResultImpl(res, mysql_num_rows(pres));
 		}
 		else {
-			return StoreQueryResult();
+			return 0;
 		}
 	}
 
@@ -472,23 +488,23 @@ public:
 		#endif
 	}
 
-	/// \brief Returns a result set from the last-executed query which
-	/// we can walk through in linear fashion, which doesn't store all
-	/// result sets in memory.
+	/// \brief Saves the results of the query just execute()d into an
+	/// object that can be used to instantiate a UseQueryResult.
 	///
-	/// \sa store_result
+	/// \sa store_result()
 	///
 	/// Wraps \c mysql_use_result() in the MySQL C API.
-	UseQueryResult use_result()
+	ResultBase::Impl* use_result()
 	{
 		if (MYSQL_RES* pres = mysql_use_result(&mysql_)) {
-			return UseQueryResult(new ResultImpl(pres), this,
-					throw_exceptions());
+			RefCountedPointer<MYSQL_RES> res(pres);
+			return new ResultImpl(res);
 		}
 		else {
-			return UseQueryResult();
+			return 0;
 		}
 	}
+
 
 private:
 	/// \brief Enable or disable multi-statements

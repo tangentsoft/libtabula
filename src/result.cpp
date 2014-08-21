@@ -2,10 +2,10 @@
  result.cpp - Implements the ResultBase, StoreQueryResult and
 	UseQuery Result classes.
 
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2007 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ and © 2004-2007, 2014 by Educational Technology Resources, Inc.
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -33,12 +33,12 @@
 namespace libtabula {
 
 
-ResultBase::ResultBase(Impl* res, DBDriver* dbd, bool te) :
+ResultBase::ResultBase(Impl* res, DBDriver* driver, bool te) :
 OptionalExceptions(te),
-driver_(res ? dbd : 0),
+driver_(driver),
 current_field_(0)
 {
-	if (driver_) {
+	if (res && driver_) {
 		driver_->fetch_fields(fields_, *res);
 		names_ = new FieldNames(this);
 		types_ = new FieldTypes(this);
@@ -89,11 +89,11 @@ ResultBase::field_num(const std::string& i) const
 }
 
 
-StoreQueryResult::StoreQueryResult(Impl* res, DBDriver* dbd,
-		list_type::size_type num_rows, bool te) :
+StoreQueryResult::StoreQueryResult(Impl* res, size_t rows,
+		DBDriver* dbd, bool te) :
 ResultBase(res, dbd, te),
-list_type(num_rows),
-copacetic_(res && dbd)
+list_type(rows),
+copacetic_(true)
 {
 	if (copacetic_) {
 		iterator it = begin();
