@@ -1,10 +1,10 @@
 /***********************************************************************
  query.cpp - Implements the Query class.
 
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2009 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ and © 2004-2009, 2014 by Educational Technology Resources, Inc.
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -194,7 +194,7 @@ Query::execute(const char* str, size_t len)
 			// Not a template query, so auto-reset
 			reset();
 		}
-		return SimpleResult(conn_, insert_id(), affected_rows(), info());
+		return SimpleResult(conn_, insert_id(), affected_rows());
 	}
 	else if (throw_exceptions()) {
 		throw BadQuery(error(), errnum());
@@ -202,13 +202,6 @@ Query::execute(const char* str, size_t len)
 	else {
 		return SimpleResult();
 	}
-}
-
-
-std::string
-Query::info()
-{
-	return conn_->driver()->query_info();
 }
 
 
@@ -486,24 +479,6 @@ Query::store(SQLQueryParms& p)
 
 
 StoreQueryResult
-Query::store(const SQLTypeAdapter& s)
-{
-	if ((parse_elems_.size() == 2) && !template_defaults.processing_) {
-		// We're a template query and this isn't a recursive call, so
-		// take s to be a lone parameter for the query.  We will come
-		// back in here with a completed query, but the processing_
-		// flag will be set, allowing us to avoid an infinite loop.
-		AutoFlag<> af(template_defaults.processing_);
-		return store(SQLQueryParms() << s);
-	}
-	else {
-		// Take s to be the entire query string
-		return store(s.data(), s.length());
-	}
-}
-
-
-StoreQueryResult
 Query::store(const char* str, size_t len)
 {
 	if ((parse_elems_.size() == 2) && !template_defaults.processing_) {
@@ -514,39 +489,32 @@ Query::store(const char* str, size_t len)
 		AutoFlag<> af(template_defaults.processing_);
 		return store(SQLQueryParms() << str << len );
 	}
-	MYSQL_RES* res = 0;
-	if ((copacetic_ = conn_->driver()->execute(str, len)) == true) {
-		res = conn_->driver()->store_result();
+
+	DBDriver* dbd = conn_->driver();
+	if ((copacetic_ = dbd->execute(str, len)) == true) {
+		if (ResultBase::Impl* pres = dbd->store_result()) {
+			if (parse_elems_.size() == 0) reset();	// not tquery
+			return StoreQueryResult(pres, dbd->num_rows(*pres), dbd,
+					throw_exceptions());
+		}
 	}
 
-	if (res) {
-		if (parse_elems_.size() == 0) {
-			// Not a template query, so auto-reset
-			reset();
-		}
-		return StoreQueryResult(res, conn_->driver(), throw_exceptions());
+	// Either result set is empty, or there was a problem executing
+	// the query or storing its results.  Since it's not an error to
+	// use store() with queries that never return results (INSERT,
+	// DELETE, CREATE, ALTER...) we need to figure out which case
+	// this is.  (You might use store() instead of execute() for
+	// such queries when the query strings come from "outside".)
+	copacetic_ = (conn_->errnum() == 0);
+	if (copacetic_) {
+		if (parse_elems_.size() == 0) reset();	// not tquery
+		return StoreQueryResult();
+	}
+	else if (throw_exceptions()) {
+		throw BadQuery(error(), errnum());
 	}
 	else {
-		// Either result set is empty, or there was a problem executing
-		// the query or storing its results.  Since it's not an error to
-		// use store() with queries that never return results (INSERT,
-		// DELETE, CREATE, ALTER...) we need to figure out which case
-		// this is.  (You might use store() instead of execute() for
-		// such queries when the query strings come from "outside".)
-		copacetic_ = (conn_->errnum() == 0);
-		if (copacetic_) {
-			if (parse_elems_.size() == 0) {
-				// Not a template query, so auto-reset
-				reset();
-			}
-			return StoreQueryResult();
-		}
-		else if (throw_exceptions()) {
-			throw BadQuery(error(), errnum());
-		}
-		else {
-			return StoreQueryResult();
-		}
+		return StoreQueryResult();
 	}
 }
 
@@ -558,9 +526,9 @@ Query::store_next()
 	DBDriver::nr_code rc = conn_->driver()->next_result();
 	if (rc == DBDriver::nr_more_results) {
 		// There are more results, so return next result set.
-		MYSQL_RES* res = conn_->driver()->store_result();
-		if (res) {
-			return StoreQueryResult(res, conn_->driver(),
+		DBDriver* dbd = conn_->driver();
+		if (ResultBase::Impl* pres = dbd->store_result()) {
+			return StoreQueryResult(pres, dbd->num_rows(*pres), dbd,
 					throw_exceptions());
 		}
 		else {
@@ -624,24 +592,6 @@ Query::use(SQLQueryParms& p)
 
 
 UseQueryResult
-Query::use(const SQLTypeAdapter& s)
-{
-	if ((parse_elems_.size() == 2) && !template_defaults.processing_) {
-		// We're a template query and this isn't a recursive call, so
-		// take s to be a lone parameter for the query.  We will come
-		// back in here with a completed query, but the processing_
-		// flag will be set, allowing us to avoid an infinite loop.
-		AutoFlag<> af(template_defaults.processing_);
-		return use(SQLQueryParms() << s);
-	}
-	else {
-		// Take s to be the entire query string
-		return use(s.data(), s.length());
-	}
-}
-
-
-UseQueryResult
 Query::use(const char* str, size_t len)
 {
 	if ((parse_elems_.size() == 2) && !template_defaults.processing_) {
@@ -650,37 +600,29 @@ Query::use(const char* str, size_t len)
 		// back in here with a completed query, but the processing_
 		// flag will be set, allowing us to avoid an infinite loop.
 		AutoFlag<> af(template_defaults.processing_);
-		return use(SQLQueryParms() << str << len );
-	}
-	MYSQL_RES* res = 0;
-	if ((copacetic_ = conn_->driver()->execute(str, len)) == true) {
-		res = conn_->driver()->use_result();
+		return use(SQLQueryParms() << str << len);
 	}
 
-	if (res) {
-		if (parse_elems_.size() == 0) {
-			// Not a template query, so auto-reset
-			reset();
+	DBDriver* dbd = conn_->driver();
+	if ((copacetic_ = dbd->execute(str, len)) == true) {
+		if (ResultBase::Impl* pres = dbd->use_result()) {
+			if (parse_elems_.size() == 0) reset();	// not tquery
+			return UseQueryResult(pres, dbd, throw_exceptions());
 		}
-		return UseQueryResult(res, conn_->driver(), throw_exceptions());
+	}
+
+	// See comments in store() above for why we distinguish between
+	// empty result sets and actual error returns here.
+	copacetic_ = (conn_->errnum() == 0);
+	if (copacetic_) {
+		if (parse_elems_.size() == 0) reset();	// not tquery
+		return UseQueryResult();
+	}
+	else if (throw_exceptions()) {
+		throw BadQuery(error(), errnum());
 	}
 	else {
-		// See comments in store() above for why we distinguish between
-		// empty result sets and actual error returns here.
-		copacetic_ = (conn_->errnum() == 0);
-		if (copacetic_) {
-			if (parse_elems_.size() == 0) {
-				// Not a template query, so auto-reset
-				reset();
-			}
-			return UseQueryResult();
-		}
-		else if (throw_exceptions()) {
-			throw BadQuery(error(), errnum());
-		}
-		else {
-			return UseQueryResult();
-		}
+		return UseQueryResult();
 	}
 }
 

@@ -63,8 +63,8 @@ public:
 	/// original is 0, also holds the original data to be escaped
 	/// \param original if given, pointer to the character buffer to
 	/// escape instead of contents of *ps
-	/// \param length if both this and original are given, number of
-	/// characters to escape instead of ps->length()
+	/// \param length if you give original, the number of
+	/// characters to escape; otherwise, uses ps->length()
 	///
 	/// \retval number of characters placed in *ps
 	///
@@ -84,19 +84,44 @@ public:
 	///
 	/// \retval number of characters placed in escaped
 	///
-	/// DBDriver provides two versions of this method and 
-	/// Query::escape_string() calls the appropriate one based on whether
-	/// or not a database connection is available.  If the connection
-	/// is available, it can call the DBDriver::escape_string() method.
-	/// If there is no database connection available (normally only in
-	/// testing), then DBDriver provides a static version of the function 
-	/// that doesn't use a database connection.
+	/// This function uses DBDriver::escape_string() if there is a
+	/// valid connection, but falls back to escape_string_generic()
+	/// otherwise.
 	///
-	/// \see comments for DBDriver::escape_string(char*, const char*, size_t),
-	/// DBDriver::escape_string_no_conn(char*, const char*, size_t)
+	/// \see DBDriver::escape_string(char*, const char*, size_t)
 	/// for further details.
 	size_t escape_string(char* escaped, const char* original,
 			size_t length) const;
+
+	/// \brief SQL-escape a string using DBMS-independent rules
+	///
+	/// \see escape_string(std::string*, const char*, size_t) for the
+	/// meaning of the parameters and the return value
+	static size_t escape_string_generic(std::string* ps,
+			const char* original = 0, size_t length = 0);
+
+	/// \brief SQL-escape a string using DBMS-independent rules
+	///
+	/// This method exists primarily to SQL-escape strings while there
+	/// is no active DBMS connection, since we need that in order to
+	/// know the current character set, which affects how we do SQL
+	/// escaping.
+	/// 
+	/// You probably should not use this function directly, but
+	/// instead use the mysqlpp::escape manipulator with SQLStream,
+	/// since that always does the best possible thing in the given
+	/// circumstances.
+	///
+	/// In fact, you probably shouldn't use this *at all* because it
+	/// implies that you're trying to build valid SQL for an invalid
+	/// DB connection.  It also means you're willing to settle for our
+	/// generic rules, while your DBMS's escaping mechanism may give
+	/// better results, being tuned to that DBMS's expectations.
+	///
+	/// \see escape_string(char*, const char*, size_t) for the meaning
+	/// of the parameters and the return value
+	static size_t escape_string_generic(char* escaped,
+			const char* original, size_t length);
 
 	/// \brief Assigns contents of another SQLStream to this one
 	SQLStream& operator=(const SQLStream& rhs);

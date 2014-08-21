@@ -64,12 +64,10 @@ public:
 	}
 
 	/// \brief Initialize object
-	SimpleResult(bool copacetic, ulonglong insert_id,
-			ulonglong rows, const std::string& info) :
+	SimpleResult(bool copacetic, ulonglong insert_id, ulonglong rows) :
 	copacetic_(copacetic),
 	insert_id_(insert_id),
-	rows_(rows),
-	info_(info)
+	rows_(rows)
 	{
 	}
 
@@ -90,15 +88,10 @@ public:
 	/// \brief Get the number of rows affected by the query
 	ulonglong rows() const { return rows_; }
 
-	/// \brief Get any additional information about the query returned
-	/// by the server.
-	const char* info() const { return info_.c_str(); }
-
 private:
 	bool copacetic_;
 	ulonglong insert_id_;
 	ulonglong rows_;
-	std::string info_;
 };
 
 
@@ -110,6 +103,15 @@ private:
 class LIBTABULA_EXPORT ResultBase : public OptionalExceptions
 {
 public:
+	/// \brief Base class for drivers to extend so they can stash
+	/// driver-sprcific result info result sets
+	class Impl
+	{
+	public:
+		Impl() { }
+		virtual ~Impl() { } 
+	};
+
 	/// \brief Destroy object
 	virtual ~ResultBase() { }
 
@@ -159,13 +161,12 @@ public:
 protected:
 	/// \brief Create empty object
 	ResultBase() :
-	driver_(0),
 	current_field_(0)
 	{
 	}
 	
 	/// \brief Create the object, fully initialized
-	ResultBase(MYSQL_RES* result, DBDriver* dbd, bool te = true);
+	ResultBase(Impl* pri, DBDriver* driver, bool te);
 	
 	/// \brief Create object as a copy of another ResultBase
 	ResultBase(const ResultBase& other) :
@@ -177,7 +178,6 @@ protected:
 	/// \brief Copy another ResultBase object's contents into this one.
 	ResultBase& copy(const ResultBase& other);
 
-	DBDriver* driver_;	///< Access to DB driver; fully initted if nonzero
 	Fields fields_;		///< list of fields in result
 
 	/// \brief list of field names in result
@@ -185,6 +185,9 @@ protected:
 
 	/// \brief list of field types in result
 	RefCountedPointer<FieldTypes> types_;
+
+	/// \brief Reference to the DBDriver instance that created us
+	DBDriver* driver_;
 
 	/// \brief Default field index used by fetch_field()
 	///
@@ -197,7 +200,7 @@ protected:
 };
 
 
-/// \brief StoreQueryResult set type for "store" queries
+/// \brief Result set type for "store" queries
 ///
 /// This is the obvious C++ implementation of a class to hold results 
 /// from a SQL query that returns rows: a specialization of std::vector
@@ -226,9 +229,6 @@ public:
 	copacetic_(false)
 	{
 	}
-	
-	/// \brief Fully initialize object
-	StoreQueryResult(MYSQL_RES* result, DBDriver* dbd, bool te = true);
 
 	/// \brief Initialize object as a copy of another StoreQueryResult
 	/// object
@@ -239,6 +239,9 @@ public:
 	{
 		copy(other);
 	}
+	
+	/// \brief Fully initialize object
+	StoreQueryResult(Impl* pri, size_t rows, DBDriver* dbd, bool te);
 
 	/// \brief Destroy result set
 	~StoreQueryResult() { }
@@ -271,26 +274,7 @@ private:
 };
 
 
-/// \brief Functor to call mysql_free_result() on the pointer you pass
-/// to it.
-///
-/// This overrides RefCountedPointer's default destroyer, which uses
-/// operator delete; it annoys the C API when you nuke its data
-/// structures this way. :)
-template <>
-struct RefCountedPointerDestroyer<MYSQL_RES>
-{
-	/// \brief Functor implementation
-	void operator()(MYSQL_RES* doomed) const
-	{
-		if (doomed) {
-			mysql_free_result(doomed);
-		}
-	}
-};
-
-
-/// \brief StoreQueryResult set type for "use" queries
+/// \brief Result set type for "use" queries
 ///
 /// See the user manual for the reason you might want to use this even
 /// though its interface is less friendly than StoreQueryResult's.
@@ -304,15 +288,15 @@ public:
 	{
 	}
 	
-	/// \brief Create the object, fully initialized
-	UseQueryResult(MYSQL_RES* result, DBDriver* dbd, bool te = true);
-	
 	/// \brief Create a copy of another UseQueryResult object
 	UseQueryResult(const UseQueryResult& other) :
 	ResultBase()
 	{
 		copy(other);
 	}
+	
+	/// \brief Create the object, fully initialized
+	UseQueryResult(Impl* pri, DBDriver* dbd, bool te);
 	
 	/// \brief Destroy object
 	~UseQueryResult() { }
@@ -343,15 +327,7 @@ public:
 	/// the row data.
 	///
 	/// \sa fetch_raw_row()
-	Row fetch_row() const;
-
-	/// \brief Wraps mysql_fetch_row() in MySQL C API.
-	///
-	/// \internal You almost certainly want to call fetch_row() instead.
-	/// It is anticipated that this is only useful within the library,
-	/// to implement higher-level query types on top of raw "use"
-	/// queries. Query::storein() uses it, for example.
-	MYSQL_ROW fetch_raw_row() const;
+	Row fetch_row();
 
 	/// \brief Jumps to the given field within the result set
 	///
@@ -360,14 +336,17 @@ public:
 	void field_seek(Fields::size_type field) const
 			{ current_field_ = field; }
 
-	/// \brief Return the pointer to the underlying MySQL C API
-	/// result set object.
+	/// \brief Access the driver-level implementation result set info
 	///
-	/// While this has obvious inherent value for those times you need
-	/// to dig beneath the libtabula interface, it has subtler value.
-	/// It effectively stands in for operator bool(), operator !(),
-	/// operator ==(), and operator !=(), because the C++ compiler can
-	/// implement all of these with a MYSQL_RES*.
+	/// This is primarily for the benefit of the DBDriver subclass,
+	/// not end-user code.
+	Impl& impl() const { return *pimpl_; }
+
+	/// \brief Truthiness operator
+	///
+	/// Because of the rules of C++, this operator effectively stands in
+	/// for operator bool(), operator !(), operator ==(), and
+	/// operator !=().
 	///
 	/// Of these uses, the most valuable is using the UseQueryResult
 	/// object in bool context to determine if the query that created
@@ -382,23 +361,16 @@ public:
 	///       // Query failed, call Query::error() or ::errnum() for why
 	///   }
 	/// \endcode
-	operator MYSQL_RES*() const { return result_.raw(); }
+	///
+	/// If you need the underlying driver-level implementation object,
+	/// you probably want to call impl() instead.
+	operator Impl*() { return pimpl_.raw(); };
 	
 private:
 	/// \brief Copy another ResultBase object's contents into this one.
 	UseQueryResult& copy(const UseQueryResult& other);
 
-	/// \brief Reference to underlying C API result set
-	///
-	/// This is mutable because so many methods in this class are
-	/// are justifiably const because they don't modify the result
-	/// set's "value" but they call C API methods that take non-const
-	/// MYSQL_RES* so they can only be const if this is mutable.  It's
-	/// quite likely that these API functions do modify the MYSQL_RES
-	/// object, so strict constness says this object changed, too, but
-	/// this has always been mutable and the resulting behavior hasn't 
-	/// confused anyone yet.
-	mutable RefCountedPointer<MYSQL_RES> result_;
+	RefCountedPointer<Impl> pimpl_;		///< Driver-level result set info
 };
 
 

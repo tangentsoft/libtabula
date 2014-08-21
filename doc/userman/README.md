@@ -103,7 +103,8 @@ There are many alternatives for the tools in the square brackets:
     available:
 
     -   Red Hat/Fedora: docbook-style-xsl RPM package
-    -   Mac OS X:       docbook-xsl Fink package (http://fink.sf.net)
+    -   Mac OS X:       docbook-xsl Brew package (http://brew.sh)
+	                    docbook-xsl Fink package (http://fink.sf.net)
     -   Cygwin:         docbook-xml?? package (?? = DocBook version)
     -   Ubuntu/Debian:  docbook-xsl, from the standard APT repository
 

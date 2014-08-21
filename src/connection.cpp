@@ -2,7 +2,7 @@
  connection.cpp - Implements the Connection class.
 
  Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2008 by Educational Technology Resources, Inc.  Others may
+ © 2004-2008, 2014 by Educational Technology Resources, Inc.  Others may
  also hold copyrights on code in this file.  See the CREDITS.txt file
  in the top directory of the distribution for details.
 
@@ -27,9 +27,10 @@
 #define LIBTABULA_NOT_HEADER
 #include "connection.h"
 
-#include "dbdriver.h"
 #include "query.h"
 #include "result.h"
+
+#include "mysql/driver.h"
 
 using namespace std;
 
@@ -37,7 +38,7 @@ namespace libtabula {
 
 Connection::Connection(bool te) :
 OptionalExceptions(te),
-driver_(new DBDriver()),
+driver_(new MySQLDriver(te)),
 copacetic_(true)
 {
 }
@@ -46,7 +47,7 @@ copacetic_(true)
 Connection::Connection(const char* db, const char* server,
 		const char* user, const char* password, unsigned int port) :
 OptionalExceptions(),
-driver_(new DBDriver()),
+driver_(new MySQLDriver()),
 copacetic_(true)
 {
 	try {
@@ -63,7 +64,7 @@ copacetic_(true)
 
 Connection::Connection(const Connection& other) :
 OptionalExceptions(other.throw_exceptions()),
-driver_(new DBDriver(*other.driver_))
+driver_(other.driver_->clone())
 {
 	copy(other);
 }
@@ -127,7 +128,8 @@ Connection::copy(const Connection& other)
 {
 	error_message_.clear();
 	set_exceptions(other.throw_exceptions());
-	driver_->copy(*other.driver_);
+	delete driver_;
+	driver_ = other.driver_->clone();
 }
 
 
@@ -188,21 +190,6 @@ Connection::error() const
 }
 
 
-std::string
-Connection::ipc_info() const
-{
-	return driver_->ipc_info();
-}
-
-
-bool
-Connection::kill(unsigned long tid) const
-{
-	error_message_.clear();
-	return driver_->kill(tid);
-}
-
-
 Connection&
 Connection::operator=(const Connection& rhs)
 {
@@ -259,13 +246,6 @@ Connection::ping()
 }
 
 
-int
-Connection::protocol_version() const
-{
-	return driver_->protocol_version();
-}
-
-
 Query
 Connection::query(const char* qstr)
 {
@@ -306,13 +286,6 @@ Connection::select_db(const std::string& db)
 
 
 std::string
-Connection::server_status() const
-{
-	return driver_->server_status();
-}
-
-
-std::string
 Connection::server_version() const
 {
 	return driver_->server_version();
@@ -337,57 +310,9 @@ Connection::set_option(Option* o)
 }
 
 
-bool
-Connection::shutdown()
-{
-	error_message_.clear();
-	if (connected()) {
-		if (driver_->shutdown()) {
-			return true;
-		}
-		else {
-			if (throw_exceptions()) {
-				throw ConnectionFailed(error(), errnum());
-			}
-			return false;
-		}
-	}
-	else {
-		build_error_message("shutdown database server");
-		if (throw_exceptions()) {
-			throw ConnectionFailed(error_message_.c_str());
-		}
-		return false;
-	}
-}
-
-
-bool
-Connection::thread_aware()
-{
-	return DBDriver::thread_aware();
-}
-
-
-void
-Connection::thread_end()
-{
-	DBDriver::thread_end();
-}
-
-
-unsigned long
-Connection::thread_id()
-{
-	return driver_->thread_id();
-}
-
-
-bool
-Connection::thread_start()
-{
-	return DBDriver::thread_start();
-}
+bool Connection::thread_aware() { return driver_->thread_aware(); }
+void Connection::thread_end() { driver_->thread_end(); }
+bool Connection::thread_start() { return driver_->thread_start(); }
 
 } // end namespace libtabula
 

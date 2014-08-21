@@ -28,6 +28,7 @@
 #include "dbdriver.h"
 #include "connection.h"
 
+#include <memory>
 #include <string>
 
 namespace libtabula {
@@ -54,13 +55,13 @@ SQLStream::escape_string(std::string* ps, const char* original,
 		size_t length) const
 {
 	if (conn_ && *conn_) {
-		// Normal case
+		// Normal case: we have a valid conn, hence we can ask the
+		// driver to do this in a DBMS and charset-aware fashion.
 		return conn_->driver()->escape_string(ps, original, length);
 	}
 	else {
-		// Should only happen in test/test_manip.cpp, since it doesn't
-		// want to open a DB connection just to test the manipulators.
-		return DBDriver::escape_string_no_conn(ps, original, length);
+		// Fall back to generic libtabula routine
+		return escape_string_generic(ps, original, length);
 	}
 }
 
@@ -74,10 +75,72 @@ SQLStream::escape_string(char* escaped, const char* original,
 		return conn_->driver()->escape_string(escaped, original, length);
 	}
 	else {
-		// Should only happen in test/test_manip.cpp, since it doesn't
-		// want to open a DB connection just to test the manipulators.
-		return DBDriver::escape_string_no_conn(escaped, original, length);
+		// Fall-back case
+		return escape_string_generic(escaped, original, length);
 	}
+}
+
+
+size_t
+SQLStream::escape_string_generic(std::string* ps,
+		const char* original, size_t length)
+{
+	std::auto_ptr<char> escaped(new char[length * 2 + 1]);
+	size_t outlen = escape_string_generic(escaped.get(), 
+			original ? original : ps->data(),
+			original ? length : ps->length());
+	ps->assign(escaped.get(), outlen);
+	return outlen;
+}
+
+
+size_t
+SQLStream::escape_string_generic(char* escaped,
+		const char* original, size_t length)
+{
+	const char* oe = escaped;
+
+	for (size_t i = 0; i < length; ++i) {
+		switch (char c = *original++) {
+			case 0:
+				*escaped++ = '\\';
+				*escaped++ = '0';
+				break;
+
+			case '\\':
+				*escaped++ = '\\';
+				*escaped++ = '\\';
+				break;
+
+			case '\'':
+				*escaped++ = '\\';
+				*escaped++ = '\'';
+				break;
+
+			case '"':
+				*escaped++ = '\\';
+				*escaped++ = '"';
+				break;
+
+			case '\n':
+				*escaped++ = '\\';
+				*escaped++ = 'n';
+				break;
+
+			case '\r':
+				*escaped++ = '\\';
+				*escaped++ = 'r';
+				break;
+
+			default:
+				*escaped++ = c;
+				break;
+		}
+	}
+
+	*escaped = '\0';
+
+	return escaped - oe;
 }
 
 

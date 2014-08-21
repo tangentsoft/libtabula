@@ -185,20 +185,6 @@ public:
 	/// or one from the current database driver otherwise.
 	const char* error() const;
 
-	/// \brief Get information about the IPC connection to the
-	/// database server
-	///
-	/// String contains info about type of connection (e.g. TCP/IP,
-	/// named pipe, Unix socket...) and the server hostname.
-	std::string ipc_info() const;
-
-	/// \brief Kill a database server thread
-	///
-	/// \param tid ID of thread to kill
-	///
-	/// \see thread_id()
-	bool kill(unsigned long tid) const;
-
 	/// \brief Test whether any error has occurred within the object.
 	///
 	/// Allows the object to be used in bool context, like this:
@@ -234,10 +220,6 @@ public:
 	/// and cannot re-establish it, or if the server did not respond to
 	/// the ping and we could not re-establish the connection.
 	bool ping();
-
-	/// \brief Returns version number of the protocol the database
-	/// driver uses to communicate with the server.
-	int protocol_version() const;
 
 	/// \brief Return a new query object.
 	///
@@ -292,46 +274,33 @@ public:
 	/// \retval true if option was successfully set
 	bool set_option(Option* o);
 
-	/// \brief Ask database server to shut down.
-	bool shutdown();
-
-	/// \brief Returns information about database server's status
-	std::string server_status() const;
-
 	/// \brief Returns true if both libtabula and database driver we're
 	/// using were compiled with thread awareness.
-	static bool thread_aware();
+	bool thread_aware();
 
 	/// \brief Tells the underlying database driver that this thread
-	/// is done using the library.
-	static void thread_end();
-
-	/// \brief Returns the database server's thread ID for this connection
+	/// is done using the database.
 	///
-	/// This has nothing to do with threading on the client side.  The
-	/// only thing you can do with this value is pass it to kill().
-	unsigned long thread_id();
+	/// Some database C APIs allocate per-thread resources when you
+	/// start using them in a thread, and don't release them until
+	/// you explicitly tell it to.
+	void thread_end();
 
 	/// \brief Tells the underlying database driver that the current
 	/// thread is now using its services.
 	///
-	/// It's not necessary to call this from the thread that creates
-	/// the connection as it's done automatically.  This method exists
-	/// for times when multiple threads may use this object; it allows
-	/// the underlying database driver to set up any per-thread data
-	/// structures it needs.
+	/// Whether you need to call this or not depends on the driver(s)
+	/// you are using.  See the function of the same name in the
+	/// driver to learn the per-DBMS requirements.
 	///
-	/// The libtabula user manual's <a href="../userman/threads.html">chapter
-	/// on threads</a> details two major strategies for dealing with
-	/// connections in the face of threads.  The Connection-per-thread
-	/// option frees you from ever having to call this method.  The
-	/// other documented strategy is to use ConnectionPool, which opens
-	/// the possibility for one thread to create a connection that
-	/// another uses, so you do need to call this method in that case,
-	/// or with any other similar strategy.
+	/// It is safe to call this function from all threads that use
+	/// this Connection, even in cases where it provides no benefit.
+	/// You could thus be lazy and just call this from each thread 
+	/// that uses this Connection before you start using it in that
+	/// thread.
 	///
 	/// \retval True if there was no problem
-	static bool thread_start();
+	bool thread_start();
 
 protected:
 	/// \brief Build an error message in the standard form used whenever

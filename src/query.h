@@ -2,10 +2,10 @@
 /// \brief Defines a class for building and executing SQL queries.
 
 /***********************************************************************
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2011 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ and © 2004-2011, 2014 by Educational Technology Resources, Inc.
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -202,10 +202,6 @@ public:
 	/// This just delegates to Connection::error().  Query has nothing
 	/// extra to say, so use either, as makes sense in your program.
 	const char* error() const;
-
-	/// \brief Returns information about the most recently executed
-	/// query.
-	std::string info();
 
 	/// \brief Get ID generated for an AUTO_INCREMENT column in the
 	/// previous INSERT query.
@@ -422,7 +418,7 @@ public:
 	/// \brief Execute a query that can return rows, with access to
 	/// the rows in sequence
 	///
-	/// \param str if this object is set up as a template query, this is
+	/// \param sta if this object is set up as a template query, this is
 	/// the value to substitute for the first template query parameter;
 	/// else, it is the SQL query string to execute
 	///
@@ -436,7 +432,8 @@ public:
 	/// type (25 total, by default; see \c lib/querydef.pl), each taking
 	/// one more SQLTypeAdapter object than the previous one.  See the
 	/// template query overview above for more about this topic.
-	UseQueryResult use(const SQLTypeAdapter& str);
+	UseQueryResult use(const SQLTypeAdapter& sta)
+			{ return use(sta.data(), sta.length()); }
 
 	/// \brief Execute a query that can return rows, with access to
 	/// the rows in sequence
@@ -485,7 +482,7 @@ public:
 	/// \brief Execute a query that can return rows, returning all
 	/// of the rows in a random-access container
 	///
-	/// \param str if this object is set up as a template query, this is
+	/// \param sta if this object is set up as a template query, this is
 	/// the value to substitute for the first template query parameter;
 	/// else, it is the SQL query string to execute
 	///
@@ -499,7 +496,8 @@ public:
 	/// type (25 total, by default; see \c lib/querydef.pl), each taking
 	/// one more SQLTypeAdapter object than the previous one.  See the
 	/// template query overview above for more about this topic.
-	StoreQueryResult store(const SQLTypeAdapter& str);
+	StoreQueryResult store(const SQLTypeAdapter& sta)
+			{ return store(sta.data(), sta.length()); }
 
 	/// \brief Execute a query that can return rows, returning all
 	/// of the rows in a random-access container
@@ -754,12 +752,7 @@ public:
 	void storein_sequence(Sequence& con, const SQLTypeAdapter& s)
 	{
 		if (UseQueryResult result = use(s)) {
-			while (1) {
-				MYSQL_ROW d = result.fetch_raw_row();
-				if (!d) break;
-				Row row(d, &result, result.fetch_lengths(),
-						throw_exceptions());
-				if (!row) break;
+			while (Row row = result.fetch_row()) {
 				con.push_back(typename Sequence::value_type(row));
 			}
 		}
@@ -825,12 +818,7 @@ public:
 	void storein_set(Set& con, const SQLTypeAdapter& s)
 	{
 		if (UseQueryResult result = use(s)) {
-			while (1) {
-				MYSQL_ROW d = result.fetch_raw_row();
-				if (!d) break;
-				Row row(d, &result, result.fetch_lengths(),
-						throw_exceptions());
-				if (!row) break;
+			while (Row row = result.fetch_row()) {
 				con.insert(typename Set::value_type(row));
 			}
 		}

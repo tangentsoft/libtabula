@@ -131,7 +131,7 @@
     with the test database:</para>
 
     <screen>
-CREATE USER test@'%' IDENTIFIED BY &#x2019;nunyabinness';
+CREATE USER test@'%' IDENTIFIED BY 'nunyabinness';
 GRANT ALL PRIVILEGES ON libtabula.* TO test@'%';</screen>
 
     <para>You could then create the sample database with the following

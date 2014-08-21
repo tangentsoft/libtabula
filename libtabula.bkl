@@ -48,6 +48,13 @@
     <if cond="FORMAT in ['msvs2003prj', 'msvs2005prj', 'msvs2008prj', 'xcode2'] and BUILD=='debug'">_d</if>
   </set>
 
+  <!-- Figure out what library file will be called; follow the system's
+       normal library naming convention. -->
+  <set var="LIBTABULA_NAME">libtabula$(DEBUG_SUFFIX)</set>
+  <set var="LIBTABULA_NAME">
+    <if cond="FORMAT in ['autoconf', 'gnu', 'xcode2']">tabula</if>
+  </set>
+
   <set var="BUILDDOCS">yes</set>
   <set var="BUILDEXAMPLES">yes</set>
   <set var="BUILDLIBRARY">yes</set>
@@ -60,11 +67,13 @@
 
   <if cond="BUILDLIBRARY=='yes'">
     <dll id="libtabula">
-      <dllname>libtabula$(DEBUG_SUFFIX)</dllname>
-      <libname>libtabula$(DEBUG_SUFFIX)</libname>
+      <dllname>$(LIBTABULA_NAME)</dllname>
+      <libname>$(LIBTABULA_NAME)</libname>
       <so_version>3.9.9</so_version>
 
       <sources>
+        src/mysql/driver.cpp
+
         src/beemutex.cpp
         src/cmdline.cpp
         src/connection.cpp
@@ -105,6 +114,8 @@
       <cxx-exceptions>on</cxx-exceptions>
       
       <install-to>$(LIBDIR)</install-to>
+
+      <include>src</include>
       
       <if cond="PLATFORM_WINDOWS_NATIVE=='yes'">
         <define>UNICODE</define>
@@ -193,7 +204,7 @@
       <cxxflags>@PTHREAD_CFLAGS@</cxxflags>
       <ldflags>-l@MYSQL_C_LIB_NAME@ @PTHREAD_LIBS@ @LIBTABULA_EXTRA_LIBS@</ldflags>
       <warnings>max</warnings>
-      <sys-lib>libtabula</sys-lib>
+      <sys-lib>tabula</sys-lib>
     </if>
 
     <if cond="FORMAT=='mingw'">
@@ -204,28 +215,28 @@
       <include>"$(MYSQL_WIN_DIR)\include"</include>
       <lib-path>"$(MYSQL_WIN_DIR)\lib"</lib-path>
       <sys-lib>mysql</sys-lib>
-      <sys-lib>libtabula$(DEBUG_SUFFIX)</sys-lib>
+      <sys-lib>$(LIBTABULA_NAME)</sys-lib>
     </if>
 
     <if cond="FORMAT in ['msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
       <lib-path>$(BUILD)</lib-path>
       <include>$(MYSQL_WIN_DIR)\include</include>
       <lib-path>$(MYSQL_WIN_DIR)\lib</lib-path>
-      <sys-lib>libtabula$(DEBUG_SUFFIX)</sys-lib>
+      <sys-lib>$(LIBTABULA_NAME)</sys-lib>
       <sys-lib>libmysql</sys-lib>
     </if>
 
     <if cond="FORMAT=='gnu'">
       <include>/usr/include/mysql</include>
       <include>/usr/include/libtabula</include>
-      <sys-lib>libtabula</sys-lib>
+      <sys-lib>tabula</sys-lib>
       <sys-lib>mysqlclient</sys-lib>
     </if>
 
     <if cond="FORMAT=='xcode2'">
       <include>/usr/local/mysql/include</include>
       <sys-lib>mysqlclient</sys-lib>
-      <sys-lib>libtabula$(DEBUG_SUFFIX)</sys-lib>
+      <sys-lib>tabula$(DEBUG_SUFFIX)</sys-lib>
     </if>
   </template>
 
@@ -233,7 +244,6 @@
     <!-- SSQLS v2 parser convenience library -->
     <lib id="ssqls2parse" template="programs">
       <depends>libtabula</depends>
-      <libname>libtabula_ssqls2parse</libname>
       <sources>src/ssx/parsev2.cpp</sources>
     </lib>
 
@@ -242,8 +252,7 @@
       <sources>src/ssx/genv2.cpp</sources>
       <sources>src/ssx/main.cpp</sources>
       <depends>ssqls2parse</depends>
-      <sys-lib>libtabula_ssqls2parse</sys-lib>
-      <sys-lib>libtabula</sys-lib>
+      <sys-lib>ssqls2parse</sys-lib>
     </exe>
   </if>
 
@@ -292,8 +301,8 @@
       <exe id="test_ssqls2" template="programs">
         <sources>test/ssqls2.cpp</sources>
         <depends>ssqls2parse</depends>
-        <sys-lib>libtabula_ssqls2parse</sys-lib>
-        <sys-lib>libtabula</sys-lib>
+        <sys-lib>ssqls2parse</sys-lib>
+        <sys-lib>$(LIBTABULA_NAME)</sys-lib>
       </exe>
     </if>
     <if cond="FORMAT!='msvs2003prj'">
@@ -315,100 +324,99 @@
 
   <!-- Define example programs' output targets, if enabled -->
   <if cond="BUILDEXAMPLES=='yes'">
-    <!-- Options specific to examples that depend on libexcommon -->
-    <template id="libexcommon-user">
-      <depends>excommon</depends>
-      <sys-lib>libtabula_excommon</sys-lib>
+    <!-- Options specific to examples that depend on libltexcomm -->
+    <template id="libltexcomm-user">
+      <depends>ltexcomm</depends>
+      <sys-lib>ltexcomm</sys-lib>
     </template>
 
     <!-- Convenience library of routines used by most examples -->
-    <lib id="excommon" template="programs">
-      <libname>libtabula_excommon</libname>
+    <lib id="ltexcomm" template="programs">
       <sources>examples/printdata.cpp</sources>
     </lib>
 
     <!-- The examples themselves -->
     <if cond="FORMAT!='msvs2003prj'">
       <!-- VC++ 2003 can't compile current SSQLS code -->
-      <exe id="cgi_jpeg" template="libexcommon-user,programs">
+      <exe id="cgi_jpeg" template="libltexcomm-user,programs">
         <sources>examples/cgi_jpeg.cpp</sources>
       </exe>
     </if>
-    <exe id="cpool" template="libexcommon-user,programs">
+    <exe id="cpool" template="libltexcomm-user,programs">
       <sources>examples/cpool.cpp</sources>
     </exe>
-    <exe id="dbinfo" template="libexcommon-user,programs">
+    <exe id="dbinfo" template="libltexcomm-user,programs">
       <sources>examples/dbinfo.cpp</sources>
     </exe>
-    <exe id="deadlock" template="libexcommon-user,programs">
+    <exe id="deadlock" template="libltexcomm-user,programs">
       <sources>examples/deadlock.cpp</sources>
     </exe>
-    <exe id="fieldinf" template="libexcommon-user,programs">
+    <exe id="fieldinf" template="libltexcomm-user,programs">
       <sources>examples/fieldinf.cpp</sources>
     </exe>
     <if cond="FORMAT!='msvs2003prj'">
       <!-- VC++ 2003 can't compile current SSQLS code -->
-      <exe id="for_each" template="libexcommon-user,programs">
+      <exe id="for_each" template="libltexcomm-user,programs">
         <sources>examples/for_each.cpp</sources>
       </exe>
     </if>
-    <exe id="load_jpeg" template="libexcommon-user,programs">
+    <exe id="load_jpeg" template="libltexcomm-user,programs">
       <sources>examples/load_jpeg.cpp</sources>
     </exe>
-    <exe id="multiquery" template="libexcommon-user,programs">
+    <exe id="multiquery" template="libltexcomm-user,programs">
       <sources>examples/multiquery.cpp</sources>
     </exe>
-    <exe id="resetdb" template="libexcommon-user,programs">
+    <exe id="resetdb" template="libltexcomm-user,programs">
       <sources>examples/resetdb.cpp</sources>
     </exe>
-    <exe id="simple1" template="libexcommon-user,programs">
+    <exe id="simple1" template="libltexcomm-user,programs">
       <sources>examples/simple1.cpp</sources>
     </exe>
-    <exe id="simple2" template="libexcommon-user,programs">
+    <exe id="simple2" template="libltexcomm-user,programs">
       <sources>examples/simple2.cpp</sources>
     </exe>
-    <exe id="simple3" template="libexcommon-user,programs">
+    <exe id="simple3" template="libltexcomm-user,programs">
       <sources>examples/simple3.cpp</sources>
     </exe>
     <if cond="FORMAT!='msvs2003prj'">
       <!-- VC++ 2003 can't compile current SSQLS code -->
-      <exe id="ssqls1" template="libexcommon-user,programs">
+      <exe id="ssqls1" template="libltexcomm-user,programs">
         <sources>examples/ssqls1.cpp</sources>
       </exe>
-      <exe id="ssqls2" template="libexcommon-user,programs">
+      <exe id="ssqls2" template="libltexcomm-user,programs">
         <sources>examples/ssqls2.cpp</sources>
       </exe>
-      <exe id="ssqls3" template="libexcommon-user,programs">
+      <exe id="ssqls3" template="libltexcomm-user,programs">
         <sources>examples/ssqls3.cpp</sources>
       </exe>
-      <exe id="ssqls4" template="libexcommon-user,programs">
+      <exe id="ssqls4" template="libltexcomm-user,programs">
         <sources>examples/ssqls4.cpp</sources>
       </exe>
-      <exe id="ssqls5" template="libexcommon-user,programs">
+      <exe id="ssqls5" template="libltexcomm-user,programs">
         <sources>examples/ssqls5.cpp</sources>
       </exe>
-      <exe id="ssqls6" template="libexcommon-user,programs">$
+      <exe id="ssqls6" template="libltexcomm-user,programs">$
         <sources>examples/ssqls6.cpp</sources>
       </exe>$
-      <exe id="store_if" template="libexcommon-user,programs">
+      <exe id="store_if" template="libltexcomm-user,programs">
         <sources>examples/store_if.cpp</sources>
       </exe>
     </if>
-    <exe id="tquery1" template="libexcommon-user,programs">
+    <exe id="tquery1" template="libltexcomm-user,programs">
       <sources>examples/tquery1.cpp</sources>
     </exe>
-    <exe id="tquery2" template="libexcommon-user,programs">
+    <exe id="tquery2" template="libltexcomm-user,programs">
       <sources>examples/tquery2.cpp</sources>
     </exe>
-    <exe id="tquery3" template="libexcommon-user,programs">
+    <exe id="tquery3" template="libltexcomm-user,programs">
       <sources>examples/tquery3.cpp</sources>
     </exe>
-    <exe id="tquery4" template="libexcommon-user,programs">
+    <exe id="tquery4" template="libltexcomm-user,programs">
       <sources>examples/tquery4.cpp</sources>
     </exe>
     <if cond="FORMAT!='msvs2003prj'">
       <!-- VC++ 2003 can't compile current SSQLS code -->
-      <exe id="transaction" template="libexcommon-user,programs">
+      <exe id="transaction" template="libltexcomm-user,programs">
         <sources>examples/transaction.cpp</sources>
       </exe>
     </if>
