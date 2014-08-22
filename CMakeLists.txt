@@ -49,7 +49,6 @@
 #
 # - Replicate existing autoconf behavior:
 #   - Library, header and function checks
-#   - Find MySQL C API files automatically
 #   - Let user specifiy location of same
 #   - Detect existence of <slist> etc.
 #   - Thread awareness selection
@@ -93,40 +92,11 @@ set(LIBTABULA_VERSION_MINOR  9)
 set(LIBTABULA_VERSION_BUGFIX 9)
 set(LIBTABULA_VERSION_TWEAK  1)
 
-find_path(MYSQL_INCLUDE mysql_version.h
-	/usr/include/mysql
-	/usr/local/include/mysql
-	/usr/local/mysql/include
-	/usr/local/mysql/include/mysql
-	/usr/mysql/include/mysql
-	/opt/mysql/include/mysql
-	/sw/include/mysql
-)
-if (NOT MYSQL_INCLUDE)
-	message(FATAL_ERROR "MySQL/MariaDB header files not found!")
-endif()
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 
-set(MYSQL_LIB_PATHS
-	/usr/lib/x86_64-linux-gnu
-	/usr/lib64
-	/usr/lib
-	/usr/lib64/mysql
-	/usr/lib/mysql
-	/usr/local/lib64
-	/usr/local/lib
-	/usr/local/lib/mysql
-	/usr/local/mysql/lib
-	/usr/local/mysql/lib/mysql
-	/usr/mysql/lib/mysql
-	/opt/mysql/lib
-	/opt/mysql/lib/mysql
-	/sw/lib
-	/sw/lib/mysql
-)
-find_library(MYSQL_LIB mysqlclient_r MYSQL_LIB_PATHS)
-find_library(MYSQL_LIB mysqlclient MYSQL_LIB_PATHS)
-if (NOT MYSQL_LIB)
-	message(FATAL_ERROR "MySQL/MariaDB library not found!")
+find_package(MySQL)
+if (NOT MYSQL_FOUND)
+	message(FATAL_ERROR "MySQL/MariaDB development files not found!")
 endif()
 
 configure_file(src/libtabula.h.in src/libtabula.h)
