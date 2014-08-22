@@ -101,8 +101,8 @@ endif()
 
 configure_file(src/libtabula.h.in src/libtabula.h)
 
-include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE})
-link_directories(${MYSQL_LIB})
+include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE_DIR})
+link_directories(${MYSQL_LIBRARY})
 
 add_subdirectory(src)
 add_subdirectory(examples)
