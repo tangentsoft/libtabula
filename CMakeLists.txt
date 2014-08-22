@@ -93,9 +93,46 @@ set(LIBTABULA_VERSION_MINOR  9)
 set(LIBTABULA_VERSION_BUGFIX 9)
 set(LIBTABULA_VERSION_TWEAK  1)
 
+find_path(MYSQL_INCLUDE mysql_version.h
+	/usr/include/mysql
+	/usr/local/include/mysql
+	/usr/local/mysql/include
+	/usr/local/mysql/include/mysql
+	/usr/mysql/include/mysql
+	/opt/mysql/include/mysql
+	/sw/include/mysql
+)
+if (NOT MYSQL_INCLUDE)
+	message(FATAL_ERROR "MySQL/MariaDB header files not found!")
+endif()
+
+set(MYSQL_LIB_PATHS
+	/usr/lib/x86_64-linux-gnu
+	/usr/lib64
+	/usr/lib
+	/usr/lib64/mysql
+	/usr/lib/mysql
+	/usr/local/lib64
+	/usr/local/lib
+	/usr/local/lib/mysql
+	/usr/local/mysql/lib
+	/usr/local/mysql/lib/mysql
+	/usr/mysql/lib/mysql
+	/opt/mysql/lib
+	/opt/mysql/lib/mysql
+	/sw/lib
+	/sw/lib/mysql
+)
+find_library(MYSQL_LIB mysqlclient_r MYSQL_LIB_PATHS)
+find_library(MYSQL_LIB mysqlclient MYSQL_LIB_PATHS)
+if (NOT MYSQL_LIB)
+	message(FATAL_ERROR "MySQL/MariaDB library not found!")
+endif()
+
 configure_file(src/libtabula.h.in src/libtabula.h)
 
-include_directories(src "${PROJECT_BINARY_DIR}/src" /usr/local/include/mysql)
+include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE})
+link_directories(${MYSQL_LIB})
 
 add_subdirectory(src)
 add_subdirectory(examples)
