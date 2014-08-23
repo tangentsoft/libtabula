@@ -87,6 +87,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 include(CheckSymbolExists)
+include(CheckFunctionExists)
 
 project(libtabula)
 set(LIBTABULA_VERSION_MAJOR  3)
@@ -105,6 +106,8 @@ CHECK_SYMBOL_EXISTS(getopt unistd.h HAVE_POSIX_GETOPT)
 if (NOT HAVE_POSIX_GETOPT)
 	CHECK_SYMBOL_EXISTS(getopt libiberty.h HAVE_LIBIBERTY_GETOPT)
 endif()
+
+CHECK_FUNCTION_EXISTS(localtime_r HAVE_LOCALTIME_R)
 
 configure_file(src/libtabula.h.in src/libtabula.h)
 configure_file(src/config.h.in src/config.h)
