@@ -109,8 +109,15 @@ endif()
 
 CHECK_FUNCTION_EXISTS(localtime_r HAVE_LOCALTIME_R)
 
-configure_file(src/libtabula.h.in src/libtabula.h)
 configure_file(src/config.h.in src/config.h)
+configure_file(doc/userman/userman.dbx.in doc/userman.dbx)
+configure_file(install.hta.in install.hta)
+configure_file(src/Doxyfile.in src/Doxyfile)
+configure_file(src/libtabula.h.in src/libtabula.h)
+configure_file(src/ssx/Doxyfile.in src/ssx/Doxyfile)
+configure_file(abi.xml.in abi.xml)
+configure_file(libtabula.spec.in libtabula.spec)
+configure_file(version.in version)
 
 include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE_DIR})
 link_directories(${MYSQL_LIBRARY})
