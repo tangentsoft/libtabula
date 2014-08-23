@@ -39,3 +39,22 @@ target_link_libraries(simple2 tabula mysqlclient_r)
 
 add_executable(simple3 simple3.cpp)
 target_link_libraries(simple3 tabula mysqlclient_r)
+
+add_executable(ssqls1 ssqls1.cpp)
+target_link_libraries(ssqls1 tabula mysqlclient_r)
+
+add_executable(ssqls2 ssqls2.cpp)
+target_link_libraries(ssqls2 ltexcomm tabula mysqlclient_r)
+
+add_executable(ssqls3 ssqls3.cpp)
+target_link_libraries(ssqls3 ltexcomm tabula mysqlclient_r)
+
+add_executable(ssqls4 ssqls4.cpp)
+target_link_libraries(ssqls4 ltexcomm tabula mysqlclient_r)
+
+add_executable(ssqls5 ssqls5.cpp)
+target_link_libraries(ssqls5 tabula mysqlclient_r)
+
+add_executable(ssqls6 ssqls6.cpp)
+target_link_libraries(ssqls6 ltexcomm tabula mysqlclient_r)
+
