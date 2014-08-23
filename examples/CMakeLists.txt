@@ -58,3 +58,14 @@ target_link_libraries(ssqls5 tabula mysqlclient_r)
 add_executable(ssqls6 ssqls6.cpp)
 target_link_libraries(ssqls6 ltexcomm tabula mysqlclient_r)
 
+add_executable(tquery1 tquery1.cpp)
+target_link_libraries(tquery1 ltexcomm tabula mysqlclient_r)
+
+add_executable(tquery2 tquery2.cpp)
+target_link_libraries(tquery2 ltexcomm tabula mysqlclient_r)
+
+add_executable(tquery3 tquery3.cpp)
+target_link_libraries(tquery3 tabula mysqlclient_r)
+
+add_executable(tquery4 tquery4.cpp)
+target_link_libraries(tquery4 ltexcomm tabula mysqlclient_r)
