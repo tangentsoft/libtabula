@@ -1,0 +1,2 @@
+#cmakedefine HAVE_POSIX_GETOPT
+#cmakedefine HAVE_LIBIBERTY_GETOPT

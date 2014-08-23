@@ -86,6 +86,8 @@
 
 cmake_minimum_required(VERSION 2.8)
 
+include(CheckSymbolExists)
+
 project(libtabula)
 set(LIBTABULA_VERSION_MAJOR  3)
 set(LIBTABULA_VERSION_MINOR  9)
@@ -99,7 +101,13 @@ if (NOT MYSQL_FOUND)
 	message(FATAL_ERROR "MySQL/MariaDB development files not found!")
 endif()
 
+CHECK_SYMBOL_EXISTS(getopt unistd.h HAVE_POSIX_GETOPT)
+if (NOT HAVE_POSIX_GETOPT)
+	CHECK_SYMBOL_EXISTS(getopt libiberty.h HAVE_LIBIBERTY_GETOPT)
+endif()
+
 configure_file(src/libtabula.h.in src/libtabula.h)
+configure_file(src/config.h.in src/config.h)
 
 include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE_DIR})
 link_directories(${MYSQL_LIBRARY})
