@@ -42,7 +42,7 @@
 	}
 	static void sleep(int s) { Sleep(s * 1000); }
 #else
-#	include "../config.h"
+#	include "../src/config.h"
 #	if defined(HAVE_UNISTD_H)
 #		include <unistd.h>
 #	endif

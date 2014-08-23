@@ -28,6 +28,30 @@
 
 add_library(ltexcomm STATIC printdata.cpp)
 
+add_executable(cgi_jpeg cgi_jpeg.cpp)
+target_link_libraries(cgi_jpeg tabula mysqlclient_r)
+
+add_executable(cpool cpool.cpp)
+target_link_libraries(cpool tabula mysqlclient_r)
+
+add_executable(dbinfo dbinfo.cpp)
+target_link_libraries(dbinfo tabula mysqlclient_r)
+
+add_executable(deadlock deadlock.cpp)
+target_link_libraries(deadlock tabula mysqlclient_r)
+
+add_executable(fieldinf fieldinf.cpp)
+target_link_libraries(fieldinf tabula mysqlclient_r)
+
+add_executable(for_each for_each.cpp)
+target_link_libraries(for_each tabula mysqlclient_r)
+
+add_executable(load_jpeg load_jpeg.cpp)
+target_link_libraries(load_jpeg tabula mysqlclient_r)
+
+add_executable(multiquery multiquery.cpp)
+target_link_libraries(multiquery tabula mysqlclient_r)
+
 add_executable(resetdb resetdb.cpp)
 target_link_libraries(resetdb tabula mysqlclient_r)
 
@@ -58,6 +82,9 @@ target_link_libraries(ssqls5 tabula mysqlclient_r)
 add_executable(ssqls6 ssqls6.cpp)
 target_link_libraries(ssqls6 ltexcomm tabula mysqlclient_r)
 
+add_executable(store_if store_if.cpp)
+target_link_libraries(store_if ltexcomm tabula mysqlclient_r)
+
 add_executable(tquery1 tquery1.cpp)
 target_link_libraries(tquery1 ltexcomm tabula mysqlclient_r)
 
@@ -69,3 +96,7 @@ target_link_libraries(tquery3 tabula mysqlclient_r)
 
 add_executable(tquery4 tquery4.cpp)
 target_link_libraries(tquery4 ltexcomm tabula mysqlclient_r)
+
+add_executable(transaction transaction.cpp)
+target_link_libraries(transaction ltexcomm tabula mysqlclient_r)
+
