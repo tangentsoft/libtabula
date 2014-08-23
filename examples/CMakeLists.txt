@@ -26,5 +26,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
 # USA
 
+add_library(ltexcomm STATIC printdata.cpp)
+
 add_executable(resetdb resetdb.cpp)
 target_link_libraries(resetdb tabula mysqlclient_r)

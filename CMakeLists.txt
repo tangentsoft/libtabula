@@ -31,8 +31,6 @@
 # TODO:
 #
 # - Add libssqlsxlat convenience library
-# - Add libexcommon convenience library
-# - Add examples/*
 # - Add doc/* and get DocBook userman toolchain working
 # - Get refman building from build/src[ssx/]/Doxyfile
 # - Update README-* with new build info
