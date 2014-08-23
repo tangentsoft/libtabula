@@ -33,10 +33,10 @@
 # - Add libssqlsxlat convenience library
 # - Add libexcommon convenience library
 # - Add examples/*
-# - Add doc/*
+# - Add doc/* and get DocBook userman toolchain working
+# - Get refman building from build/src[ssx/]/Doxyfile
 # - Update README-* with new build info
 # - Allow separate build/debug building, with VC++ and XCode at least
-# - Add configure_file calls for the rest of *.in
 # - Get unit tests and bmark.txt testing working
 #
 # - Replace old bootstrap script verbs with CMake options:
