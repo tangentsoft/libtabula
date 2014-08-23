@@ -30,3 +30,12 @@ add_library(ltexcomm STATIC printdata.cpp)
 
 add_executable(resetdb resetdb.cpp)
 target_link_libraries(resetdb tabula mysqlclient_r)
+
+add_executable(simple1 simple1.cpp)
+target_link_libraries(simple1 tabula mysqlclient_r)
+
+add_executable(simple2 simple2.cpp)
+target_link_libraries(simple2 tabula mysqlclient_r)
+
+add_executable(simple3 simple3.cpp)
+target_link_libraries(simple3 tabula mysqlclient_r)
