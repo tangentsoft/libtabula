@@ -30,7 +30,6 @@
 #
 # TODO:
 #
-# - Add libssqlsxlat convenience library
 # - Add doc/* and get DocBook userman toolchain working
 # - Get refman building from build/src[ssx/]/Doxyfile
 # - Update README-* with new build info
@@ -116,4 +115,5 @@ include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE_DIR})
 link_directories(${MYSQL_LIBRARY})
 
 add_subdirectory(src)
+add_subdirectory(src/ssx)
 add_subdirectory(examples)
