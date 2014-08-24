@@ -46,8 +46,7 @@
 #   - pedantic
 #
 # - Replicate existing autoconf behavior:
-#   - Library, header and function checks
-#   - Let user specifiy location of same
+#   - Does FindMySQL allow user to specify a custom location?
 #   - Detect existence of <slist> etc.
 #   - Thread awareness selection
 #   - SSL support detection in mysqlclient
@@ -65,14 +64,12 @@
 #   - Visual C++ 2013 (32- and 64-bit)
 #   - MinGW
 #   - Cygwin
-#   - Ubuntu 14.04 LTS
 #   - CentOS 7
-#   - CentOS 5
 #   - CentOS 3?
 #   - XCode
 #   - OpenIndiana
 #
-# - For each success above with CMake < 2.8, lower minimum requirement
+# - For each success above with CMake < 2.6, lower minimum requirement
 #
 # - Convert non-core top-level targets
 #   - tags
