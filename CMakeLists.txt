@@ -95,10 +95,8 @@ set(LIBTABULA_VERSION_TWEAK  1)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 
+set(MYSQL_FIND_REQUIRED 1)
 find_package(MySQL)
-if (NOT MYSQL_FOUND)
-	message(FATAL_ERROR "MySQL/MariaDB development files not found!")
-endif()
 
 CHECK_SYMBOL_EXISTS(getopt unistd.h HAVE_POSIX_GETOPT)
 if (NOT HAVE_POSIX_GETOPT)
