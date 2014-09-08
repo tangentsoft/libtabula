@@ -31,7 +31,6 @@
 # TODO:
 #
 # - Add doc/* and get DocBook userman toolchain working
-# - Get refman building from build/src[ssx/]/Doxyfile
 # - Update README-* with new build info
 # - Allow separate build/debug building, with VC++ and XCode at least
 # - Get unit tests and bmark.txt testing working
@@ -117,3 +116,15 @@ link_directories(${MYSQL_LIBRARY})
 add_subdirectory(src)
 add_subdirectory(src/ssx)
 add_subdirectory(examples)
+
+# Build refman if Doxygen is installed here
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/refman)
+	add_custom_target(doc
+		${DOXYGEN_EXECUTABLE}
+		${CMAKE_CURRENT_BINARY_DIR}/src/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMENT "Generating API documentation with Doxygen" VERBATIM
+	)
+endif(DOXYGEN_FOUND)
