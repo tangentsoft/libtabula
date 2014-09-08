@@ -101,7 +101,7 @@ endif()
 CHECK_FUNCTION_EXISTS(localtime_r HAVE_LOCALTIME_R)
 
 configure_file(src/config.h.in src/config.h)
-configure_file(doc/userman/userman.dbx.in doc/userman.dbx)
+configure_file(doc/userman/userman.dbx.in doc/userman/userman.dbx)
 configure_file(install.hta.in install.hta)
 configure_file(src/Doxyfile.in src/Doxyfile)
 configure_file(src/libtabula.h.in src/libtabula.h)
@@ -132,9 +132,24 @@ endif(DOXYGEN_FOUND)
 # Add a userman target if the DocBook XSL tools are installed here
 find_package(DocBook)
 if(DOCBOOK_FOUND)
-	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/userman)
+	set(USERMAN_BINDIR ${CMAKE_CURRENT_BINARY_DIR}/doc/userman)
+	set(USERMAN_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/doc/userman)
+	set(USERMAN_WEBDIR ${CMAKE_CURRENT_BINARY_DIR}/doc/html/userman)
+
+	set(DBX_BASE userman)
+
+	set(USERMAN_DBX ${USERMAN_BINDIR}/${DBX_BASE}.dbx)
+	set(USERMAN_PDF ${USERMAN_BINDIR}/${DBX_BASE}.pdf)
+	set(USERMAN_FO  ${USERMAN_SRCDIR}/${DBX_BASE}.fo)
+
+	set(COMMON_SS ${USERMAN_SRCDIR}/common.xsl)
+	set(FO_SS     ${USERMAN_SRCDIR}/fo.xsl)
+	set(HTML_SS   ${USERMAN_SRCDIR}/html.xsl)
+
+	file(MAKE_DIRECTORY ${USERMAN_WEBDIR})
 	add_custom_target(userman
-		${DOCBOOK_XSLT_PROCESSOR} --xinclude ${FO_SS} ${DOCFILE} > ${FOFILE}
+		${DOCBOOK_XSLT_PROCESSOR} --xinclude --path ${USERMAN_SRCDIR} 
+			${FO_SS} ${USERMAN_DBX} > ${USERMAN_FO}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		COMMENT "Generating user manual from DocBook" VERBATIM
 	)
