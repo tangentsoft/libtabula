@@ -117,14 +117,34 @@ add_subdirectory(src)
 add_subdirectory(src/ssx)
 add_subdirectory(examples)
 
-# Build refman if Doxygen is installed here
+# Add a refman target if Doxygen is installed here
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/refman)
-	add_custom_target(doc
+	add_custom_target(refman
 		${DOXYGEN_EXECUTABLE}
 		${CMAKE_CURRENT_BINARY_DIR}/src/Doxyfile
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		COMMENT "Generating API documentation with Doxygen" VERBATIM
 	)
 endif(DOXYGEN_FOUND)
+
+# Add a userman target if the DocBook XSL tools are installed here
+find_package(DocBook)
+if(DOCBOOK_FOUND)
+	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/userman)
+	add_custom_target(userman
+		${DOCBOOK_XSLT_PROCESSOR} --xinclude ${FO_SS} ${DOCFILE} > ${FOFILE}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMENT "Generating user manual from DocBook" VERBATIM
+	)
+endif(DOCBOOK_FOUND)
+
+# Set up the doc target based on above refman/userman tool checks
+if(DOXYGEN_FOUND AND DOCBOOK_FOUND)
+	add_custom_target(doc DEPENDS refman userman)
+elseif(DOXYGEN_FOUND)
+	add_custom_target(doc DEPENDS refman)
+elseif(DOXYGEN_FOUND)
+	add_custom_target(doc DEPENDS userman)
+endif()
