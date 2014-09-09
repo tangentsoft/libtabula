@@ -1,6 +1,4 @@
-# CMakeLists.txt - Tells CMake how to build libtabula proper, plus its
-#    reference manual.
-#
+# src/CMakeLists.txt - Tells CMake how to build libtabula proper
 #    See ../CMakeLists.txt for system-wide matters.
 #
 # Created 2014.08.21 by Warren Young
@@ -68,15 +66,3 @@ add_library(tabula SHARED
     wnp_connection.cpp
 )
 target_link_libraries(tabula mysqlclient_r)
-
-# Add a refman target if Doxygen is installed here
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-	file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/doc/html/refman)
-	add_custom_target(refman
-		${DOXYGEN_EXECUTABLE}
-		${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		COMMENT "Generating API documentation with Doxygen" VERBATIM
-	)
-endif(DOXYGEN_FOUND)
