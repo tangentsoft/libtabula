@@ -1,19 +1,19 @@
-#!/bin/sh
-# Script to convert C++ source files to a text format, with 4 spaces for
-# every tab, and with the leading block comment removed.  Used to
-# reformat the example programs so they can be xincluded directly into
-# the DocBook during XSLT processing.
-
-TXTFILE=$1
-SRCFILE=`echo ../../examples/$TXTFILE | sed -e s/\\\\.txt/.cpp/`
-if [ ! -e $SRCFILE ]
+#!/bin/bash
+if [ -z "$1" -o -z "$2" ]
 then
-	SRCFILE=`echo ../../examples/$TXTFILE | sed -e s/\\\\.txt/.h/`
+	cat <<USAGE
+usage: $0 infile outfile
+
+    outfile will be a version of the infile suitable for xincluding
+    into the DocBook userman during XSLT processing.  The leading block
+    comment plus the blank line following it is removed, and all tabs
+    are converted to four spaces.
+
+USAGE
 fi
-CLINE=`grep -n '\*\*/' $SRCFILE |cut -f1 -d:`
-LINE=`echo $CLINE + 2 |bc`
 
-#echo Converting $SRCFILE to $TXTFILE, starting at line $LINE...
-
-expand -t4 $SRCFILE | tail -n +$LINE > $TXTFILE
+SRCFILE=$1
+TXTFILE=$2
+CLINE=`grep -n '\*\*/' $SRCFILE | cut -f1 -d:`
+expand -t4 $SRCFILE | tail -n +$((CLINE+2)) > $TXTFILE
 
