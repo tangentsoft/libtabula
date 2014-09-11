@@ -72,15 +72,17 @@ if(WORKING_XSLTPROC)
 	# Definitions
 	set(USERMAN_BINDIR ${CMAKE_CURRENT_BINARY_DIR}/userman)
 	set(USERMAN_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/userman)
+	set(XSLT_PATH      "${USERMAN_SRCDIR}:${USERMAN_BINDIR}")
 
 	set(USERMAN_PDFDIR ${CMAKE_BINARY_DIR}/doc/pdf)
 	set(USERMAN_WEBDIR ${CMAKE_BINARY_DIR}/doc/html/userman)
 
 	set(DBX_BASE userman)
 
-	set(USERMAN_DBX ${USERMAN_BINDIR}/${DBX_BASE}.dbx)
-	set(USERMAN_PDF ${USERMAN_PDFDIR}/${DBX_BASE}.pdf)
-	set(USERMAN_FO  ${USERMAN_BINDIR}/${DBX_BASE}.fo)
+	set(USERMAN_DBX  ${USERMAN_BINDIR}/${DBX_BASE}.dbx)
+	set(USERMAN_HTML ${USERMAN_WEBDIR}/index.html)
+	set(USERMAN_PDF  ${USERMAN_PDFDIR}/${DBX_BASE}.pdf)
+	set(USERMAN_FO   ${USERMAN_BINDIR}/${DBX_BASE}.fo)
 	file(GLOB USERMAN_CHAPTERS ${USERMAN_SRCDIR} "*.dbx")
 
 	set(COMMON_SS ${USERMAN_SRCDIR}/common.xsl)
@@ -128,15 +130,14 @@ if(WORKING_XSLTPROC)
 	file(MAKE_DIRECTORY ${USERMAN_PDFDIR})
 	file(MAKE_DIRECTORY ${USERMAN_WEBDIR})
 	add_custom_target(userman
-		DEPENDS ${USERMAN_PDF}
+		DEPENDS ${USERMAN_HTML} ${USERMAN_PDF}
 		COMMENT "Generating user manual from DocBook" VERBATIM
 	)
 
 	# Build userman.pdf from the DocBook inputs (*.dbx and *.txt)
 	add_custom_command(
-		OUTPUT ${USERMAN_PDF}
-		COMMAND ${XSLTPROC} --xinclude 
-		    --path "${USERMAN_SRCDIR}:${USERMAN_BINDIR}"
+		OUTPUT ${USERMAN_PDF} ${USERMAN_FO}
+		COMMAND ${XSLTPROC} --xinclude --path "${XSLT_PATH}"
 			${FO_SS} ${USERMAN_DBX} > ${USERMAN_FO}
 		COMMAND 
 			${USERMAN_SRCDIR}/fo2pdf ${USERMAN_FO} ${USERMAN_PDF}
@@ -144,6 +145,18 @@ if(WORKING_XSLTPROC)
 		MAIN_DEPENDENCY ${USERMAN_DBX}
 		DEPENDS ${USERMAN_CHAPTERS} ${outTxtFiles}
 		COMMENT "Generating PDF version of the user manual" VERBATIM
+	)
+
+	# Build HTML version of userman from the same inputs
+	add_custom_command(
+		OUTPUT ${USERMAN_HTML}
+		COMMAND
+			${XSLTPROC} --xinclude --path "${XSLT_PATH}" --nonet
+			-o ${USERMAN_WEBDIR}/ ${HTML_SS} ${USERMAN_DBX}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		MAIN_DEPENDENCY ${USERMAN_DBX}
+		DEPENDS ${USERMAN_CHAPTERS} ${outTxtFiles}
+		COMMENT "Generating HTML version of the user manual" VERBATIM
 	)
 endif(WORKING_XSLTPROC)
 
