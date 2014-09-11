@@ -41,7 +41,8 @@ class Row;
 #endif
 
 #define DBD_SET_OPTION_IMPL(T) \
-	virtual Option::Error set_option_impl(const T& opt) { }
+	virtual Option::Error set_option_impl(const T& opt) \
+	{ return Option::err_NONE; }
 
 /// \brief Define a generic database "driver" layer.
 ///
