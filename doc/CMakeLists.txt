@@ -72,13 +72,16 @@ if(WORKING_XSLTPROC)
 	# Definitions
 	set(USERMAN_BINDIR ${CMAKE_CURRENT_BINARY_DIR}/userman)
 	set(USERMAN_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/userman)
-	set(USERMAN_WEBDIR ${CMAKE_BINARY_DIR}/doc/html/userman)
+
+	set(USERMAN_PDFDIR ${CMAKE_BINARY_DIR}/doc/html/userman)
+	set(USERMAN_WEBDIR ${CMAKE_BINARY_DIR}/doc/pdf)
 
 	set(DBX_BASE userman)
 
 	set(USERMAN_DBX ${USERMAN_BINDIR}/${DBX_BASE}.dbx)
-	set(USERMAN_PDF ${USERMAN_BINDIR}/${DBX_BASE}.pdf)
-	set(USERMAN_FO  ${USERMAN_SRCDIR}/${DBX_BASE}.fo)
+	set(USERMAN_PDF ${USERMAN_PDFDIR}/${DBX_BASE}.pdf)
+	set(USERMAN_FO  ${USERMAN_BINDIR}/${DBX_BASE}.fo)
+	file(GLOB USERMAN_CHAPTERS ${USERMAN_SRCDIR} "*.dbx")
 
 	set(COMMON_SS ${USERMAN_SRCDIR}/common.xsl)
 	set(FO_SS     ${USERMAN_SRCDIR}/fo.xsl)
@@ -121,14 +124,26 @@ if(WORKING_XSLTPROC)
 	# TODO: Add ${EX_TXT} to clean.  Can't just remove *.txt, because that
 	# would remove *this* file, too.
 
-	# Build the actual userman from the *.dbx and *.txt inputs
+	# Define the high-level userman target, which builds PDF and HTML versions
+	file(MAKE_DIRECTORY ${USERMAN_PDFDIR})
 	file(MAKE_DIRECTORY ${USERMAN_WEBDIR})
 	add_custom_target(userman
-		${XSLTPROC} --xinclude --path "${USERMAN_SRCDIR}:${USERMAN_BINDIR}"
-			${FO_SS} ${USERMAN_DBX} > ${USERMAN_FO}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		DEPENDS ${outTxtFiles}
+		DEPENDS ${USERMAN_PDF}
 		COMMENT "Generating user manual from DocBook" VERBATIM
+	)
+
+	# Build userman.pdf from the DocBook inputs (*.dbx and *.txt)
+	add_custom_command(
+		OUTPUT ${USERMAN_PDF}
+		COMMAND ${XSLTPROC} --xinclude 
+		    --path "${USERMAN_SRCDIR}:${USERMAN_BINDIR}"
+			${FO_SS} ${USERMAN_DBX} > ${USERMAN_FO}
+		COMMAND 
+			${USERMAN_SRCDIR}/fo2pdf ${USERMAN_FO} ${USERMAN_PDF}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		MAIN_DEPENDENCY ${USERMAN_DBX}
+		DEPENDS ${USERMAN_CHAPTERS} ${outTxtFiles}
+		COMMENT "Generating PDF version of the user manual" VERBATIM
 	)
 endif(WORKING_XSLTPROC)
 
