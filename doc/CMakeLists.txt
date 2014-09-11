@@ -70,8 +70,8 @@ endif(XSLTPROC)
 # TODO: Explicitly test for the DocBook XSL stylesheets, too.
 if(WORKING_XSLTPROC)
 	# Definitions
-	set(USERMAN_BINDIR ${CMAKE_CURRENT_BINARY_DIR})
-	set(USERMAN_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR})
+	set(USERMAN_BINDIR ${CMAKE_CURRENT_BINARY_DIR}/userman)
+	set(USERMAN_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/userman)
 	set(USERMAN_WEBDIR ${CMAKE_BINARY_DIR}/doc/html/userman)
 
 	set(DBX_BASE userman)
@@ -107,15 +107,15 @@ if(WORKING_XSLTPROC)
 		endif()
 
 		set(inFileFull  ${CMAKE_SOURCE_DIR}/examples/${inFile})
-		set(outFileFull ${CMAKE_CURRENT_BINARY_DIR}/${outFile})
-		set(mktxt       ${CMAKE_CURRENT_SOURCE_DIR}/mktxt)
+		set(outFileFull ${USERMAN_BINDIR}/${outFile})
+		set(mktxt       ${USERMAN_SRCDIR}/mktxt)
 
 		add_custom_command(OUTPUT ${outFileFull}
 			COMMAND ${mktxt} ${inFileFull} ${outFileFull}
 			DEPENDS ${inFileFull}
 			COMMENT "Generating ${inFile} from ${outFile}")
 
-		set(outTxtFiles ${outTxtFiles} ${outFile})
+		set(outTxtFiles ${outTxtFiles} ${outFileFull})
 	endforeach(outFile)
 
 	# TODO: Add ${EX_TXT} to clean.  Can't just remove *.txt, because that

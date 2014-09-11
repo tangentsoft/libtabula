@@ -30,7 +30,6 @@
 #
 # TODO:
 #
-# - Add doc/* and get DocBook userman toolchain working
 # - Update README-* with new build info
 # - Allow separate build/debug building, with VC++ and XCode at least
 # - Get unit tests and bmark.txt testing working
