@@ -137,7 +137,7 @@ if(WORKING_XSLTPROC)
 	# Build userman.pdf from the DocBook inputs (*.dbx and *.txt)
 	add_custom_command(
 		OUTPUT ${USERMAN_PDF} ${USERMAN_FO}
-		COMMAND ${XSLTPROC} --xinclude --path "${XSLT_PATH}"
+		COMMAND ${XSLTPROC} --xinclude --path "${XSLT_PATH}" --nonet
 			${FO_SS} ${USERMAN_DBX} > ${USERMAN_FO}
 		COMMAND 
 			${USERMAN_SRCDIR}/fo2pdf ${USERMAN_FO} ${USERMAN_PDF}
