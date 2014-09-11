@@ -46,6 +46,7 @@ add_library(tabula SHARED
     manip.cpp
     myset.cpp
     mystring.cpp
+	mysql/driver.cpp
     null.cpp
     options.cpp
     qparms.cpp
