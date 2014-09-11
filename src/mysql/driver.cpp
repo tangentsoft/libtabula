@@ -304,6 +304,7 @@ MySQLDriver::set_option_impl(const MultiResultsOption& opt)
 #if MYSQL_VERSION_ID >= 40101
 	if (connected()) {
 		set_multi_statements_option(opt.arg());
+		return Option::err_NONE;
 	}
 	else {
 		return set_option_internal(CLIENT_MULTI_RESULTS, opt.arg()) ?
@@ -321,6 +322,7 @@ MySQLDriver::set_option_impl(const MultiStatementsOption& opt)
 #if MYSQL_VERSION_ID >= 40101
 	if (connected()) {
 		set_multi_statements_option(opt.arg());
+		return Option::err_NONE;
 	}
 	else {
 		return set_option_internal(CLIENT_MULTI_STATEMENTS, opt.arg()) ?
