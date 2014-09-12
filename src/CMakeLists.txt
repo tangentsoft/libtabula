@@ -33,6 +33,20 @@
 #
 # ---------------------
 
+if (NOT EXISTS "querydef.h")
+	message(STATUS "Generating querydef.h...")
+	execute_process(
+		COMMAND "${CMAKE_SOURCE_DIR}/src/querydef.pl"
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
+endif()
+
+if (NOT EXISTS "ssqls.h")
+	message(STATUS "Generating ssqls.h...")
+	execute_process(
+		COMMAND "${CMAKE_SOURCE_DIR}/src/ssqls.pl"
+		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
+endif()
+
 add_library(tabula SHARED
     beemutex.cpp
     cmdline.cpp
