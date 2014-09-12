@@ -25,27 +25,19 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
 # USA
 
-# ---------------------
-#
-# TODO:
-#
-# - Build querydef.h and ssqls.h automatically
-#
-# ---------------------
+set(QUERYDEF_PL "${CMAKE_SOURCE_DIR}/src/querydef.pl")
+add_custom_command(OUTPUT querydef.h
+	COMMAND ${QUERYDEF_PL}
+	DEPENDS ${QUERYDEF_PL}
+	COMMENT "Generating querydef.h..."
+	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
 
-if (NOT EXISTS "querydef.h")
-	message(STATUS "Generating querydef.h...")
-	execute_process(
-		COMMAND "${CMAKE_SOURCE_DIR}/src/querydef.pl"
-		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
-endif()
-
-if (NOT EXISTS "ssqls.h")
-	message(STATUS "Generating ssqls.h...")
-	execute_process(
-		COMMAND "${CMAKE_SOURCE_DIR}/src/ssqls.pl"
-		WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
-endif()
+set(SSQLS_PL "${CMAKE_SOURCE_DIR}/src/ssqls.pl")
+add_custom_command(OUTPUT ssqls.h
+	COMMAND ${SSQLS_PL}
+	DEPENDS ${SSQLS_PL}
+	COMMENT "Generating ssqls.h..."
+	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
 
 add_library(tabula SHARED
     beemutex.cpp
@@ -65,11 +57,13 @@ add_library(tabula SHARED
     options.cpp
     qparms.cpp
     query.cpp
+	querydef.h
     result.cpp
     row.cpp
     scopedconnection.cpp
     sql_buffer.cpp
     sqlstream.cpp
+    ssqls.h
     ssqls2.cpp
     stadapter.cpp
     tcp_connection.cpp
