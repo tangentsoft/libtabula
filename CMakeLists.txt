@@ -99,9 +99,9 @@ endif()
 
 CHECK_FUNCTION_EXISTS(localtime_r HAVE_LOCALTIME_R)
 
-configure_file(src/config.h.in src/config.h)
-configure_file(doc/userman/userman.dbx.in doc/userman/userman.dbx)
 configure_file(install.hta.in install.hta)
+configure_file(doc/userman/userman.dbx.in doc/userman/userman.dbx)
+configure_file(src/config.h.in src/config.h)
 configure_file(src/Doxyfile.in src/Doxyfile)
 configure_file(src/libtabula.h.in src/libtabula.h)
 configure_file(src/ssx/Doxyfile.in src/ssx/Doxyfile)
