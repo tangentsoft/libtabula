@@ -68,7 +68,7 @@ add_executable(test_sqlstream sqlstream.cpp)
 target_link_libraries(test_sqlstream tabula mysqlclient_r)
 
 add_executable(test_ssqls2 ssqls2.cpp)
-target_link_libraries(test_ssqls2 tabula ssqls2parse mysqlclient_r)
+target_link_libraries(test_ssqls2 ssqls2parse tabula mysqlclient_r)
 
 add_executable(test_string string.cpp)
 target_link_libraries(test_string tabula mysqlclient_r)
