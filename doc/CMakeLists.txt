@@ -55,13 +55,12 @@ if(XSLTPROC)
 		OUTPUT_VARIABLE XSLTPROC_VERSION
 		ERROR_QUIET)
 	if(XSLTPROC_VERSION)
-		string(REGEX MATCH "libxslt [0-9]+" LIBXSLT_VERSION
-			${XSLTPROC_VERSION})
-		if(LIBXSLT_VERSION LESS 10127)	# FIXME: doesn't work right; why not?
-			message(STATUS "xsltproc found (${LIBXSLT_VERSION}), but it's too old!")
-		else()
-			message(STATUS "xstlproc found (${LIBXSLT_VERSION}), and new enough")
+		string(REGEX MATCH "libxslt ([0-9]+)" DUMMY ${XSLTPROC_VERSION})
+		if(CMAKE_MATCH_1 AND (CMAKE_MATCH_1 GREATER 10126))
+			message(STATUS "xstlproc found, and new enough")
 			set(WORKING_XSLTPROC 1)
+		else()
+			message(STATUS "xsltproc missing or too old (${CMAKE_MATCH_1}); need 1.1.27+!")
 		endif()
 	endif(XSLTPROC_VERSION)
 endif(XSLTPROC)
