@@ -32,7 +32,7 @@
 #
 # - Update README-* with new build info
 # - Allow separate build/debug building, with VC++ and XCode at least
-# - Get unit tests and bmark.txt testing working
+# - Get bmark.txt testing working
 #
 # - Replace old bootstrap script verbs with CMake options:
 #   - nodoc
@@ -115,4 +115,5 @@ link_directories(${MYSQL_LIBRARY})
 add_subdirectory(doc)
 add_subdirectory(src)
 add_subdirectory(src/ssx)
+add_subdirectory(test)
 add_subdirectory(examples)

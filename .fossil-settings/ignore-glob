@@ -52,20 +52,7 @@ src/ssx/libssqls2parse.a
 src/ssx/ssqlsxlat
 
 test/CMakeFiles
-test/array_index
-test/cpool
-test/datetime
-test/insertpolicy
-test/inttypes
-test/manip
-test/null_comparison
-test/null_uniqueness
-test/qssqls
-test/qstream
-test/query_copy
-test/sqlstream
-test/ssqls2
-test/string
-test/tcp
-test/uds
-test/wnp
+test/cmake_install.cmake
+test/Makefile
+test/test_*
+
