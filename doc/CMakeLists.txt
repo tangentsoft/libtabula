@@ -43,7 +43,9 @@ endif(DOXYGEN_FOUND)
 find_program(XSLTPROC
   NAMES xsltproc
   DOC   "path to xsltproc from libxslt >= 1.1.27")
-if(XSLTPROC)
+if(NOT XSLTPROC)
+	message(STATUS "Cannot build userman here; xsltproc missing")
+elseif(NOT ${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
 	# It's here, but is it new enough?  xsltproc from libxslt 1.1.26 and
 	# earlier can't handle XIncludes that ping-ping between the source
 	# and build directories.  A single include across the boundary is
@@ -63,7 +65,12 @@ if(XSLTPROC)
 			message(STATUS "xsltproc missing or too old (${CMAKE_MATCH_1}); need 1.1.27+!")
 		endif()
 	endif(XSLTPROC_VERSION)
-endif(XSLTPROC)
+else()
+	# Don't need to do a version check.  When building in-tree, any
+	# version of xsltproc will do.
+	message(STATUS "Can build userman here: xsltproc present and building in-tree")
+	set(WORKING_XSLTPROC 1)
+endif(NOT XSLTPROC)
 
 # Add a userman target if xsltproc checks succeeded.
 # TODO: Explicitly test for the DocBook XSL stylesheets, too.
