@@ -1,6 +1,8 @@
 *.o
 libtabula.so*
 
+core.*
+vgcore.*
 
 */*.sln, */*.vcproj
 libtabula.xcodeproj
