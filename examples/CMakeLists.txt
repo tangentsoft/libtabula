@@ -26,6 +26,12 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
 # USA
 
+set(STOCK_TXT "${CMAKE_CURRENT_BINARY_DIR}/stock.txt")
+if (NOT EXISTS ${STOCK_TXT})
+	file(COPY "stock.txt" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+	message(STATUS "Copied stock.txt to build dir so ssqls6 will run")
+endif()
+
 add_library(ltexcomm STATIC printdata.cpp)
 
 add_executable(cgi_jpeg cgi_jpeg.cpp)

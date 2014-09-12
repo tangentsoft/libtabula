@@ -31,6 +31,8 @@
 
 #include <fstream>
 
+#include <libgen.h>
+
 using namespace std;
 
 
@@ -90,8 +92,12 @@ main(int argc, char *argv[])
 	}
 
 	// Read in a tab-delimited file of stock data
+	char expath[256];
+	strncpy(expath, argv[0], sizeof(expath) - 1);
+	string datapath(dirname(expath));
+	datapath += "/stock.txt";
 	vector<stock> stock_vector;
-	if (!read_stock_items("examples/stock.txt", stock_vector)) {
+	if (!read_stock_items(datapath.c_str(), stock_vector)) {
 		return 1;
 	}
 
