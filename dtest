@@ -1,15 +1,17 @@
 #!/bin/bash
 
+BASE="$(dirname "$0")"
+BUILD=`pwd`
 TMP=`mktemp bmXXXXXX`
 
 # Run simple unit tests first.
 typeset -i count=0
 echo -n 'Running unit tests:'
-for t in test_*
+for t in "$BUILD/test/"test_*
 do
-	if [ -x "$t" ]
+	if [ -x "$t" ]	# ignore .cpp files
 	then
-		errmsg=`./exrun "$t" 2>&1`
+		errmsg=$("$BASE/exrun" "$t" 2>&1)
 		errno=$?
 		if [ "$errno" = 0 ]
 		then
@@ -34,31 +36,33 @@ export QUERY_STRING=id=1
 # resetdb is intentional!  It's run after each example that changes
 # the database in a way that will cause a subsequent example to fail
 # because data it expects isn't present.
+EX="$BUILD/examples"
 echo -n 'Running examples:'
-for t in \
-	resetdb simple[0-9] store_if for_each multiquery tquery1 \
-	resetdb tquery[2-9] \
-	resetdb ssqls[0-9] \
-	load_jpeg cgi_jpeg
+for ex in \
+	$EX/resetdb $EX/simple[0-9] $EX/store_if $EX/for_each $EX/multiquery $EX/tquery1 \
+	$EX/resetdb $EX/tquery[2-9] \
+	$EX/resetdb $EX/ssqls[0-9] \
+	$EX/load_jpeg $EX/cgi_jpeg
 do
-	if [ -x $t ]
+	eb=`basename $ex`
+	if [ -x $ex ]
 	then
-		if [ "$t" = "resetdb" ]
+		if [ "$eb" = "resetdb" ]
 		then
 			echo
 			echo -n "   "
 		fi
 	
-		echo -n "$t "
-		echo "---------------- BEGIN $t OUTPUT ----------------" >> $TMP
-		if ! ./exrun $t -D $* >> $TMP
+		echo -n "$eb "
+		echo "---------------- BEGIN $eb OUTPUT ----------------" >> $TMP
+		if ! $BASE/exrun $ex -D $* >> $TMP
 		then
 			echo
 			echo 'TESTING ABORTED.'
 			rm -f $TMP
 			exit $?
 		fi
-		echo "================ END $t OUTPUT ================" >> $TMP
+		echo "================ END $eb OUTPUT ================" >> $TMP
 		echo >> $TMP
 	fi
 done
@@ -70,24 +74,25 @@ echo
 # ssqlsxlat to deal with comments, whitespace differences, line element
 # ordering, boolean value and type canonicalization, and other niggly
 # differences we really don't care about.  diff -w isn't enough.
-for f in {examples,test}/*.ssqls
+for f in $BASE/{examples,test}/*.ssqls
 do
+	bnf=`basename $f`
 	echo -n "Testing ssqlsxlat -i $f -o..."
-	echo "--- BEGIN ssqlsxlat -i $f -o ERROR OUTPUT ---" >> $TMP
+	echo "--- BEGIN ssqlsxlat -i $bnf -o ERROR OUTPUT ---" >> $TMP
 	pass1=/tmp/dtest-ssxgv2-pass1-$bnf
 	pass2=/tmp/dtest-ssxgv2-pass2-$bnf
 	echo -n "pass 1"
-	./exrun ssqlsxlat -i $f -o $pass1 > /dev/null 2>> $TMP
+	$BASE/exrun $BUILD/src/ssx/ssqlsxlat -i $f -o $pass1 > "$pass1".err 2>> $TMP
 	echo -n ", pass 2"
-	./exrun ssqlsxlat -i $pass1 -o $pass2 > /dev/null 2>> $TMP
+	$BASE/exrun $BUILD/src/ssx/ssqlsxlat -i $pass1 -o $pass2 > "$pass2".err 2>> $TMP
 	echo -n ", diff"
 	diff $pass1 $pass2 > /dev/null >> $TMP
-	echo "==== END ssqlsxlat -i $f -o ERROR OUTPUT ====" >> $TMP
+	echo "==== END ssqlsxlat -i $bnf -o ERROR OUTPUT ====" >> $TMP
 	echo
 done
 
 # Check for any changes
-BFILE=bmark.txt
+BFILE=$BASE/bmark.txt
 if [ -f $BFILE ]
 then
 	if diff -u -w $BFILE $TMP

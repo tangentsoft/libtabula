@@ -1,4 +1,7 @@
 #!/bin/sh
+BASE="$(dirname "$0")"
+BUILD=`pwd`
+
 if [ -z "$1" ]
 then
 	echo "usage: $0 [TOOL] <example> [args...]"
@@ -33,34 +36,43 @@ then
 fi
 
 shift
-if [ -e "$PROG" ]
+
+if [ ! -x "$PROG" ]
 then
-	if [ `uname -s` = 'Darwin' ]
+	if [ -x "$BUILD/examples/$PROG" ]
 	then
-		DYLD_LIBRARY_PATH=. $TOOL ./$PROG $*
+		PROG="$BUILD/examples/$PROG"
+	elif [ ! -x "$PROG" -a -x "$BUILD/test/$PROG" ]
+	then
+		PROG="$BUILD/test/$PROG"
 	elif [ `uname -o` = 'Cygwin' ]
 	then
-		# Cygwin build case; see below for bash-as-DOS-shell case
-		PATH=. $TOOL ./$PROG $*
-	elif [ -e /usr/bin/ldd ]
-	then
-		if [ `uname -s` = 'SunOS' ]
-		then
-			LD_LIBRARY_PATH=.:/usr/mysql/lib/mysql $TOOL ./$PROG $*
-		else
-			LD_LIBRARY_PATH=. $TOOL ./$PROG $*
-		fi
+		# VC++ build, but using Cygwin's bash as shell to run programs
+		cmd.exe /c exrun.bat $PROG $*
 	else
-		echo "ERROR: I don't grok this system's dynamic linkage system."
+		echo "usage: $0 [TOOL] <example> [args...]"
+		echo
+		echo "   Run $0 without arguments for more detailed usage info."
+		echo
+		exit 1
 	fi
+fi
+
+if [ `uname -s` = 'Darwin' ]
+then
+	DYLD_LIBRARY_PATH=. $TOOL $BASE/examples/$PROG $*
 elif [ `uname -o` = 'Cygwin' ]
 then
-	# VC++ build, but using Cygwin's bash as shell to run programs
-	cmd.exe /c exrun.bat $PROG $*
+	# Cygwin build case; see below for bash-as-DOS-shell case
+	PATH=. $TOOL ./$PROG $*
+elif [ -e /usr/bin/ldd ]
+then
+	if [ `uname -s` = 'SunOS' ]
+	then
+		LD_LIBRARY_PATH=.:/usr/mysql/lib/mysql $TOOL $PROG $*
+	else
+		LD_LIBRARY_PATH=. $TOOL $PROG $*
+	fi
 else
-	echo "usage: $0 [TOOL] <example> [args...]"
-	echo
-	echo "   Run $0 without arguments for more detailed usage info."
-	echo
-	exit 1
+	echo "ERROR: I don't grok this system's dynamic linkage system."
 fi

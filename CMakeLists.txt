@@ -32,7 +32,6 @@
 #
 # - Update README-* with new build info
 # - Allow separate build/debug building, with VC++ and XCode at least
-# - Get bmark.txt testing working
 #
 # - Replace old bootstrap script verbs with CMake options:
 #   - nodoc
@@ -117,3 +116,6 @@ add_subdirectory(src)
 add_subdirectory(src/ssx)
 add_subdirectory(test)
 add_subdirectory(examples)
+
+add_custom_target(dtest
+	COMMAND ${PROJECT_SOURCE_DIR}/dtest -u test -p test)
