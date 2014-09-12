@@ -1,23 +1,71 @@
-*.o
-libtabula.so*
-
 core.*
 vgcore.*
 
-*/*.sln, */*.vcproj
-libtabula.xcodeproj
 Makefile*
-bk-deps
-
-aclocal.m4, autoconf_inc.m4, autom4te.cache, config.cache, config.guess, config.h*, config.log, config.status, config.sub, configure, install-sh, libtool, ltmain.sh
 
 tags, version
+
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
 
 abi.xml, install.hta, libtabula.spec, doc/userman/userman.dbx
 src/Doxyfile, src/ssx/Doxyfile
 src/libtabula.h, src/querydef.h, src/ssqls.h
 
-cgi_jpeg, cpool, dbinfo, deadlock, fieldinf, for_each, load_jpeg, multiquery, resetdb, simple[1-3], ssqls[1-6]*, store_if, tquery[1-4]*, transaction
-test_*
-
+doc/CMakeFiles
+doc/cmake_install.cmake
+doc/Makefile
+doc/html/userman/*.html
 doc/userman/*.txt
+
+examples/CMakeFiles
+examples/cmake_install.cmake
+examples/Makefile
+examples/cgi_jpeg
+examples/cpool
+examples/dbinfo
+examples/deadlock
+examples/fieldinf
+examples/for_each
+examples/load_jpeg
+examples/multiquery
+examples/resetdb
+examples/simple[1-3]
+examples/ssqls[1-6]*
+examples/store_if
+examples/tquery[1-4]*
+examples/transaction
+examples/libltexcomm.a
+
+src/CMakeFiles
+src/cmake_install.cmake
+src/Makefile
+src/config.h
+src/*.o
+src/libtabula.so*
+
+src/ssx/CMakeFiles
+src/ssx/cmake_install.cmake
+src/ssx/Makefile
+src/ssx/libssqls2parse.a
+src/ssx/ssqlsxlat
+
+test/CMakeFiles
+test/array_index
+test/cpool
+test/datetime
+test/insertpolicy
+test/inttypes
+test/manip
+test/null_comparison
+test/null_uniqueness
+test/qssqls
+test/qstream
+test/query_copy
+test/sqlstream
+test/ssqls2
+test/string
+test/tcp
+test/uds
+test/wnp
