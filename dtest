@@ -5,17 +5,19 @@ BUILD=`pwd`
 TMP=`mktemp bmXXXXXX`
 
 # Run simple unit tests first.
-typeset -i count=0
+typeset -i total=0
+typeset -i success=0
 echo -n 'Running unit tests:'
 for t in "$BUILD/test/"test_*
 do
 	if [ -x "$t" ]	# ignore .cpp files
 	then
+		total=total+1
 		errmsg=$("$BASE/exrun" "$t" 2>&1)
 		errno=$?
 		if [ "$errno" = 0 ]
 		then
-			count=count+1
+			success=success+1
 		else
 			rm -f $TMP
 			echo " $t FAILED ($errno)"
@@ -25,7 +27,7 @@ do
 		fi
 	fi
 done
-echo " $count tests succeeded"
+echo " $success/$total tests succeeded"
 echo 'All unit tests passed' >> $TMP
 
 # Assume AUTO_INCREMENT id column in images table will get 1 in
