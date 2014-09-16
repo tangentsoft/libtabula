@@ -28,7 +28,10 @@
 
 set(STOCK_TXT "${CMAKE_CURRENT_BINARY_DIR}/stock.txt")
 if (NOT EXISTS ${STOCK_TXT})
-	file(COPY "stock.txt" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+	# CMake 2.8.0 added file(COPY), but we need to support 2.6, so we
+	# must hand-roll a "copy" command.
+	file(READ "stock.txt" ST_CONTENTS)
+	file(WRITE ${STOCK_TXT} "${ST_CONTENTS}")
 	message(STATUS "Copied stock.txt to build dir so ssqls6 will run")
 endif()
 
