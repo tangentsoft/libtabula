@@ -150,7 +150,7 @@ File types: `ac`, `cpp`, `h`, `in`, `m4`, `pl`
 
 **XML/HTML Dialects**
 
-File types: `bkl`, `dbx`, `hta`
+File types: `dbx`, `hta`
 
 * Spaces for indents, size 2.  Shallow indents due to the
   high level of nesting occurring in such files, and spaces
@@ -170,9 +170,15 @@ File types: `md`, `txt`
   are often viewed in Notepad and similarly crippled text
   editors which use a default indent level of 8.
 
-* DOS line endings, again for the Notepad reason.  And on
-  modern Unixy platforms, the tools cope with DOS line endings
-  reasonably well.  Better than the converse, anyway.
+* Unix line endings.  Notepad can't cope with LF line endings, and
+  it is the default handler of `*.txt` on Windows, but then, such
+  files are all build and test system files, so you really want to be
+  editing them in a competent programmer's text editor to begin with,
+  and such things understand LF line endings.
+
+  As for `*.md`, there is no default association for that on Windows,
+  so you might as well associate it with either a competent plain
+  text editor or a Markdown editor/viewer.
 
 When in doubt, mimic what you see in the current code.  When still
 in doubt, ask on the mailing list.
