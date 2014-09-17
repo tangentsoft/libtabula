@@ -16,8 +16,10 @@ To clone the code repository, say:
 
 That will get you a file called `libtabula.fossil` containing the
 full history of libtabula from just after the MySQL++ 3.2.1 fork.
+
 (If you need to dig into libtabula's history prior to the fork,
 see the instructions in [the MySQL++ equivalent to this file][3].)
+
 You can call that clone file anything you like.  Even the `.fossil`
 extension is just a convention, not a requirement.
 
@@ -30,14 +32,15 @@ Then to "open" the repo clone so you can hack on it, say:
 As with libtabula.fossil, you can call the working directory
 anythihg you like.  I actually prefer a tree like this:
 
-    src/
+    museum/                    # Where fossils are kept
         libtabula.fossil
+    src/                       # Working tree for software projects
         libtabula/
-            head/              # Fossil libtabula trunk checkout
-            4.0.0/             # release branch checkout
+            skull/             # Fossil head, get it?   I crack me up.
+            4.0.0/             # Release branch checkout
         mysql++/
             head/              # Gna! MySQL++ svn trunk checkout
-            3.2.1/             # release tarball unpacked
+            3.2.1/             # Release tarball unpacked
 
 Fossil will let you make any modifications you like to your local
 repository copy.  For those with privileges on the upstream
@@ -50,193 +53,36 @@ in upstream changes when updating your local clone.
 
 Bootstrapping the Library
 ----
-When you open a clone of the Fossil repository, there are a lot
-of things "missing" as compared to a distributed tarball, because
-the repository contains only source files, no generated files.
-The process that turns a fresh libtabula repository checkout into
-something you can build and hack on is called bootstrapping.
 
-Boostrapping is best done on a modern Unix type platform: Linux, OS
-X, BSD, Solaris...any version released in the last 4 years or so.
-It's possible to do it on Windows, but harder; enough so that we
-cover the options below in a separate section.
+If you are coming to libtabula from MySQL++ and remember having to
+bootstrap the library to get it to build from a Subversion checkout,
+you can forget all that.  CMake takes care of that for us now.  Just
+use the normal build procedures documented in `README-*.md`.
 
-Two of the tools you need to do this are commonly available on
-Unixy systems, at least as an option: Perl 5 and Autoconf 1.59
-or higher.  If they're not installed, you can probably run your
-system's package manager to install suitable versions.
-
-There's a third tool you'll need to bootstrap libtabula called
-[Bakefile][4]. You will need Bakefile 0.2.5 or higher, which in turn
-requires Python 2.3 or higher to run.  To build Bakefile from source,
-you will also need SWIG, so if you don't have that, you'll want to
-use one of the binary builds of Bakefile.
-
-Once you have all the tools in place, you can bootstrap libtabula
-with a Bourne shell script called bootstrap, which you get as part
-of the repo checkout.  It's fairly powerful, with many options.
-For most cases, it suffices to just run it without any arguments:
-
-    $ ./bootstrap
-
-For more unusual situations, here's the complete usage:
-
-    $ ./bootstrap [no{doc,ex,lib,opt}] [pedantic] [bat] [configure flags]
-
-**Bootstrap Script Arguments:**
-
-* *nodoc*: The documentation won't be considered a prerequisite
-for building the distribution tarball.  This is useful on systems
-where the documentation doesn't build correctly, and you only
-need to make a binary RPM.  That process requires a tarball, but
-doesn't need the documentation.  Don't distribute the tarball or
-SRPM that results, as they are no good for any other purpose.
-
-* *noex*: The generated makefiles and project files won't try to
-build any of the examples.
-
-* *nolib*: The generated makefiles and project files won't try
-to build the libtabula library.
-
-* *nomaint*: Turn off "maintainer mode" stuff in the build.
-These are features used only by those building libtabula from the
-code repository.  The 'dist' build target uses this when creating
-the tarball.
-
-* *noopt*: Compiler optimization will be turned off.  (This
-currently has no effect on MinGW or Visual C++.)
-
-* *pedantic*: Turns on all of GCC's warnings and portability
-checks.  Good for checking changes before making a public release.
-
-* *bat*: Asks `cmd.exe` to run `bootstrap.bat` for you.  This is
-useful when using Cygwin just as a command shell in preference to
-cmd.exe, as opposed to using Cygwin to build libtabula using its
-native tools.  Passing `bat` stops all command line processing
-in the bootstrap script, so if you also pass some of the other
-options, make `bat` last.  The only options that affect the built
-project files and makefiles work are the `no*` ones.
-
-* *configure options*: As soon as the bootstrap script sees an
-option that it doesn't understand, it stops processing the command
-line.  Any subsequent options are passed to the configure script.
-See [the Unix README][5] for more on configure script options.
-
-
-Bootstrapping the Library Using only Windows
-----
-The thing that makes bootstrapping on Windows difficult is that
-one of the required steps uses a Unix-centric tool, Autoconf.
-This section is about working out a way to get that working on
-Windows, or avoiding the need for it, so you can get on with
-hacking on libtabula on Windows.
-
-The thing autoconf does that's relevant to Windows builds of libtabula
-is that it substitutes the current libtabula version number into
-several source files.  This allows us to change the version number in
-just one place &mdash; `configure.ac` &mdash; and have it applied to
-all these other places.  Until you do this step, a repo checkout of
-libtabula won't build, because these files with the version numbers
-in them won't be generated.
-
-**Option 1: Copy the generated files over from a released version**
-
-Only one of these generated files is absolutely critical to allowing
-libtabula to build: `src/libtabula.h`.  So, the simplest option
-you have to bootstrap libtabula entirely on Windows is to copy
-`src/libtabula.h` over from a released version of libtabula.  While
-you're doing that, you might copy over the other such generated files:
-
-    install.hta
-    libtabula.spec
-    doc/userman/userman.dbx
-    src/Doxyfile
-    src/ssx/Doxyfile
-
-Having done that, you can complete the bootstrapping process by
-running `bootstrap.bat`.  It has the same purpose as the Bourne
-shell script described above, but much simpler.  It has none
-of the command line options described above, for one thing.
-
-The main downside of doing it this way is that your changed
-version will have the same version number as the release of
-libtabula you copied the files from, unless you go into each
-file and change the version numbers.
-
-**Option 2: Cygwin**
-
-If you'd like to hack on libtabula entirely on Windows and
-have all the build freedoms enjoyed by those working on Unixy
-platforms, the simplest solution is probably to install Cygwin.
-
-First, get the Cygwin installer. There are [32-bit][6] and [64-bit][7]
-versions.
-
-When you run it, it will walk you through the steps to install Cygwin.
-Autoconf and Perl 5 aren't installed in Cygwin by default, so when
-you get to the packages list, be sure to select them.  Autoconf is
-in the Devel category, and Perl 5 in the Interpreters category.
-
-You will also need to install the native Windows binary version of
-[Bakefile][4].  Don't get the source version and try to build Bakefile
-under Cygwin; it won't work.  The Windows binary version of Bakefile
-includes an embedded version of Python, so you won't need to install
-Cygwin's Python.
-
-Having done all this, you can follow the Unix bootstrapping
-instructions in the previous section.
-
-**Option 3: "[Here's a nickel, kid, get yourself a better computer.][8]"**
-
-Finally, you might have access to a Unixy system, or the
-ability to set one up.  You don't even need a separate physical
-computer, now that virtual machine techology is free.
-
-For example, you could [download a Linux "appliance"][9] and the free
-[VMware Player][10] to run it on your Windows machine.  You'd do the
-repo checkout of libtabula on that machine and bootstrap it there
-using the instructions in the previous section. That done, just copy
-the result over to the Windows machine to continue hacking on it.
 
 
 On Manipulating the Build System Source Files
 ----
-One of the things the bootstrapping system described above
-does is produces various types of project and make files from a
-small number of source files.  This system lets us support many
-platforms without having to maintain separate build system files
-for each platform.
 
-[Bakefile][4] produces most of these project and make files from a
-single source file called `libtabula.bkl`.
+The [CMake build system][4] files are called `CMakeLists.txt`, of
+which there are several in the libtabula tree.  These files in turn
+depend on files in the `modules` directory off the top level of the
+libtabula source tree.
 
-Except for small local changes, it's best to change `libtabula.bkl`
-and "re-bake" the project and make files rather than change those
-files directly.  You can do this with the bootstrapping scripts
-covered above.  On Windows, if all you've changed is `libtabula.bkl`,
-you can use `rebake.bat` instead, which doesn't try to do as much
-as `bootstrap.bat`.
-
-Bakefile produces finished project files for Visual C++ and Xcode and
-finished makefiles for MinGW.  It also produces `Makefile.in`, which
-is input to GNU Autoconf along with `configure.ac` and `config/*`.
-You may need to change these latter files in addition to or instead
-of `libtabula.bkl` to get the effect you want.  Running `bootstrap`
-incorporates changes to all of these files in the GNU Autoconf output.
-
-While Bakefile's documentation isn't as comprehensive as it
-ought to be, you can at least count on it to list all of the
-available features.  So, if you can't see a way to make Bakefile
-do something, it's likely it just can't do it.  Bakefile is a
-high-level abstraction of build systems in general, so it'll never
-support all the particulars of every odd build system out there.
+Everything that is customizable about libtabula's build system either
+lives in one of these files already, or should be added to one of
+them.  Changes go in the file "nearest" to the affected subsystem.
+For instance, to customize the way the examples get built, put the
+change in `examples/CMakeLists.txt`, not the top-level `CMakeLists.txt`
+file.
 
 
 Submitting Patches
 ----
+
 If you wish to submit a patch to the library, please send it to [the
-libtabula mailing list][11], or [create a ticket][12] and attach the patch
-to the ticket.  We want patches in unified diff format.
+libtabula mailing list][11], or [create a ticket][12] and attach the
+patch to the ticket.  We want patches in unified diff format.
 
 The easiest way to get a unified diff is to check out a copy of the
 current libtabula tree as described above.  Then make your change,
@@ -253,11 +99,15 @@ newfile` to make Fossil forget about the new file.
 Please don't submit patches against branches of the repository or
 against released versions. libtabula often drifts enough during
 development that a patch against anything other than the tip of the
-trunk won't apply cleanly.
+trunk won't apply cleanly.  We have historically not had separate
+"development" and "stable" branches; all development happens on the
+trunk, so that the branches you find in the libtabula Fossil repo
+are really just release tags, not true branch points.
 
 
 The libtabula Code Style
 ----
+
 Every code base should have a common code style.  Love it or
 hate it, here are libtabula's current code style rules:
 
@@ -330,47 +180,57 @@ in doubt, ask on the mailing list.
 
 Testing Your Proposed Change
 ----
+
 libtabula includes a self-test mechanism called `dtest`.  It's a
 Bourne shell script, run much like `exrun`:
 
     $ ./dtest [-s server_addr] [-u user] [-p password]
 
-This automatically runs most of the examples, captures the outputs
-to a file, and then compares that to a known-good run's outputs,
-stored in `bmark.txt`.  So, before you submit a patch, run `dtest`
-to see if anything has changed.  If something has and you can't
-account for it, it represents a problem that you'll have to fix
-before submitting the patch.  If it gives an expected change,
-remove `bmark.txt`, re-run `dtest`, and include the `bmark.txt` diffs in
-your patch.  This communicates to us the fact that you know there
-are differences and want the patch evaluated anyway.  Otherwise,
-we are likely to view the change as a bug.
+This automatically runs most of the examples, capturing the program
+outputs to a file, and then compares that to a known-good run's
+outputs, stored in `bmark.txt`.  So, before you submit a patch, run
+`dtest` to see if anything has changed.
 
-`dtest` also runs all of the unit tests in `test/*`.  The purpose of
-`test/*` is different from that of `examples/*`:
+The easiest way to run `dtest` is as `make dtest`, which assumes you
+have a "test" user with password "test" on your system's default DBMS.
 
-* `test/*` are unit tests: each tests only one libtabula class,
-  independent of everything else.  Because DB access requires
-  several libtabula classes to cooperate, a unit test never
-  accesses a database; hence, no unit test needs DB connection
-  parameters.  We will never get 100% code coverage from
-  `test/*` alone.
+If `dtest` turns up a change and you can't account for it, it
+represents a problem that you'll have to fix before submitting
+the patch.  If it gives an expected change, remove `bmark.txt`,
+re-run `dtest`, and include the `bmark.txt` diffs in your patch.
+This communicates to us the fact that you know there are differences
+and want the patch evaluated anyway.  Otherwise, we are likely to
+view the change as a regression.
 
-* `examples/*` can be thought of as integration tests: they
-  test many pieces of libtabula working together, accessing
-  a real database server.  In addition to ensuring that all
-  the pieces work together and give consistent results from
-  platform to platform and run to run, it also fills in gaps
-  in the code coverage where no suitable `test/*` module could
-  be created.
+`dtest` also runs all of the unit tests in `test/*` which don't
+purposely fail.
 
-* `test/*` programs always run silently on success, writing
-  output only to indicate test failures.  This is because
-  they're usually only run via dtest.
+(One of the unit tests won't even build, on purpose, because it tests
+whether a compile-time check within the library stops compilation as
+it should.)
 
-* `examples/*` are always "noisy," regardless of whether they
-  succeed or fail, because they're also run interactively by
-  people learning to use libtabula.
+The purpose of `test/*` is different from that of `examples/*`:
+
+*   `test/*` are unit tests: each tests only one libtabula class,
+    independent of everything else.  Because DB access requires
+    several libtabula classes to cooperate, a unit test never accesses
+    a database; hence, no unit test needs DB connection parameters.
+    We will never get 100% code coverage from `test/*` alone.
+
+*   `examples/*` can be thought of as integration tests: they
+    test many pieces of libtabula working together, accessing a real
+    database server.  In addition to ensuring that all the pieces work
+    together and give consistent results from platform to platform
+    and run to run, it also fills in gaps in the code coverage where
+    no suitable `test/*` module could be created.
+
+*   `test/*` programs always run silently on success, writing
+    output only to indicate test failures.  This is because they're
+    usually only run via `dtest`.
+
+*   `examples/*` are always "noisy," regardless of whether they
+    succeed or fail, because they're also run interactively by people
+    learning to use libtabula.
 
 Patches should include tests if they introduce new functionality or fix
 a bug that the existing test coverage failed to catch.  If the test
@@ -393,36 +253,37 @@ either need to do the test another way, or also submit a change
 to `doc/userman/*.dbx` that incorporates the difference.
 
 
-Adding Support for a Different Compiler
+Building libtabula with Unsupported C++ Compilers/IDEs
 ----
-As described above, libtabula uses the Bakefile system for
-creating project files and makefiles.  This allows us to make
-changes to a single set of files, and have the proper changes be
-made to all generated project files and makefiles.  In the past,
-we used more ad-hoc systems, and we'd frequently forget to update
-individual project files and makefiles, so at any given time,
-at least one target was likely to be broken.
 
-If libtabula doesn't currently ship with project files or makefiles
-tuned for your compiler of choice, you need to work through the
-Bakefile mechanism to add support.  We're not willing to do ad-hoc
-platform support any more, so please don't ask if you can send
-us project files instead; we don't want them.
+As described above, libtabula uses the CMake build system, which
+actually supports more IDE and compiler types than libtabula is
+known to work with.  Before you go trying to hack up a one-off
+set of project files, or whatever, run `cmake --help` and see if
+there is already a generator for your favorite tool.  If there is,
+it might work without any help.
 
-If you want to port libtabula to another platform, we need to be
-confident that the entire library works on your platform before
-we'll accept patches.  In the past, we've had broken ports that
-were missing important library features, or that crashed when built
-in certain ways.  Few people will knowingly use a crippled version
-of libtabula, since there are usually acceptable alternatives.
-Therefore, such ports become maintenance baggage with little
-compensating value.
+If there is a CMake generator for your tool and it doesn't work, we're
+going to want to fix it, either by changing the libtabula CMake input
+files or by working to get CMake itself fixed.  We don't want your
+hand-built IDE project files.  They're unmaintainable; we know from
+experience that they won't get updated every time something in the
+library changes that would require a change to all supported platform
+build systems.  It's why we use a cross-platform build system like
+CMake in the first place.
+
+If you do get libtabula building on a platform that isn't already
+known to work, please test it thoroughly.  Run its test suite, and get
+it linking to your own program and doing real work before reporting
+success.  At that point, a success report on [the mailing list][11]
+would be welcome.  Even more welcome would be a `README-*.md` file
+for your platform.
 
 
 [1]:  http://fossil-scm.org/
 [2]:  http://en.wikipedia.org/wiki/Distributed_revision_control
 [3]:  http://svn.gna.org/viewcvs/*checkout*/mysqlpp/trunk/HACKERS.txt
-[4]:  http://bakefile.org/
+[4]:  http://cmake.org/
 [5]:  README-Unix.md
 [6]:  http://cygwin.com/setup-x86.exe
 [7]:  http://cygwin.com/setup-x86_64.exe

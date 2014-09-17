@@ -4,67 +4,97 @@ Building libtabula on MinGW
 Prerequisite: GCC Version
 ----
 
-If your MinGW version isn't using at least GCC 3.4.5, it needs
-to be updated.  Older versions are known to not work with libtabula.
-
-As of libtabula 3.1.1, the required version might need to be even
-newer, as we are now depending on improvements to the MinGW linker
-which probably don't go back that far.
+MinGW has a long history of weird bugs that prevent libtabula from
+working correctly.  Always use a recent version of MinGW's GCC package;
+by preference, the very latest stable version.  You can get away with
+an ancient copy of GCC 3.0.1 on Linux, but not on MinGW.
 
 
-Prerequisite: MySQL C Development Files
+Prerequisite: C API Development Files for Your DBMS of Choice
 ----
 
-libtabula is built atop MySQL's C API library.  The easiest way to
-get that is to [install Connector/C][1] on your development system.
-The libtabula distribution assumes these files are in:
+libtabula is built atop the C API libraries of multiple DBMSes.
+It can be built against all of them at once, just one, or some mix.
 
-    C:\Program Files\libtabula\libtabula Connector C 6.1\
-
-There are a number of reasons why that path may not work for you:
-
-*   You have a newer version of Connector/C installed
-
-*   You're on a 64-bit system, but have the 32-bit versions of
-    Connector/C and MinGW installed and wish to build a 32-bit binary.
-    In that case, the path will look like this instead:
-
-        C:\Program Files (x86)\libtabula\libtabula Connector C 6.1\
-
-*   You may have the MySQL Server on your system and installed the
-    development files along with it, and therefore don't want to
-    install Connector/C separately.  In that case, the path will look
-    like this instead:
-
-        C:\Program Files\libtabula\libtabula Server 5.6\
-
-Regardless of the reason you have for changing this path, there are
-two ways that work:
-
-*   The easy way is to do a global search and replace on the path
-    in `Makefile.mingw`.  This is a generated file, but if that's the
-    only change to libtabula you need, it works fine.
-
-*   If you're doing deeper work on libtabula, you should change the
-    `MYSQL_WIN_DIR` variable at the top of `libtabula.bkl` instead.
-
-    Having done that, you can generate `Makefile.mingw` from that
-    file using the Windows port of [Bakefile](http://bakefile.org/):
-
-        bakefile_gen -f mingw
+The easiest and best-supported option currently is the [Connector/C][1]
+package for MySQL.  libtabula's build system knows how to find these
+files in the normal case.  If you have a newer version than libtabula
+knows about, or have installed them in a nonstandard location, see
+the CMake information below.
 
 
 Building the Library and Example Programs
 ----
 
-With the prerequisites above taken care of, you can build libtabula
-with this command:
+libtabula uses the CMake build system.  If your system only has the
+MinGW compiler installed, and nothing else, CMake should find it and
+use it without help.  The standard command sequence is:
 
-    mingw32-make -f Makefile.mingw
+    c:\> cd c:\wherever\you\unpacked\libtabula
+    c:\...\libtabula> mkdir build
+    c:\...\libtabula> cd build
+    c:\...\libtabula> cmake ..
+    c:\...\libtabula> make
 
-Notice that we're using the MinGW-specific version of GNU `make`, not
-the Cygwin or MSYS versions.  Many things will break otherwise: path
-separator handling, shell commands used by the `Makefile`, etc.
+This assumes you told CMake to put itself into the Windows PATH,
+and that you don't need to specifiy `mingw32-make` on your system to
+get the right version of GNU make.
+
+The CMake build system tries to find your database's C API development
+files automatically.  If it fails, edit the `modules/FindMySQL.cmake`
+file, adding the proper include and library directories to the top
+of the Windows directory lists you find within.
+
+You don't have to create the `build` subdirectory if you don't want to.
+If you say `cmake .` from within the libtabula source tree, CMake and
+the subsequent `make` command will create their outputs intermixed
+with the source files, creating a tangle for you to deal with.
+Using a separate build directory is simply cleaner.  The name of the
+build directory doesn't matter, and it doesn't have to be underneath
+the libtabula source root.
+
+If you also have Cygwin or Visual Studio installed, things get a
+bit trickier.
+
+The native Windows version of CMake uses Visual Studio by preference,
+if it finds it.  To force it to use MinGW, change the `cmake ..`
+command above to:
+
+    c:\...\libtabula> cmake -G 'MinGW Makefiles` ..
+
+or to:
+
+    c:\...\libtabula> cmake -G 'MSYS Makefiles` ..
+
+The correct invocation depends on whether you're using the native
+Win32 version of GNU make (a.k.a. `mingw32-make`) from the MinGW
+project or the MSYS port of GNU make.
+
+(The difference is in which command shell each uses.  The native
+Windows port of GNU make interprets target commands with `cmd.exe`,
+while the MSYS port uses the GNU Bash shell, which has a very different
+syntax.  Also, generated commands like "copy" and "ren" must change,
+in this case to "cp" and "mv".)
+
+If you've got both Cygwin and MinGW installed, or you are using
+Cygwin with the MinGW cross-compilers, you have similar traps to
+watch out for:
+
+-   If you have the Cygwin version of `cmake.exe` installed, it will
+    be in the `PATH` ahead of the native Windows version of
+    `cmake.exe`, so it will generate `Makefiles` that assume you're
+    building under Cygwin, *for* Cygwin.  The Cygwin version of CMake
+    does not include the MinGW generators, so you will need to give
+    the full path to the native CMake executable:
+
+        $ "/cygdrive/c/Program Files (x86)/CMake/bin/cmake" ..
+
+    You might need to give a `-G` flag to force it to generate MinGW
+    `Makefiles`, as above.
+
+-   As with the MinGW vs MSYS `Makefile` issue brought up above, the
+    Cygwin version of `make.exe` will misinterpret the MinGW
+    `Makefiles`.  Be sure you're using the right tools!
 
 Speaking of Cygwin and MSYS, if you have either these or any other
 Unix emulation environment installed, be sure their executables
@@ -87,10 +117,10 @@ It's possible to have both Cygwin and MinGW installed and build
 with the MinGW tools without interference from the Cygwin bits.
 The main thing you have to take care of is that MinGW's `bin`
 directory must precede the Cygwin `bin` directory in the `PATH`,
-so that its tools are found first.  If you use Cygwin's `bash`
-as a command shell in preference to the DOS-like `cmd.exe`, you
-can use this shell script to temporarily set the environment to
-"MinGW mode" and make it easy to get back to "Cygwin mode":
+so that its tools are found first.  If you use Cygwin's Bash as a
+command shell in preference to the DOS-like `cmd.exe`, you can use
+this shell script to temporarily set the environment to "MinGW mode"
+and make it easy to get back to "Cygwin mode":
 
     #!/bin/sh
     PATH=/cygdrive/c/mingw/bin:/cygdrive/c/windows:/cygdrive/c/windows/system32:/cygdrive/c/cygwin/bin
@@ -115,60 +145,45 @@ nice for those who have `make` committed to muscle memory.
 Building on Linux
 ----
 
-You might wish to build libtabula with MinGW because you're
-not actually running Windows, but need Windows executables.
-The thought being that this lets you use GCC, the same compiler
-you're probably using to make native executables.  There are
-indeed ways to make this work.
+You might wish to build libtabula with MinGW because you're not
+actually running Windows, but need Windows executables.  The thought
+being that this lets you use GCC, the same compiler you're probably
+using to make native executables.  There are indeed ways to make
+this work.
 
-The most "native" way to do this is to run MinGW under Wine.
+The most "native" way to do this is to use the MinGW cross-compilers,
+which may already be included in the package repository for your
+version of Linux.  CMake doesn't fall out of the box knowing how to
+do this, but [it can be taught][2], if you want to go that route.
+
+The second most Linux-like way to do this is to run MinGW under Wine.
 Leonti Bielski provided these instructions:
 
 1. Install MinGW through Wine:
 
         $ wine MinGW-5.1.6.exe
 
-2.  Add the MinGW directory to Wine's PATH with [Wine regedit][2].
+2.  Add the MinGW directory to Wine's `PATH` with [Wine regedit][3].
 
-3.  Install libtabula under Wine, or at least unpack the Windows
-    ZIP file version of libtabula in a place where Wine can find it.
-    You don't need to run a Windows libtabula server under Wine.
-    We're only doing this to get the libtabula C API library and
-    its headers, which libtabula builds against.  The resulting
-    MinGW build of libtabula can talk to a native libtabula server
-    out in Wine's host environment or on some other machine.
+3.  Install the Windows version of the C API development files for
+    your DBMS in a directory Wine can see.  (You do not need to
+    install the DBMS itself under Wine.)
 
-4.  Modify Makefile.mingw to match the install location for
-    the libtabula C API files.
+    Ideally, install them in the same directory that you would use
+    in a native Windows system, so that `modules/FindMySQL.cmake`
+    will find them automatically.  If you can't do that, edit that
+    file and add the include and library directories to the directory
+    lists you find within.
 
-5.  Build libtabula with:
+4.  Build libtabula with:
 
-        $ wine mingw32-make -f Makefile.mingw
+        $ wine mingw32-make
 
-Another way is to build a Windows virtual machine, such as with
-VMware or VirtualBox.  In that case, you'd use the regular build
-instructions at the top of this document.
-
-You might think to avoid the need for Wine or Windows by use of a
-MinGW cross-compiler:
-
-    $ ./configure --target=mingw32
-    $ make
-
-Unfortunately, that currently doesn't work.
-
-The reason is that our Autoconf build system assumes a typical POSIX
-type target, which MinGW is not.  We made this assumption because
-we have a perfectly good MinGW build option, `Makefile.mingw`.  But,
-that also won't work on a POSIX system because that `Makefile` assumes
-external commands run under `cmd.exe`, not some Unixy shell.  Thus the
-advice to build with `Makefile.mingw` under Windows or something
-sufficiently close to it.
-
-If you really wanted to, you could extend the Autoconf build system
-to make it realize when it's being used to cross-compile for MinGW.
-Patches thoughtfully considered; see [the HACKERS file](HACKERS.md).
+A third way is to build a Windows virtual machine, such as with VMware
+or VirtualBox.  In that case, you'd use the regular build instructions
+at the top of this document.
 
 
 [1]: http://dev.mysql.com/downloads/mysql/
-[2]: http://winehq.org/site/docs/wineusr-guide/environment-variables
+[2]: http://www.cmake.org/Wiki/CmakeMingw
+[3]: http://winehq.org/site/docs/wineusr-guide/environment-variables

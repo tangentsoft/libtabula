@@ -30,9 +30,6 @@
 #
 # TODO:
 #
-# - Update README-* with new build info
-# - Allow separate build/debug building, with VC++ and XCode at least
-#
 # - Replace old bootstrap script verbs with CMake options:
 #   - nodoc
 #   - noex
@@ -42,14 +39,18 @@
 #   - pedantic
 #
 # - Replicate existing autoconf behavior:
-#   - Does FindMySQL allow user to specify a custom location?
 #   - Detect existence of <slist> etc.
 #   - Thread awareness selection
 #   - SSL support detection in mysqlclient
 #
 # - Add other build options
-#   - 32/64 bit
-#   - Move --with-field-limit from configure.ac to bootstrap
+#   - Add analog of --with-field-limit to src/CMakeLists.txt, modifying
+#     the calls to querydef.pl and ssqls.pl
+#   
+# - Try to get rid of install.hta on Windows, in favor of CMake's
+#   own installation mechanism.
+#
+# - Bring examples/vstudio into the build system
 #
 # - Get it working on:
 #   - Visual C++ 2003

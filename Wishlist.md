@@ -136,15 +136,8 @@ point, 5.0.
     Library classes derive from vector and exception, which are much
     less likely to be a problem.
 
-*   Convert from Bakefile to CMake
-
-    -   Migrate libtabula.bkl and Bakefiles.bkgen
-
-    -   Bring examples/vstudio into the build system
-
-    -   Update build instructions in `README*`
-
-    -   Replace rebake scripts
+*   Convert from Bakefile to CMake.  See the TODO list in the top-level
+    `CMakeLists.txt` file.
 
 *   Database independence:
 

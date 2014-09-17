@@ -4,119 +4,100 @@ Building libtabula with Visual C++
 Prerequisites
 ----
 
-You need to have the MySQL C API development files on your system,
-since libtabula is built on top of it.
+You need to have the MySQL or MariaDB C API development files on your
+system, since libtabula is built on top of it.
 
-The easiest way to get it is to [download Connector/C][1].
+The easiest way to get these files is to [download Connector/C][1].
 
-If you need the MySQL server on your development system anyway,
-you you can choose to install the development files along with the
-server.  Some versions of the MySQL Server installer for Windows have
-installed the development files by default, while others have made
-it an optional install.
+If you need the DB server on your development system anyway, you may
+find that they come with the DBMS, either by default or as an option
+during the installation.
 
 
 Project Files
 ----
 
-The distribution comes with three sets of `.sln` and `.vcproj` files
-in the `vc2003`, `vc2005` and `vc2008` subdirectories.
+libtabula does not ship with *.sln or *.vc[x]proj files.  Instead,
+you generate them on your system using CMake[2], which produces
+a set of such files customized to your particular system.
 
-We do this for several reasons:
+The standard way to use CMake on Windows is to:
 
-1.  It lets you build libtabula with multiple versions of Visual
-	C++ without the build products conflicting.
+1.  Install CMake.
 
-2.  For Visual C++ 2003, we had to disable the SSQLS feature
-	because changes made in libtabula 3.0 now cause the compiler
-	to crash while building.  See the Breakages chapter in the
-	user manual for workarounds if you must still use VC++ 2003.
+2.  Drop to a command prompt.  Both PowerShell and `cmd.exe` work.
 
-3.  The VC++ 2008 project files get built for 64-bit output, while
-	the other two build 32-bit executables.
+    You can also use the Cygwin Bash shell, but you need to be sure
+    you're not using the Cygwin version of `cmake`, since that will
+    try to build libtabula under Cygwin, even if your system also has
+    Visual Studio installed.  (The Cygwin version of CMake is built
+    in such a way that it actually *can't* generate Visual Studio
+    project and solution files.)
 
-	With VC++ 2003, we have no choice about this, since it only
-	supports 32-bit targets.
+3.  `cd` to the directory where you unpacked the libtabula sources.
 
-	VC++ 2005 did have experimental 64-bit compilers available,
-	but their beta nature was only one reason we chose not to
-	use them.  The real reason is that the current libtabula build
-	system isn't currently set up to make it easy to build both
-	32- and 64-bit libraries and executables at the same time
-	within the same solution.  Bakefile allows it, but it would
-	require forking many of the build rules in libtabula.bkl
-	so we can do things like have separate MYSQL_WIN_DIR values
-	for each bitness.  (See below for more on this variable.)
+4.  **Optional:** Create a build directory underneath that, and `cd`
+    into it.
 
-	For that same reason, the VC++ 2008 project files are set
-	up to build 64-bit libraries and executables *only*.
+    You can call it "build" if you have no better name.  The name
+    doesn't matter.
 
-It is possible to upgrade these project files to work with newer
-versions of Visual C++, but beware that the upgrade feature tends
-to be problematic.
+    If you elect not to do this, the build products will be intermixed
+    with the libtabula source files, making it harder to disentangle
+    them.  It also makes it more difficult to cope with multiple
+    versions of Visual Studio on the same system, since the build
+    products will conflict with each other.
 
-If you want to do a 32-bit build on VC++ 2008 or newer, it is
-easiest to open the vc2005\* project files and let Visual Studio
-upgrade them for you.  The alternative, starting with the vc2008
-files, requires that you add a 32-bit build option to all of the
-many targets in libtabula, then optionally delete the 64-bit
-targets.  This is a lot more work.  Plus, it only works if you
-have the 64-bit compilers installed, since Visual Studio will
-refuse to open project files where all targets must be built
-with compilers that aren't installed, even if your goal is to
-immediately adjust them to use compilers that *are* installed.
+5.  Run either `cmake` or `cmake-gui` followed by the relative path
+    to the source directory.  If you created a build directory underneath
+    the source directory, the command is `cmake ..`
 
-When converting the VC++ 2008 project files to VC++ 2012, Visual
-Studio will change the output directories from Debug to Debug\x64
-(and similar for Release), but it won't also change the link paths
-from Debug to Debug\x64, so that the library and examples will
-compile but not link.  The migration tool detects that there is
-a problem, but it can't fix its own mess.  You have to manually
-fix it.
+6.  If that succeeded, you can open the `libtabula.sln` file it
+    generated.
 
-There were also problems in VC++ 2010 when you had converted 32-bit
-VC++ 2008 projects and then were trying to switch them to 64-bit.
-It ended up being simpler in this case to just start over from
-scratch and build your own project files.
+    If it failed, it should clearly say why.  If not, post the CMake
+    output to the [mailing list.][3]
 
 
-Using Nonstandard libtabula Installations
+Locating C API Development Files
 ----
 
-The Visual Studio project files that come with libtabula have
-everything set up correctly for the common case.  The biggest
-assumption in the settings is that you're building against the
-current stable version of Connector/C, which gets installed here
-at the time of this writing:
+The CMake files try to figure out which C API development files you've
+got installed, automatically.
 
-	C:\Program Files\libtabula\libtabula Connector C 6.1\
+If it cannot find your MySQL/MariaDB development files, edit the
+`modules\FindMySQL.cmake` file in a text editor, adding the library
+and header file directories to the two directory lists you find within.
+Then try again.
 
-If you installed a different version, or it's in a different
-directory, or you've installed the development files as part
-of libtabula Server on the same machine, you need to change the
-project files to reference the C API development files in that
-other location.  There are two ways to do this.
 
-The hard way is to make 16 different changes each to 44 separate
-project files.  If you're a talented Visual Studio driver,
-you can do this in as little as about 5 or 6 steps.  You might
-even get it right the first time.  If you are not so talented,
-you have to make all ~700 changes one at a time, and you almost
-certainly will *not* get it right the first time.
+Choosing a Different C++ Compiler or Toolchain
+----
 
-The somewhat easier way is to open all these files in a text
-editor that lets you make a global search and replace on all
-open files.
+The native Windows version of CMake normally tries to use Visual C++
+if it's available.
 
-The easy way is to install [Bakefile][2], change the value of the
-`MYSQL_WIN_DIR` variable near the top of `libtabula.bkl` in the top
-level of the libtabula source tree, and run `rebake.bat`.  This will
-rebuild all of the project files for you, using the new libtabula
-path in all the many places it's needed.  The easy way is to install
-Bakefile, change the value of the `MYSQL_WIN_DIR` variable near the
-top of `libtabula.bkl` in the top level of the libtabula source tree,
-and run `rebake.bat`.  This will rebuild all of the project files for
-you, using the new libtabula path in all the many places it's needed.
+If CMake finds multiple versions of Visual C++ installed, it will
+use the newest one.  To force it to use another, give a command like:
+
+     c:/Program Files/CMake/bin/cmake -G "Visual Studio 11 2012"
+
+Give the `--help` flag instead to get a list of available generators
+for the `-G` option.
+
+CMake normally generates project files for building 32-bit executables.
+To generate 64-bit executables instead, add "Win64" to the end of the
+generator name:
+
+     c:/Program Files/CMake/bin/cmake -G "Visual Studio 12 2013 Win64"
+
+If you have MinGW installed alongside Visual Studio and want it to
+use MinGW instead, see `README-MinGW.md`.
+
+If you have Cygwin installed alongside Visual Studio, simply install
+the Cygwin version of CMake using Cygwin's `setup*.exe` program.
+That build of CMake assumes you're building under Cygwin, *for*
+Cygwin, by default.  See `README-Cygwin.md`.
 
 
 Building the Library and Example Programs
@@ -152,25 +133,6 @@ Using libtabula in Your Own Projects
 This is covered in the user manual, chapter 9.
 
 
-Working With Bakefile
-----
-
-libtabula's top-level Visual Studio project files aren't maintained
-directly.  Instead, we use a tool called [Bakefile][2] to generate
-them from `libtabula.bkl`. Since there are so many project files in
-libtabula, it's often simpler to edit this source file and "re-bake"
-the project files from it than to make your changes in Visual Studio.
-
-To do this, download the native Windows version of Bakefile, install
-it, and then put the installation directory in your Windows `PATH`.
-Then, open up a command window, `cd` into the libtabula directory,
-and type `rebake`.  This will run `rebake.bat`, which rebuilds the
-Visual Studio project files from `libtabula.bkl`.
-
-There's more information about using Bakefile in [the HACKERS
-file](HACKERS.md).
-
-
 If You Run Into Problems...
 ----
 
@@ -182,4 +144,5 @@ your project settings, not in libtabula.
 
 
 [1]: http://dev.mysql.com/downloads/mysql/
-[2]: http://bakefile.org/
+[2]: http://cmake.org/
+[3]: http://libtabula.org/ml/

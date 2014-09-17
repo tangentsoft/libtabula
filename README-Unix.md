@@ -88,25 +88,20 @@ to get a list.  Some of the more interesting flags are:
 
 Building a Static Library
 ----
-As shipped, libtabula only builds a shared library.  It's possible to
-change things so you get a static library instead.
 
-Before we get to "how," beware that liking statically to libtabula
-has legal consequences that may matter to you, due to the library's
-license, the GNU LGPL.  Familiarize yourself with the license,
-and consider getting legal counsel before proceeding.  Also,
-see the [libtabula FAQ][5].  There is more on this topic there.
+As shipped, libtabula only builds a shared library.  To build a static
+library instead, simply change the `SHARED` tag on the `add_library()`
+command in `src/CMakeLists.txt` to `STATIC`, then `make clean && make`.
 
-The necessary changes are all in `libtabula.bkl`:
+A change to a `CMakeLists.txt` file automatically triggers a
+reconfiguration, but if you don't "clean" the library between builds,
+it may not link properly.
 
-- Change the `<dll>` tag to `<lib>`.  (Remember the closing tag!)
-
-- Remove the `<dllname>` tag
-
-- Remove the `<so_version>` tag
-
-Then, re-bootstrap the library.  See [HACKERS.md](HACKERS.md) if you
-need further instruction on doing that.
+Beware that liking statically to libtabula has legal consequences
+that may matter to you, due to the library's license, the GNU LGPL.
+Familiarize yourself with the license, and consider getting legal
+counsel before proceeding.  Also, see the [libtabula FAQ][5].
+There is more on this topic there.
 
 
 
