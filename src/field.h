@@ -28,7 +28,7 @@
 #define LIBTABULA_FIELD_H
 
 #include "common.h"
-#include "type_info.h"
+#include "mysql/ft.h"
 
 #include <vector>
 
@@ -49,8 +49,7 @@ public:
 	/// \brief Create empty object
 	Field() :
 	length_(0),
-	max_length_(0),
-	flags_(0)
+	max_length_(0)
 	{
 	}
 
@@ -61,11 +60,11 @@ public:
 #if MYSQL_VERSION_ID > 40000	// only in 4.0 +
 	db_(pf->db),
 #endif
-	type_(pf->type, (pf->flags & UNSIGNED_FLAG) != 0,
-			(pf->flags & NOT_NULL_FLAG) == 0),
+	type_(MySQLFieldType(pf->type, FieldType::tf_default |
+			(pf->flags & UNSIGNED_FLAG) ? FieldType:tf_unsigned : 0,
+			(pf->flags & NOT_NULL_FLAG) ? 0 : FieldType::tf_null)),
 	length_(pf->length),
-	max_length_(pf->max_length),
-	flags_(pf->flags)
+	max_length_(pf->max_length)
 	{
 	}
 
@@ -76,8 +75,7 @@ public:
 	db_(other.db_),
 	type_(other.type_),
 	length_(other.length_),
-	max_length_(other.max_length_),
-	flags_(other.flags_)
+	max_length_(other.max_length_)
 	{
 	}
 
@@ -130,7 +128,7 @@ public:
 	bool timestamp() const { return flags_ & TIMESTAMP_FLAG; }
 
 	/// \brief Return information about the field's type
-	const mysql_type_info& type() const { return type_; }
+	const FieldType& type() const { return type_; }
 
 	/// \brief Returns true if field is part of a unique key
 	bool unique_key() const { return flags_ & UNIQUE_KEY_FLAG; }
@@ -142,7 +140,7 @@ private:
 	std::string name_;		///< the field's name
 	std::string table_;		///< name of table field comes from
 	std::string db_;		///< name of database field comes from
-	mysql_type_info type_;	///< info about the field's type
+	FieldType type_;		///< info about the field's type
 	size_t length_;			///< creation size of column
 	size_t max_length_;		///< size of largest item in column in result set
 	unsigned int flags_;	///< DB engine-specific set of bit flags

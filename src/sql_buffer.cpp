@@ -1,8 +1,8 @@
 /***********************************************************************
  sql_buffer.cpp - Implements the SQLBuffer class.
 
- Copyright © 2007-2008 by Educational Technology Resources, Inc.
- Others may also hold copyrights on code in this file.  See the
+ Copyright © 2007-2008, 2014 by Educational Technology Resources,
+ Inc.  Others may also hold copyrights on code in this file.  See the
  CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
@@ -32,6 +32,7 @@
 
 namespace libtabula {
 
+SQLBuffer::string_type = FieldType(FieldType::ft_text, FieldType::tf_null);
 
 SQLBuffer&
 SQLBuffer::assign(const char* data, size_type length, mysql_type_info type,

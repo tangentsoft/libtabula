@@ -515,11 +515,5 @@ SQLTypeAdapter::quote_q() const
 	return buffer_ ? buffer_->quote_q() : true;
 }
 
-int
-SQLTypeAdapter::type_id() const
-{
-	return buffer_ ? buffer_->type().id() : 0;
-}
-
 } // end namespace libtabula
 

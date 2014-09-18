@@ -28,7 +28,7 @@
 #ifndef LIBTABULA_FIELD_TYPES_H
 #define LIBTABULA_FIELD_TYPES_H
 
-#include "type_info.h"
+#include "field_type.h"
 
 #include <vector>
 
@@ -40,7 +40,7 @@ class LIBTABULA_EXPORT ResultBase;
 #endif
 
 /// \brief A vector of SQL field types.
-class FieldTypes : public std::vector<mysql_type_info>
+class FieldTypes : public std::vector<FieldType>
 {
 public:
 	/// \brief Default constructor
@@ -54,7 +54,7 @@ public:
 
 	/// \brief Create fixed-size list of uninitialized field types
 	FieldTypes(int i) :
-	std::vector<mysql_type_info>(i)
+	std::vector<FieldType>(i)
 	{
 	}
 
@@ -71,7 +71,7 @@ public:
 	/// \param i number of field type objects to insert
 	FieldTypes& operator =(int i)
 	{
-		insert(begin(), i, mysql_type_info());
+		insert(begin(), i, FieldType());
 		return *this;
 	}
 
