@@ -42,21 +42,36 @@ The standard way to use CMake on Windows is to:
     You can call it "build" if you have no better name.  The name
     doesn't matter.
 
+    If you will be creating multiple build directories, we suggest that
+    you call them "build-*", to clearly distinguish their purpose, or
+    nest them under a single "build" directory:
+
+        libtabula-4.0.0/
+            build-32/
+            build-64/
+
+    or:
+
+        libtabula-4.0.0/
+            build/
+                vs2010/
+                vs2012/
+                vs2013/
+
     If you elect not to do this, the build products will be intermixed
     with the libtabula source files, making it harder to disentangle
     them.  It also makes it more difficult to cope with multiple
     versions of Visual Studio on the same system, since the build
     products will conflict with each other.
 
-5.  Run either `cmake` or `cmake-gui` followed by the relative path
-    to the source directory.  If you created a build directory underneath
-    the source directory, the command is `cmake ..`
+5.  Run either `cmake` or `cmake-gui` followed by the relative path to
+    the source directory.  If you created a single build directory
+    underneath the source directory, the command is `cmake ..`
 
-6.  If that succeeded, you can open the `libtabula.sln` file it
-    generated.
+6.  If that succeeded, you can open the generated `libtabula.sln` file.
 
-    If it failed, it should clearly say why.  If not, post the CMake
-    output to the [mailing list.][3]
+    If it failed, it should say why clearly enough that you can see how
+    to fix it.  If not, post the CMake output to the [mailing list.][3]
 
 
 Locating C API Development Files
@@ -71,33 +86,33 @@ and header file directories to the two directory lists you find within.
 Then try again.
 
 
-Choosing a Different C++ Compiler or Toolchain
+Choosing a Different C++ Compiler or CPU Target
 ----
 
 The native Windows version of CMake normally tries to use Visual C++
-if it's available.
+if it's available, and it generates 32-bit project files by default.
 
 If CMake finds multiple versions of Visual C++ installed, it will
 use the newest one.  To force it to use another, give a command like:
 
-     c:/Program Files/CMake/bin/cmake -G "Visual Studio 11 2012"
+     cmake -G "Visual Studio 11 2012"
 
-Give the `--help` flag instead to get a list of available generators
-for the `-G` option.
+Give the `--help` flag to get a list of available generators for the
+`-G` option.
 
-CMake normally generates project files for building 32-bit executables.
 To generate 64-bit executables instead, add "Win64" to the end of the
 generator name:
 
-     c:/Program Files/CMake/bin/cmake -G "Visual Studio 12 2013 Win64"
+     cmake -G "Visual Studio 12 2013 Win64"
 
 If you have MinGW installed alongside Visual Studio and want it to
 use MinGW instead, see `README-MinGW.md`.
 
-If you have Cygwin installed alongside Visual Studio, simply install
-the Cygwin version of CMake using Cygwin's `setup*.exe` program.
-That build of CMake assumes you're building under Cygwin, *for*
-Cygwin, by default.  See `README-Cygwin.md`.
+If you have Cygwin installed alongside Visual Studio and want CMake to
+build under Cygwin instead of Visual C++, simply install the Cygwin
+version of CMake using Cygwin's `setup*.exe` program.  That build of
+CMake assumes you're building under Cygwin, *for* Cygwin, by default.
+See `README-Cygwin.md`.
 
 
 Building the Library and Example Programs
