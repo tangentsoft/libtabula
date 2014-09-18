@@ -17,9 +17,9 @@ during the installation.
 Project Files
 ----
 
-libtabula does not ship with *.sln or *.vc[x]proj files.  Instead,
-you generate them on your system using CMake[2], which produces
-a set of such files customized to your particular system.
+libtabula does not ship with `*.sln` or `*.vc[x]proj` files.  Instead,
+you generate them on your system using [CMake][2], which produces a set
+of such files customized to your particular system.
 
 The standard way to use CMake on Windows is to:
 
@@ -71,7 +71,7 @@ The standard way to use CMake on Windows is to:
 6.  If that succeeded, you can open the generated `libtabula.sln` file.
 
     If it failed, it should say why clearly enough that you can see how
-    to fix it.  If not, post the CMake output to the [mailing list.][3]
+    to fix it.  If not, post the CMake output to [the mailing list][3].
 
 
 Locating C API Development Files

@@ -1,7 +1,9 @@
 The libtabula Examples
 ====
+
 libtabula ships with a large number of examples to show off all the many
 features of the library.
+
 
 Building the Examples
 ----

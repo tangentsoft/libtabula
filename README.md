@@ -36,13 +36,13 @@ Additional Things to Read
 Each major platform we support has a dedicated `README-*.md` file for
 it containing information specific to that platform.  Please read it:
 
-* [Cygwin](README-Cygwin.md)
-* [Linux](README-Linux.md)
-* [Mac OS X](README-Mac-OS-X.md)
-* [MinGW](README-MinGW.md)
-* [Solaris](README-Solaris.md)
-* [Unix (generic)](README-Unix.md)
-* [Visual C++](README-Visual-C%2b%2b.md)
+*   [Cygwin](README-Cygwin.md)
+*   [Linux](README-Linux.md)
+*   [Mac OS X](README-Mac-OS-X.md)
+*   [MinGW](README-MinGW.md)
+*   [Solaris](README-Solaris.md)
+*   [Unix (generic)](README-Unix.md)
+*   [Visual C++](README-Visual-C%2b%2b.md)
 
 For authorship information, see [the CREDITS file](CREDITS.md).
 
@@ -72,11 +72,11 @@ used it to build libtabula under these native build system types:
     There are supplementary platform-specific `README` files for most
     popular Unixy platforms:
 
-    - [Cygwin](README-Cygwin.md)
-    - [Linux](README-Linux.md)
-    - [Mac OS X](README-Mac-OS-X.md)
-    - [MinGW](README-MinGW.md)
-    - [Solaris](README-Solaris.md)
+    -   [Cygwin](README-Cygwin.md)
+    -   [Linux](README-Linux.md)
+    -   [Mac OS X](README-Mac-OS-X.md)
+    -   [MinGW](README-MinGW.md)
+    -   [Solaris](README-Solaris.md)
 
     TODO: Write README-Free/Net/OpenBSD.md, if only to mention the
     location for C API files.
@@ -119,21 +119,21 @@ See [the examples README](README-examples.md) for further details.
 Unsupported Compliers
 ----
 
-If you're on Windows but want to use some other compiler besides
-Visual C++ or GCC, you are currently on your own.  There have been
-past efforts to port libtabula to other Windows compilers, but for
-one reason or another, all of these ports have died.
+If you're on Windows but want to use some other compiler besides Visual
+C++ or GCC, you are currently on your own.  There have been past efforts
+to port libtabula to other Windows compilers, but for one reason or
+another, all of these ports have died.
 
-On Unixy systems, GCC and Clang work best.  "Native" compilers
-and third-party compilers may work, but you're on your own to get
-it working.
+On Unixy systems, GCC and Clang work best.  "Native" compilers and
+third-party compilers may work, but you're on your own to get it
+working.
 
-We have nothing in particular against these unsupported systems.
-We just lack the time and resources to support everything ourselves.
-If you are sufficiently motivated to get libtabula working on one
-of these alternate systems, see [the HACKERS file](HACKERS.md) first
-for guidance.  If you follow the advice in that file, your patch will
-be more likely to be accepted.
+We have nothing in particular against these unsupported systems.  We
+just lack the time and interest to support everything ourselves.  If you
+are sufficiently motivated to get libtabula working on one of these
+alternate systems, see [the HACKERS file](HACKERS.md) first for
+guidance.  If you follow the advice in that file, your patch will be
+more likely to be accepted.
 
 
 If You Want to Hack on libtabula...
