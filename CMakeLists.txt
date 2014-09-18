@@ -110,7 +110,8 @@ configure_file(src/libtabula.h.in src/libtabula.h)
 configure_file(src/ssx/Doxyfile.in src/ssx/Doxyfile)
 
 include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE_DIR})
-link_directories(${MYSQL_LIBRARY})
+get_filename_component(MYSQL_LIBRARY_DIR "${MYSQL_LIBRARY}" PATH)
+link_directories(${MYSQL_LIBRARY_DIR})
 
 add_subdirectory(doc)
 add_subdirectory(src)
