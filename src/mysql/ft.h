@@ -69,7 +69,7 @@ private:
 	}
 	
 	MySQLFieldTypeInfo(const char* s,
-			const std::type_info& t, const enum_type_field_types bt,
+			const std::type_info& t, const enum_field_types bt,
 			const unsigned int flags = FieldType::tf_default) :
 	sql_name_(s),
 	c_type_(&t),
@@ -84,7 +84,7 @@ private:
 
 	const char* sql_name_;
 	const std::type_info* c_type_;
-	const enum_type_field_types base_type_;
+	const enum_field_types base_type_;
 	const unsigned char flags_;
 };
 
@@ -138,32 +138,45 @@ public:
 	/// \brief Extended version of FieldType::Base, adding
 	/// MySQL-specific data types
 	enum Base {
-		ft_datetime =		ft_LAST_UNUSED + 0,
+		// Dupe base class values, since C++ can't subclass an enum.
+		ft_integer =		FieldType::ft_integer,
+		ft_real =			FieldType::ft_real,
+		ft_text =			FieldType::ft_text,
+		ft_blob =			FieldType::ft_blob,
+
+		// MySQL-specific data types
+		ft_datetime =		ft_FIRST_UNUSED + 0,
 		// TODO: finish filling out
 	};
 
 	/// \brief Extended version of FieldType::Flags, adding
 	/// MySQL-specific type flags
-	enum Flags {
-		tf_auto_increment = tf_LAST_UNUSED << 0,
-		tf_binary = 		tf_LAST_UNUSED << 1,
-		tf_blob =			tf_LAST_UNUSED << 2,
-		tf_enumeration =	tf_LAST_UNUSED << 3,
-		tf_multiple_key =	tf_LAST_UNUSED << 4,
-		tf_no_default =		tf_LAST_UNUSED << 5,
-		tf_primary_key =	tf_LAST_UNUSED << 6,
-		tf_set_type =		tf_LAST_UNUSED << 7,
-		tf_timestamp =		tf_LAST_UNUSED << 8,
-		tf_unique_key =		tf_LAST_UNUSED << 9,
-		tf_zerofill =		tf_LAST_UNUSED << 10,
+	enum Flag {
+		// See above
+		tf_default = 		FieldType::tf_default,
+		tf_unsigned =		FieldType::tf_unsigned,
+		tf_null = 			FieldType::tf_null,
+
+		// MySQL-specific type flags, from MYSQL_FIELD.flags
+		tf_auto_increment = tf_FIRST_UNUSED << 0,
+		tf_binary = 		tf_FIRST_UNUSED << 1,
+		tf_blob =			tf_FIRST_UNUSED << 2,
+		tf_enumeration =	tf_FIRST_UNUSED << 3,
+		tf_multiple_key =	tf_FIRST_UNUSED << 4,
+		tf_no_default =		tf_FIRST_UNUSED << 5,
+		tf_primary_key =	tf_FIRST_UNUSED << 6,
+		tf_set_type =		tf_FIRST_UNUSED << 7,
+		tf_timestamp =		tf_FIRST_UNUSED << 8,
+		tf_unique_key =		tf_FIRST_UNUSED << 9,
+		tf_zerofill =		tf_FIRST_UNUSED << 10,
 	};
 
 	/// \brief Standard constructor
 	///
 	/// \see FieldType::FieldType(FieldType::Base, FieldType::Flags)
-	MySQLFieldType(Base b = static_cast<Base>(-1), Flags f = tf_default) :
+	MySQLFieldType(Base b = static_cast<Base>(-1), Flag f = tf_default) :
 	FieldType(static_cast<FieldType::Base>(b), 
-	          static_cast<FieldType::Flags(f))
+	          static_cast<FieldType::Flag>(f))
 	{
 	}
 
@@ -172,12 +185,12 @@ public:
 	/// \param t the underlying MySQL C API type ID for this type
 	/// \param is_unsigned if true, this is the unsigned version of the type
 	/// \param is_null if true, this type can hold a SQL null
-	MySQLFieldType(enum_type_field_types t, bool is_unsigned = false,
+	MySQLFieldType(enum_field_types t, bool is_unsigned = false,
 			bool is_null = false) :
-	base_type_(type(t)),
-	flags_(FieldType::ft_default | 
-			(is_null ? FieldType::ft_null : 0) |
-			(is_unsigned ? FieldType::ft_unsigned : 0))
+	FieldType(static_cast<FieldType::Base>(type(t)),
+			  static_cast<FieldType::Flag>(FieldType::tf_default | 
+					(is_null ? FieldType::tf_null : 0) |
+					(is_unsigned ? FieldType::tf_unsigned : 0)))
 	{
 	}
 
@@ -187,12 +200,15 @@ public:
 	/// \brief Create a MySQLFieldType object from a C++ type_info object
 	///
 	/// This tries to map a C++ type to the closest MySQL data type.
-	/// It is necessarily somewhat approximate.
-	MySQLFieldType(const std::type_info& t)
+	/// It is necessarily somewhat approximate.  For one thing, we
+	/// ignore integer signedness.  We also make the fully-warranted
+	/// assumption that C++ hasn't grown a SQL-like "nullable" type
+	/// attribute between the time this code was written and the time
+	/// your compiler was last improved.
+	MySQLFieldType(const std::type_info& t) :
+	FieldType(static_cast<FieldType::Base>(lookups[t]),
+			FieldType::tf_default)
 	{
-		base_type_ = lookups[t];
-		flags_ = FieldType::tf_default;	// not nullable; ignoring signedness
-		return *this;
 	}
 
 	/// \brief Returns an implementation-defined name of the C++ type.
@@ -217,9 +233,9 @@ public:
 	///
 	/// Returns the type_info for the C++ type inside the libtabula::Null
 	/// type.  If the type is not Null then this is the same as c_type().
-	const FieldType& base_type() const
+	const FieldType base_type() const
 	{
-		return MySQLFieldType(deref().base_type_);
+		return deref().base_type_;
 	}
 
 	/// \brief Returns true if the SQL type is of a type that needs to
@@ -255,16 +271,11 @@ private:
 	/// the SQL null concept doesn't map directly onto the C++ type
 	/// system.  See null.h for details.
 	///
-	/// \param t Underlying C API type constant
-	/// \param _unsigned if true, indicates the unsigned variant of a
-	/// MySQL type
-	/// \param _null if true, indicates the variant of the MySQL type
-	/// that can also hold an SQL 'null' instead of regular data.
+	/// \param t Underlying MySQL C API type constant
 	///
 	/// While libtabula is tied to MySQL, \c t is just an abstraction
-	/// of enum_type_field_types from mysql_com.h.
-	static unsigned char type(enum_type_field_types t,
-			bool _unsigned, bool _null = false);
+	/// of enum_field_types from mysql_com.h.
+	static Base type(enum_field_types t);
 
 	const sql_type_info& deref() const
 	{
