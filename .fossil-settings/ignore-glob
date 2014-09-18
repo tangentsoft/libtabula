@@ -5,6 +5,8 @@ Makefile*
 
 tags, version
 
+build*
+
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
