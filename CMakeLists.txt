@@ -61,9 +61,7 @@
 #   - Visual C++ 2013 (32- and 64-bit)
 #   - MinGW
 #   - Cygwin
-#   - CentOS 7
 #   - CentOS 3?
-#   - XCode
 #   - OpenIndiana
 #
 # - For each success above with CMake < 2.6, lower minimum requirement
