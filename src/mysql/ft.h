@@ -101,11 +101,11 @@ class LIBTABULA_EXPORT MySQLFieldTypeLookup
 private:
 	friend class MySQLFieldType;
 
-	typedef MySQLFieldTypeInfo sql_type_info;
+	typedef MySQLFieldTypeInfo MySQLFieldTypeInfo;
 	typedef std::map<const std::type_info*, unsigned char, MySQLTypeInfoCmp>
 			map_type;
 
-	MySQLFieldTypeLookup(const sql_type_info types[],
+	MySQLFieldTypeLookup(const MySQLFieldTypeInfo types[],
 			const int size);
 
 	const unsigned char& operator [](
@@ -253,13 +253,10 @@ public:
 	bool escape_q() const;
 
 private:
-	typedef MySQLFieldTypeInfo sql_type_info;
-	typedef MySQLFieldTypeLookup sql_type_info_lookup;
-
-	static const sql_type_info types[];
+	static const MySQLFieldTypeInfo types[];
 	static const int base_type_types;
 
-	static const sql_type_info_lookup lookups;
+	static const MySQLFieldTypeLookup lookups;
 
 	/// \brief Return an index into MySQLFieldType::types array given
 	/// MySQL type information.
@@ -277,7 +274,7 @@ private:
 	/// of enum_field_types from mysql_com.h.
 	static Base type(enum_field_types t);
 
-	const sql_type_info& deref() const
+	const MySQLFieldTypeInfo& deref() const
 	{
 		return types[base_type_];
 	}
