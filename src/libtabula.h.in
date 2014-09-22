@@ -55,6 +55,7 @@
 // dependency chain.
 #include "connection.h"
 #include "cpool.h"
+#include "fieldtype.h"
 #include "query.h"
 #include "scopedconnection.h"
 #include "sql_types.h"

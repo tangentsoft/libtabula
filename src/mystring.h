@@ -194,7 +194,7 @@ public:
 	/// because this ctor may be used for things other than
 	/// null-terminated C strings.  (e.g. BLOB data)
 	explicit String(const char* str, size_type len,
-			mysql_type_info type = mysql_type_info::string_type,
+			FieldType::Base type = FieldType::ft_text,
 			bool is_null = false) :
 	buffer_(new SQLBuffer(str, len, type, is_null))
 	{
@@ -208,7 +208,7 @@ public:
 	///
 	/// The resulting object will contain a copy of the string buffer.
 	explicit String(const std::string& str,
-			mysql_type_info type = mysql_type_info::string_type,
+			FieldType::Base type = FieldType::ft_text,
 			bool is_null = false) :
 	buffer_(new SQLBuffer(str.data(), static_cast<size_type>(str.length()),
 			type, is_null))
@@ -223,7 +223,7 @@ public:
 	///
 	/// The resulting object will contain a copy of the string buffer.
 	explicit String(const char* str,
-			mysql_type_info type = mysql_type_info::string_type,
+			FieldType::Base type = FieldType::ft_text,
 			bool is_null = false) :
 	buffer_(new SQLBuffer(str, static_cast<size_type>(strlen(str)),
 			type, is_null))
@@ -240,7 +240,7 @@ public:
 	/// without creating a String temporary to get around the fact
 	/// that operator=() can only take one parameter.
 	void assign(const char* str, size_type len,
-			mysql_type_info type = mysql_type_info::string_type,
+			FieldType::Base type = FieldType::ft_text,
 			bool is_null = false)
 	{
 		buffer_ = new SQLBuffer(str, len, type, is_null);
@@ -253,7 +253,7 @@ public:
 	/// without creating a String temporary to get around the fact
 	/// that operator=() can only take one parameter.
 	void assign(const std::string& str,
-			mysql_type_info type = mysql_type_info::string_type,
+			FieldType::Base type = FieldType::ft_text,
 			bool is_null = false)
 	{
 		buffer_ = new SQLBuffer(str.data(),
@@ -267,7 +267,7 @@ public:
 	/// without creating a String temporary to get around the fact
 	/// that operator=() can only take one parameter.
 	void assign(const char* str,
-			mysql_type_info type = mysql_type_info::string_type,
+			FieldType::Base type = FieldType::ft_text,
 			bool is_null = false)
 	{
 		buffer_ = new SQLBuffer(str, static_cast<size_type>(strlen(str)),
@@ -445,9 +445,9 @@ public:
 	void to_string(std::string& s) const;
 
 	/// \brief Get this object's current MySQL type.
-	mysql_type_info type() const
+	FieldType::Base type() const
 	{
-		return buffer_ ? buffer_->type() : mysql_type_info::string_type;
+		return buffer_ ? buffer_->type() : FieldType::ft_text;
 	}
 
 	/// \brief Assignment operator, from C++ string
@@ -455,7 +455,7 @@ public:
 	{
 		buffer_ = new SQLBuffer(rhs.data(),
 				static_cast<size_type>(rhs.length()),
-				mysql_type_info::string_type, false);
+				FieldType::ft_text, false);
 
 		return *this;
 	}
@@ -468,7 +468,7 @@ public:
 	{
 		buffer_ = new SQLBuffer(str,
 				static_cast<size_type>(strlen(str)),
-				mysql_type_info::string_type, false);
+				FieldType::ft_text, false);
 
 		return *this;
 	}

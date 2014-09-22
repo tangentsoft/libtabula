@@ -44,11 +44,8 @@ using namespace std;
 
 namespace libtabula {
 
-// This table maps C++ type information to SQL type information.  As you
-// can see, it's intimately tied in with MySQL's type constants, thus the
-// name.  Unlike in earlier versions of libtabula, this table is the only
-// place with such a dependency.  Everything else abstracts MySQL's
-// type system away by bouncing things through this table.
+// This table maps C++ type information to MySQL type information, using
+// the abstract libtabula type system as the bridge.
 //
 // The second half of the table parallels the first, to handle null-able
 // versions of the types in the first half.  This is required because
@@ -56,11 +53,17 @@ namespace libtabula {
 // null-able versions of these types have to have a different C++ type,
 // implemented using the Null template.  See null.h for further details.
 //
-// Types with tf_default set are added to a lookup map in the
-// MySQLFieldType_lookup class in order to provide reverse lookup
-// of C++ types to SQL types.  If you take the subset of all items
-// marked as default, the typeid() of each item must be unique.
-const MySQLFieldType::MySQLFieldTypeInfo MySQLFieldType::types[] = {
+// The tuple of the MySQL C API type and the type flags (unsigned and
+// null, currently) must be unique; that is to say, we do not refer to
+// the underlying C API types redundantly.  Multiple such tuples may
+// map to the same libtabula type where a distinctions made at the C
+// API layer is ignored at the libtabula layer.  For example, libtabula
+// has no special type for "UNSIGNED FLOAT"; it uses sql_float
+// regardless of signedness.
+//
+// See the NativeToMySQLTypeMap class instance for the inverse of this
+// table, mapping C++ types to C API types.
+const MySQLFieldTypeInfo MySQLFieldType::types[] = {
 	// Basic non-nullable type set
 	MySQLFieldTypeInfo("DECIMAL NOT NULL", typeid(sql_decimal),
 #if MYSQL_VERSION_ID >= 50001
@@ -223,14 +226,13 @@ const MySQLFieldType::MySQLFieldTypeInfo MySQLFieldType::types[] = {
 const int MySQLFieldType::num_types =
 		sizeof(MySQLFieldType::types) / sizeof(MySQLFieldType::types[0]);
 
-const MySQLFieldType::MySQLFieldTypeLookup
-		MySQLFieldType::lookups(MySQLFieldType::types,
-		MySQLFieldType::num_types);
+const NativeToMySQLTypeMap MySQLFieldType::native_to_mysql_type_map(
+		MySQLFieldType::types, MySQLFieldType::num_types);
 
 #if !defined(DOXYGEN_IGNORE)
 // Doxygen will not generate documentation for this section.
 
-MySQLFieldTypeLookup::MySQLFieldTypeLookup(
+NativeToMySQLTypeMap::NativeToMySQLTypeMap(
 		const MySQLFieldTypeInfo types[], const int size)
 {
 	for (int i = 0; i < size; ++i) {
@@ -258,7 +260,7 @@ unsigned char MySQLFieldType::type(enum_field_types t,
 
 bool MySQLFieldType::quote_q() const
 {
-	const type_info& ti = base_type().c_type();
+	const type_info& ti = c_type();
 	return	ti == typeid(string) ||
 			ti == typeid(sql_date) ||
 			ti == typeid(sql_time) ||
@@ -273,7 +275,7 @@ bool MySQLFieldType::quote_q() const
 
 bool MySQLFieldType::escape_q() const
 {
-	const type_info& ti = base_type().c_type();
+	const type_info& ti = c_type();
 	return	ti == typeid(string) ||
 			ti == typeid(sql_enum) ||
 			ti == typeid(sql_blob) ||
