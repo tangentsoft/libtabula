@@ -249,6 +249,7 @@ private:
 	/// \brief An array of type info that roughly maps the MySQL C
 	/// API's enum_field_types to FieldType objects.
 	static const MySQLFieldTypeInfo types[];
+	static const int num_types;
 
 	static const NativeToMySQLTypeMap native_to_mysql_type_map;
 
@@ -266,7 +267,7 @@ private:
 	///
 	/// While libtabula is tied to MySQL, \c t is just an abstraction
 	/// of enum_field_types from mysql_com.h.
-	static FieldType::Base base_type(enum_field_types t);
+	static Base base_type(enum_field_types t);
 
 	const MySQLFieldTypeInfo& deref() const
 	{
