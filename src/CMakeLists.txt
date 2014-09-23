@@ -27,19 +27,24 @@
 
 set(QUERYDEF_PL "${CMAKE_SOURCE_DIR}/src/querydef.pl")
 add_custom_command(OUTPUT querydef.h
-	COMMAND ${QUERYDEF_PL}
-	DEPENDS ${QUERYDEF_PL}
-	COMMENT "Generating querydef.h..."
-	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
+    COMMAND ${QUERYDEF_PL}
+    DEPENDS ${QUERYDEF_PL}
+    COMMENT "Generating querydef.h..."
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
 
 set(SSQLS_PL "${CMAKE_SOURCE_DIR}/src/ssqls.pl")
 add_custom_command(OUTPUT ssqls.h
-	COMMAND ${SSQLS_PL}
-	DEPENDS ${SSQLS_PL}
-	COMMENT "Generating ssqls.h..."
-	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
+    COMMAND ${SSQLS_PL}
+    DEPENDS ${SSQLS_PL}
+    COMMENT "Generating ssqls.h..."
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
 
 add_library(tabula SHARED
+    tags
+
+    querydef.h
+    ssqls.h
+
     beemutex.cpp
     cmdline.cpp
     connection.cpp
@@ -52,18 +57,16 @@ add_library(tabula SHARED
     manip.cpp
     myset.cpp
     mystring.cpp
-	mysql/driver.cpp
+    mysql/driver.cpp
     null.cpp
     options.cpp
     qparms.cpp
     query.cpp
-	querydef.h
     result.cpp
     row.cpp
     scopedconnection.cpp
     sql_buffer.cpp
     sqlstream.cpp
-    ssqls.h
     ssqls2.cpp
     stadapter.cpp
     tcp_connection.cpp
@@ -75,3 +78,20 @@ add_library(tabula SHARED
     wnp_connection.cpp
 )
 target_link_libraries(tabula mysqlclient_r)
+
+# Add a top-level "tags" target which includes all files in both
+# the build and source versions of src/*.
+set_source_files_properties(tags PROPERTIES GENERATED true)
+add_custom_command(OUTPUT tags
+    COMMAND ctags -R --c++-kinds=+p --fields=+iaS --extra=+q 
+		${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND ln -sf ${CMAKE_CURRENT_BINARY_DIR}/tags ${CMAKE_BINARY_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+# ...but only make it a dependency of libtabula if the ctags program
+# is available, else it will fail to build on Windows.
+find_program(CTAGS_PATH ctags)
+if(CTAGS_PATH)
+	message(STATUS "Found ctags: ${CTAGS_PATH}")
+	add_dependencies(tabula tags)
+endif(CTAGS_PATH)

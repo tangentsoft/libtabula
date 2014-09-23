@@ -67,9 +67,7 @@
 # - For each success above with CMake < 2.6, lower minimum requirement
 #
 # - Convert non-core top-level targets
-#   - tags
-#   - dist
-#   - rpm/deb/ebuild; CPack?
+#   - dist/rpm/deb/ebuild... via CPack
 #   - abicheck
 #
 # ---------------------
