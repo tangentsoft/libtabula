@@ -84,7 +84,7 @@ public:
 	/// default-initted copy with the assignment operator.  Failure to
 	/// do so will trigger the crash we have arranged by casting a bogus
 	/// value.
-	FieldType(Base b = static_cast<Base>(-1), Flag f = tf_default) :
+	FieldType(Base b = static_cast<Base>(-1), unsigned int f = tf_default) :
 	base_type_(b),
 	flags_(f)
 	{
@@ -127,7 +127,7 @@ public:
 	///
 	/// Returns the type_info for the C++ type inside the libtabula::Null
 	/// type.  If the type is not Null then this is the same as c_type().
-	virtual const FieldType base_type() const { return *this; }
+	virtual const FieldType::Base base_type() const { return base_type_; }
 
 	/// \brief Returns true if the SQL type is of a type that needs to
 	/// be quoted.
@@ -159,7 +159,7 @@ public:
 	unsigned short id() const { return (flags_ << 8) | base_type_; }
 
 protected:
-	unsigned char base_type_;
+	Base base_type_;
 	unsigned int flags_;
 };
 

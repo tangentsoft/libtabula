@@ -60,9 +60,7 @@ public:
 #if MYSQL_VERSION_ID > 40000	// only in 4.0 +
 	db_(pf->db),
 #endif
-	type_(MySQLFieldType(pf->type, FieldType::tf_default |
-			(pf->flags & UNSIGNED_FLAG) ? FieldType::tf_unsigned : 0,
-			(pf->flags & NOT_NULL_FLAG) ? 0 : FieldType::tf_null)),
+	type_(MySQLFieldType(pf->type, pf->flags)),
 	length_(pf->length),
 	max_length_(pf->max_length)
 	{

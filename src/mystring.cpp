@@ -2,9 +2,9 @@
  mystring.cpp - Implements the String class.
 
  Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2008 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ © 2004-2008, 2014 by Educational Technology Resources, Inc.  Others
+ may also hold copyrights on code in this file.  See the CREDITS.txt
+ file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -33,6 +33,10 @@
 
 namespace libtabula {
 
+// DB field type used for String objects when no other type info is
+// given.  Just make it a generic "text string" type.
+FieldType String::default_type_(FieldType::ft_text,
+		FieldType::tf_default);
 
 char
 String::at(size_type pos) const
@@ -187,7 +191,7 @@ String::it_is_null()
 		buffer_->set_null();
 	}
 	else {
-		buffer_ = new SQLBuffer(0, 0, mysql_type_info::string_type, true);
+		buffer_ = new SQLBuffer(0, 0, default_type_, true);
 	}
 }
 

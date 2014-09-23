@@ -30,6 +30,7 @@
 
 #include "common.h"
 
+#include "field_type.h"
 #include "exceptions.h"
 
 #include <map>
@@ -144,8 +145,12 @@ public:
 		ft_blob =			FieldType::ft_blob,
 
 		// MySQL-specific data types
-		ft_datetime =		ft_FIRST_UNUSED + 0,
-		// TODO: finish filling out
+		ft_date =			ft_FIRST_UNUSED + 0,
+		ft_time =			ft_FIRST_UNUSED + 1,
+		ft_datetime =		ft_FIRST_UNUSED + 2,
+		ft_enum =			ft_FIRST_UNUSED + 3,
+		ft_set =			ft_FIRST_UNUSED + 4,
+		ft_null =			ft_FIRST_UNUSED + 5,
 	};
 
 	/// \brief Extended version of FieldType::Flags, adding
@@ -181,15 +186,14 @@ public:
 
 	/// \brief Create object from MySQL C API type info
 	///
-	/// \param t the underlying MySQL C API type ID for this type
-	/// \param is_unsigned if true, this is the unsigned version of the type
-	/// \param is_null if true, this type can hold a SQL null
-	MySQLFieldType(FieldType::Base t, bool is_unsigned = false,
-			bool is_null = false) :
-	FieldType(t, static_cast<FieldType::Flag>(
+	/// \param t the underlying MySQL C API type ID for this type,
+	/// typically given as MYSQL_FIELD::type
+	/// \param flags is the MYSQL_FIELD::flags value
+	MySQLFieldType(enum_field_types t, unsigned int flags) :
+	FieldType(static_cast<FieldType::Base>(base_type(t)),
 			FieldType::tf_default | 
-			(is_null ? FieldType::tf_null : 0) |
-			(is_unsigned ? FieldType::tf_unsigned : 0)))
+			(flags & UNSIGNED_FLAG ? FieldType::tf_unsigned : 0) |
+			(flags & NOT_NULL_FLAG ? 0 : FieldType::tf_null))
 	{
 	}
 
@@ -262,7 +266,7 @@ private:
 	///
 	/// While libtabula is tied to MySQL, \c t is just an abstraction
 	/// of enum_field_types from mysql_com.h.
-	static Base type(enum_field_types t);
+	static FieldType::Base base_type(enum_field_types t);
 
 	const MySQLFieldTypeInfo& deref() const
 	{

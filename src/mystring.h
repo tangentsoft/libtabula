@@ -444,10 +444,10 @@ public:
 	/// to a buffer instead of copying the buffer's contents.
 	void to_string(std::string& s) const;
 
-	/// \brief Get this object's current MySQL type.
-	FieldType::Base type() const
+	/// \brief Get this object's current field type.
+	FieldType type() const
 	{
-		return buffer_ ? buffer_->type() : FieldType::ft_text;
+		return buffer_ ? buffer_->type() : default_type_;
 	}
 
 	/// \brief Assignment operator, from C++ string
@@ -649,7 +649,8 @@ private:
 		}
 	}
 
-	RefCountedBuffer buffer_;	///< reference-counted data buffer
+	static FieldType default_type_; ///< default string type
+	RefCountedBuffer buffer_;		///< reference-counted data buffer
 
 	friend class SQLTypeAdapter;
 };

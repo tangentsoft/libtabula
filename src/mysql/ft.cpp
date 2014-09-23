@@ -244,18 +244,52 @@ NativeToMySQLTypeMap::NativeToMySQLTypeMap(
 
 #endif // !defined(DOXYGEN_IGNORE)
 
-unsigned char MySQLFieldType::type(enum_field_types t,
-		bool _unsigned, bool _null)
+Base MySQLFieldType::base_type(enum_field_types t)
 {
-	for (unsigned char i = 0; i < num_types; ++i) {
-		if ((types[i].base_type_ == t) &&
-				(!_unsigned || types[i].is_unsigned()) &&
-				(!_null || types[i].is_null())) {
-			return i;
-		}
-	}
+	switch (t) {
+		case MYSQL_TYPE_NULL:
+			return ft_null;
 
-	return type(MYSQL_TYPE_STRING, false, _null);	// punt!
+		case MYSQL_TYPE_TINY:
+		case MYSQL_TYPE_SHORT:
+		case MYSQL_TYPE_INT24:
+		case MYSQL_TYPE_LONG:
+		case MYSQL_TYPE_LONGLONG:
+			return ft_integer;
+
+		case MYSQL_TYPE_FLOAT:
+		case MYSQL_TYPE_DOUBLE:
+			return ft_real;
+
+		case MYSQL_TYPE_DATE:
+			return ft_date;
+
+		case MYSQL_TYPE_TIME:
+			return ft_time;
+
+		case MYSQL_TYPE_DATETIME:
+		case MYSQL_TYPE_TIMESTAMP:
+			return ft_datetime;
+
+		case MYSQL_TYPE_ENUM:
+			return ft_enum;
+
+		case MYSQL_TYPE_SET:
+			return ft_set;
+
+		case MYSQL_TYPE_BLOB:
+		case MYSQL_TYPE_TINY_BLOB:
+		case MYSQL_TYPE_MEDIUM_BLOB:
+		case MYSQL_TYPE_LONG_BLOB:
+			return ft_blob;
+
+		case MYSQL_TYPE_VAR_STRING:
+		case MYSQL_TYPE_STRING:
+			return ft_text;
+
+		// No default!  We want the compiler to warn us if the C API
+		// adds another data type.
+	}
 }
 
 bool MySQLFieldType::quote_q() const

@@ -9,10 +9,10 @@
 /// trivial compile time benefits, at the expense of clarity.
 
 /***********************************************************************
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2010 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ and © 2004-2010, 2014 by Educational Technology Resources, Inc.
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -55,7 +55,7 @@
 // dependency chain.
 #include "connection.h"
 #include "cpool.h"
-#include "fieldtype.h"
+#include "field_type.h"
 #include "query.h"
 #include "scopedconnection.h"
 #include "sql_types.h"
