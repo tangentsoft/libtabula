@@ -32,10 +32,10 @@
 
 namespace libtabula {
 
-SQLBuffer::string_type = FieldType(FieldType::ft_text, FieldType::tf_null);
+FieldType SQLBuffer::string_type(FieldType::ft_text, FieldType::tf_null);
 
 SQLBuffer&
-SQLBuffer::assign(const char* data, size_type length, mysql_type_info type,
+SQLBuffer::assign(const char* data, size_type length, FieldType type,
 		bool is_null)
 {
 	replace_buffer(data, length);
@@ -45,7 +45,7 @@ SQLBuffer::assign(const char* data, size_type length, mysql_type_info type,
 }
 
 SQLBuffer&
-SQLBuffer::assign(const std::string& s, mysql_type_info type, bool is_null)
+SQLBuffer::assign(const std::string& s, FieldType type, bool is_null)
 {
 	replace_buffer(s.data(), s.length());
 	type_ = type;
@@ -56,7 +56,7 @@ SQLBuffer::assign(const std::string& s, mysql_type_info type, bool is_null)
 bool
 SQLBuffer::quote_q() const
 {
-	if ((type_.base_type().c_type() == typeid(libtabula::sql_datetime)) &&
+	if ((type_.c_type() == typeid(libtabula::sql_datetime)) &&
 			data_ && (length_ >= 5) && (memcmp(data_, "NOW()", 5) == 0)) {
 		// The default DATETIME value is special-cased as a call to the
 		// SQL NOW() function, which must not be quoted.

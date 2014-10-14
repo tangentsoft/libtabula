@@ -45,7 +45,7 @@ initialized_(false)
 				data_.push_back(value_type(
 						is_null ? "NULL" : row[i],
 						is_null ? 4 : lengths[i],
-						res->field_type(int(i)),
+						res->field_type(int(i)).base_type(),
 						is_null));
 			}
 
