@@ -124,6 +124,10 @@ Items in this section are big or break the library's ABI, so they have
 to be done in 4.0, else they must wait for the next allowed ABI breakage
 point, 5.0.
 
+*   Reimplement FieldNames in terms of std::map.  At least one test
+    shows that the linear scan for field names in row["foo"] is a
+    huge time-sink: http://lists.mysql.com/plusplus/9732
+
 *   Reimplement the ostringstream interface in SQLStream, drop the
     inheritance, and include an ostreamstring instance as a member
     instead of deriving from it.  There is some evidence that VC++ has
