@@ -42,7 +42,7 @@ anythihg you like.  I actually prefer a tree like this:
     src/                       # Working tree for software projects
         libtabula/
             skull/             # Fossil head, get it?   I crack me up.
-			trunk -> skull/    # Alias to match Fossil branch naming
+            trunk -> skull/    # Alias to match Fossil branch naming
                 build/         # Build directory for the skull/trunk
             some-branch/       # Separately-opened working branch
                 build/         # Build directory for the working branch
