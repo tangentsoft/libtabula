@@ -42,6 +42,7 @@ anythihg you like.  I actually prefer a tree like this:
     src/                       # Working tree for software projects
         libtabula/
             skull/             # Fossil head, get it?   I crack me up.
+			trunk -> skull/    # Alias to match Fossil branch naming
                 build/         # Build directory for the skull/trunk
             some-branch/       # Separately-opened working branch
                 build/         # Build directory for the working branch
@@ -100,7 +101,6 @@ you get what is called an in-tree build.
 CMake works best with out-of-tree builds.  Therefore, the standard
 commands after you have "opened" the libtabula Fossil repository are:
 
-    $ fossil open ...see above...
     $ mkdir build
     $ cd build
     $ cmake ..
@@ -110,10 +110,9 @@ Once CMake has generated the `Makefiles`, you can run `make` as normal.
 You may prefer parallel build and source trees to the above nested
 scheme.  This works as you would expect:
 
-    $ fossil open ...see above...
     $ mkdir ../build
     $ cd ../build
-    $ cmake ..
+    $ cmake ../trunk
 
 
 On Manipulating the Build System Source Files
