@@ -10,9 +10,14 @@ Code Repository Access
 libtabula 4.0 and newer uses the [Fossil][1] [distributed version
 control system][2].
 
-To clone the code repository, say:
+To clone the code repository anonymously, say:
 
     $ fossil clone http://libtabula.org/code libtabula.fossil
+
+If you have a developer account on libtabula.org's Fossil instance, just
+add your username to the URL like so:
+
+    $ fossil clone http://username@libtabula.org/code libtabula.fossil
 
 That will get you a file called `libtabula.fossil` containing the
 full history of libtabula from just after the MySQL++ 3.2.1 fork.
@@ -29,7 +34,7 @@ Then to "open" the repo clone so you can hack on it, say:
     $ cd libtabula
     $ fossil open ../libtabula.fossil
 
-As with libtabula.fossil, you can call the working directory
+As with `libtabula.fossil`, you can call the working directory
 anythihg you like.  I actually prefer a tree like this:
 
     museum/                    # Where fossils are kept
@@ -37,6 +42,9 @@ anythihg you like.  I actually prefer a tree like this:
     src/                       # Working tree for software projects
         libtabula/
             skull/             # Fossil head, get it?   I crack me up.
+			    build/         # Build directory for the skull/trunk
+			some-branch/       # Separately-opened working branch
+			    build/         # Build directory for the working branch
             4.0.0/             # Release branch checkout
         mysql++/
             head/              # Gna! MySQL++ svn trunk checkout
@@ -49,6 +57,27 @@ copy, checkins get automatically synced with it by default.
 can say `fossil settings autosync off`.)  If you don't have such
 permissions, you just modify your local copy, then have to merge
 in upstream changes when updating your local clone.
+
+Developers are expected to make all nontrivial changes on a branch,
+rather than check such changes directly into the trunk.  Once we have
+discussed the change on the mailing list and resolved any isssues with
+the experimental branch, it will be merged into the trunk.
+
+Creating a branch in Fossil is scary-simple, to the point that those
+coming from other version control systems may ask, "Is that really all
+there is to it?"  Yes, really, this is it:
+
+    $ fossil checkin --branch new-branch-name
+
+That is to say, you make your changes as you normally would; then when
+you go to check them in, you give the `--branch` option to the
+`ci/checkin` command to put the changes on a new branch, rather than add
+them to the same branch the changes were made against.
+
+At some point, the trunk version becomes the next major version.  Stable
+versions become either tags or branches.  (The only difference between
+tags and branches in Fossil is that branches may have subsequent changes
+made to them.)
 
 
 Bootstrapping the Library
