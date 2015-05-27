@@ -42,9 +42,9 @@ anythihg you like.  I actually prefer a tree like this:
     src/                       # Working tree for software projects
         libtabula/
             skull/             # Fossil head, get it?   I crack me up.
-			    build/         # Build directory for the skull/trunk
-			some-branch/       # Separately-opened working branch
-			    build/         # Build directory for the working branch
+                build/         # Build directory for the skull/trunk
+            some-branch/       # Separately-opened working branch
+                build/         # Build directory for the working branch
             4.0.0/             # Release branch checkout
         mysql++/
             head/              # Gna! MySQL++ svn trunk checkout
