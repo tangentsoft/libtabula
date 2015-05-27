@@ -135,29 +135,40 @@ file.
 Submitting Patches
 ----
 
-If you wish to submit a patch to the library, please send it to [the
-libtabula mailing list][11], or [create a ticket][12] and attach the
-patch to the ticket.  We want patches in unified diff format.
+The simplest way to send a change to libtabula is to say this after
+developing your change against the trunk of libtabula:
 
-The easiest way to get a unified diff is to check out a copy of the
-current libtabula tree as described above.  Then make your change,
-and ask Fossil to generate the diff for you:
+    $ fossil diff > my-changes.patch
 
-    $ fossil diff > mychange.patch
+Then attach that file to a new [mailing list][11] message.
 
-If your patch adds new files to the distribution, you can say
-`fossil add newfile` before you do the diff, which will include the
-contents of that file in the patch.  (You can do this even when
-you've checked out the tree anonymously.)  Then say `fossil revert
-newfile` to make Fossil forget about the new file.
+If your change is more than a small patch, `fossil diff` might not
+incorporate all of the changes you have made. The old unified `diff`
+format can't encode branch names, file renamings, file deletions, tags,
+checkin comments, and other Fossil-specific information. For such
+changes, it is better to send a Fossil bundle:
 
-Please don't submit patches against branches of the repository or
-against released versions. libtabula often drifts enough during
-development that a patch against anything other than the tip of the
-trunk won't apply cleanly.  We have historically not had separate
-"development" and "stable" branches; all development happens on the
-trunk, so that the branches you find in the libtabula Fossil repo
-are really just release tags, not true branch points.
+    $ fossil checkin --branch my-changes
+    $ fossil bundle export --branch my-changes my-changes.bundle
+
+The checkin command will fail on the "autosync" step if you did an
+anonymous checkout of the libtabula Fossil repo, but your changes will
+get stored in a new branch.  The "bundle" feature of Fossil takes that
+branch and packs just your changes up into a file that one of the
+developers can temporarily attach to their local repository, then apply
+if they approve the changes.
+
+Because you are working on a branch on your private copy of the
+libtabula Fossil repository, you are free to make as many checkins as
+you like on the new branch before giving the `bundle export` command.
+
+Contributors with a history of providing quality patches/bundles can
+apply to get a developer login on [the repository][14].
+
+Please make your patches or experimental branch bundles against the tip
+of the current trunk.  libtabula often drifts enough during development
+that a patch against a stable release may not apply to the trunk cleanly
+otherwise.
 
 
 The libtabula Code Style
@@ -354,3 +365,4 @@ for your platform.
 [11]: http://libtabula.org/ml/
 [12]: http://libtabula.org/code/tktnew
 [13]: http://linux.die.net/man/1/indent
+[14]: http://libtabula.org/code/
