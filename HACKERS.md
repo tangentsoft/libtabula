@@ -89,6 +89,32 @@ you can forget all that.  CMake takes care of that for us now.  Just
 use the normal build procedures documented in `README-*.md`.
 
 
+CMake Build Directories
+----
+
+Although the Bakefile + Autotools based build system allowed separate
+source and object file trees, it was not the standard way of working on
+MySQL++. If you say something like `./bootsrap && make && make install`,
+you get what is called an in-tree build.
+
+CMake works best with out-of-tree builds.  Therefore, the standard
+commands after you have "opened" the libtabula Fossil repository are:
+
+    $ fossil open ...see above...
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+
+Once CMake has generated the `Makefiles`, you can run `make` as normal.
+
+You may prefer parallel build and source trees to the above nested
+scheme.  This works as you would expect:
+
+    $ fossil open ...see above...
+    $ mkdir ../build
+    $ cd ../build
+    $ cmake ..
+
 
 On Manipulating the Build System Source Files
 ----
