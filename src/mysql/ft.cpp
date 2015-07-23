@@ -257,18 +257,27 @@ MySQLFieldType::Base MySQLFieldType::base_type(enum_field_types t)
 		case MYSQL_TYPE_LONGLONG:
 			return ft_integer;
 
+		case MYSQL_TYPE_DECIMAL:
+		case MYSQL_TYPE_NEWDECIMAL:
 		case MYSQL_TYPE_FLOAT:
 		case MYSQL_TYPE_DOUBLE:
 			return ft_real;
 
 		case MYSQL_TYPE_DATE:
+#if MYSQL_VERSION_ID >= 50000
+		case MYSQL_TYPE_NEWDATE:
+#endif
+		case MYSQL_TYPE_YEAR:
 			return ft_date;
 
 		case MYSQL_TYPE_TIME:
+		case MYSQL_TYPE_TIME2:
 			return ft_time;
 
 		case MYSQL_TYPE_DATETIME:
+		case MYSQL_TYPE_DATETIME2:
 		case MYSQL_TYPE_TIMESTAMP:
+		case MYSQL_TYPE_TIMESTAMP2:
 			return ft_datetime;
 
 		case MYSQL_TYPE_ENUM:
@@ -283,9 +292,16 @@ MySQLFieldType::Base MySQLFieldType::base_type(enum_field_types t)
 		case MYSQL_TYPE_LONG_BLOB:
 			return ft_blob;
 
+		case MYSQL_TYPE_VARCHAR:
 		case MYSQL_TYPE_VAR_STRING:
 		case MYSQL_TYPE_STRING:
 			return ft_text;
+
+		// TODO: Add C++ data types to the library to allow us to
+		// represent these SQL data types.
+		case MYSQL_TYPE_BIT:
+		case MYSQL_TYPE_GEOMETRY:
+			return ft_unsupported;
 
 		// No default!  We want the compiler to warn us if the C API
 		// adds another data type.

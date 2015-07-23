@@ -139,6 +139,7 @@ public:
 	/// MySQL-specific data types
 	enum Base {
 		// Dupe base class values, since C++ can't subclass an enum.
+		ft_unsupported =	FieldType::ft_unsupported,
 		ft_integer =		FieldType::ft_integer,
 		ft_real =			FieldType::ft_real,
 		ft_text =			FieldType::ft_text,

@@ -55,6 +55,7 @@ public:
 	/// libtabula to understand.  Subclasses can extend this, starting
 	/// their enum with ft_FIRST_UNUSED.
 	enum Base {
+		ft_unsupported,
 		ft_integer,
 		ft_real,
 		ft_text,
