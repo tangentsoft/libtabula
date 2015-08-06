@@ -68,13 +68,17 @@ MySQLFieldType::Base MySQLFieldType::base_type(enum_field_types t)
 			return ft_date;
 
 		case MYSQL_TYPE_TIME:
+#if defined(MYSQL_TYPE_TIME2)
 		case MYSQL_TYPE_TIME2:
+#endif
 			return ft_time;
 
 		case MYSQL_TYPE_DATETIME:
-		case MYSQL_TYPE_DATETIME2:
 		case MYSQL_TYPE_TIMESTAMP:
+#if defined(MYSQL_TYPE_DATETIME2)
+		case MYSQL_TYPE_DATETIME2:
 		case MYSQL_TYPE_TIMESTAMP2:
+#endif
 			return ft_datetime;
 
 		case MYSQL_TYPE_ENUM:
