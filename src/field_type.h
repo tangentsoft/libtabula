@@ -11,7 +11,7 @@
 
 /***********************************************************************
  Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
- and © 2004-2008, 2014 by Educational Technology Resources, Inc.
+ and © 2004-2008, 2014-2015 by Educational Technology Resources, Inc.
  Others may also hold copyrights on code in this file.  See the
  CREDITS.txt file in the top directory of the distribution for details.
 
@@ -37,10 +37,14 @@
 #define LIBTABULA_FIELD_TYPE_H
 
 #include "common.h"
+#include "exceptions.h"
 
+#include <map>
+#include <sstream>
 #include <typeinfo>
 
 namespace libtabula {
+
 
 /// \brief SQL field type information
 ///
@@ -49,18 +53,37 @@ namespace libtabula {
 class LIBTABULA_EXPORT FieldType
 {
 public:
-	/// \brief Elementary SQL data types
+	/// \brief Basic SQL data types with libtabula support
 	/// 
-	/// These are the data types we expect every DBMS supported by
-	/// libtabula to understand.  Subclasses can extend this, starting
-	/// their enum with ft_FIRST_UNUSED.
+	/// These are ordered roughly by commonality in SQL implementations.
+	/// As you go further down the list, the chance decreases that any
+	/// given SQL DBMS supports it.
+	///
+	/// This is called FieldType::Base because these are the basic data
+	/// types only, without modifiers.  See FieldType::Flag.
 	enum Base {
+		// Special data type, giving libtabula a way to flag data of a
+		// type that the library itself does not support.
 		ft_unsupported,
+
+		// Data types pretty much every SQL implementation knows
 		ft_integer,
-		ft_real,
+		ft_real,		// a.k.a float, double...
 		ft_text,
 		ft_blob,
-		ft_FIRST_UNUSED,
+
+		// Common data types, but not universal.  For example, SQLite
+		// only supports date/time values via specially-formatted string
+		// columns.  For another, many DBMSes have no formal "boolean"
+		// type, but instead require you to use bare integers or enums.
+		ft_date = 20,		// skip a bit to allow expansion
+		ft_time,
+		ft_datetime,
+		ft_timestamp,
+		ft_decimal,			// fixed-point number; not same as ft_real!
+		ft_enum,
+		ft_boolean,
+		ft_set,
 	};
 
 	/// \brief SQL data type modifier flags
@@ -68,11 +91,23 @@ public:
 	/// These flags modify the \c ft_* type flag enum.  If this field
 	/// has no flags (i.e. it is tf_default) it is implicitly signed
 	/// if it's an integer type, and it's non-null in all cases.
+	///
+	/// As with Base, these are ordered by commonality.
 	enum Flag {
-		tf_default = 0,
-		tf_unsigned = 1,
-		tf_null = 2,
-		tf_FIRST_UNUSED = 4,
+		// Type modifiers every SQL DBMS should support, even SQLite
+		tf_default = 		1 << 0,
+		tf_unsigned = 		1 << 1,
+		tf_null = 			1 << 2,
+
+		// Common type attributes, but not universal
+		tf_primary_key =	1 << 10,
+		tf_unique_key =		1 << 11,
+		tf_multiple_key =	1 << 12,
+
+		// Nonstandard modifers; mainly MySQL-specific
+		tf_auto_increment = 1 << 20,	// nonstandard SQL
+		tf_binary = 		1 << 21,	// BINARY TEXT ≅ CHAR sans encoding
+		tf_zerofill =		1 << 22,	// 0-padded strings
 	};
 
 	/// \brief Standard constructor
@@ -83,9 +118,8 @@ public:
 	/// elements.  If you are creating these objects in code you write,
 	/// you need to pass the first parameter at least, or overwrite the
 	/// default-initted copy with the assignment operator.  Failure to
-	/// do so will trigger the crash we have arranged by casting a bogus
-	/// value.
-	FieldType(Base b = static_cast<Base>(-1), unsigned int f = tf_default) :
+	/// do so will cause a runtime error.
+	FieldType(Base b = ft_unsupported, unsigned int f = tf_default) :
 	base_type_(b),
 	flags_(f)
 	{
@@ -96,6 +130,21 @@ public:
 	base_type_(other.base_type_),
 	flags_(other.flags_)
 	{
+	}
+
+	/// \brief Create a FieldType object from a C++ type_info object
+	///
+	/// This tries to map a C++ type to the closest libtabula data type.
+	/// It is necessarily somewhat approximate.  For one thing, we
+	/// ignore integer signedness.  We also make the fully-warranted
+	/// assumption that C++ hasn't grown a SQL-like "nullable" type
+	/// attribute between the time this code was written and the time
+	/// your compiler was last improved.
+	FieldType(const std::type_info& t)
+	{
+		size_t i = type_map_[t];
+		base_type_ = types_[i].base_type_;
+		flags_ = types_[i].flags_;
 	}
 
 	/// \brief Assign another FieldType object to this object
@@ -110,17 +159,26 @@ public:
 	///
 	/// Returns the name that would be returned by typeid().name() for
 	/// the C++ type associated with the SQL type.
+	///
+	/// FIXME: Shouldn't this be an abstract method?  Can we require
+	/// that only the DB driver create instances of our driver-specific
+	/// subclass, or must there be a way to create base class instances,
+	/// even if it's bogus, as our return value here shows?
 	virtual const char* name() const { return 0; }
 
 	/// \brief Returns the name of the SQL type.
 	///
 	/// Returns the SQL name for the type.
+	///
+	/// FIXME: Same problem as with name()
 	virtual const char* sql_name() const { return 0; }
 
 	/// \brief Returns the type_info for the C++ type associated with
 	/// the SQL type.
 	///
 	/// Returns the C++ type_info record corresponding to the SQL type.
+	///
+	/// FIXME: Same problem as with name()
 	virtual const std::type_info& c_type() const { return typeid(void); }
 
 	/// \brief Returns the type_info for the C++ type inside of the
@@ -131,24 +189,23 @@ public:
 	virtual const FieldType::Base base_type() const { return base_type_; }
 
 	/// \brief Returns true if the SQL type is of a type that needs to
-	/// be quoted.
-	///
-	/// \return true if the type needs to be quoted for syntactically
-	/// correct SQL.
-	virtual bool quote_q() const
+	/// be quoted for syntactically correct SQL.
+	bool quote_q() const
 	{
 		return	base_type_ == ft_blob ||
-				base_type_ == ft_text;
+				base_type_ == ft_date ||
+				base_type_ == ft_datetime ||
+				base_type_ == ft_set ||
+				base_type_ == ft_text ||
+				base_type_ == ft_time;
 	}
 
 	/// \brief Returns true if the SQL type is of a type that needs to
-	/// be escaped.
-	///
-	/// \return true if the type needs to be escaped for syntactically
-	/// correct SQL.
-	virtual bool escape_q() const
+	/// be escaped for syntactically correct SQL.
+	bool escape_q() const
 	{
 		return	base_type_ == ft_blob ||
+				base_type_ == ft_enum ||
 				base_type_ == ft_text;
 	}
 
@@ -160,6 +217,86 @@ public:
 	unsigned short id() const { return (flags_ << 8) | base_type_; }
 
 protected:
+	//// Subclass interface
+	// Used in the global static data structures that map libtabula data
+	// types and from {Base, Flag} enum pairs.  That in turn is how
+	// you can construct a FieldType object and call c_type() and such
+	// on it, yielding a value you did not explicitly pass to the ctor.
+	class TypeInfo
+	{
+	public:
+		TypeInfo& operator=(const TypeInfo& other);
+		
+		TypeInfo(const char* s = 0, const std::type_info& t = typeid(void),
+				Base bt = ft_unsupported, Flag f = tf_default,
+				bool bg = true) :
+		sql_name_(s),
+		c_type_(&t),
+		base_type_(bt),
+		flags_(f),
+		best_guess_(bg)
+		{
+		}
+
+		bool is_default() const { return flags_ == FieldType::tf_default; }
+		bool is_null() const { return flags_ & FieldType::tf_null; }
+		bool is_unsigned() const { return flags_ & FieldType::tf_unsigned; }
+
+		const char* sql_name_;
+		const std::type_info* c_type_;
+		const Base base_type_;
+		const unsigned int flags_;
+		const bool best_guess_;
+	};
+
+	/// \brief Look up the TypeInfo object corresponding to our
+	/// {Base, Flag} pair.
+	const TypeInfo& type_info() const
+	{
+		return types_[base_type_];
+	}
+
+private:
+	// Helper class for mapping data types to and from our enums above
+	class LIBTABULA_EXPORT TypeMap
+	{
+	private:
+		friend class FieldType;
+
+		struct Cmp
+		{
+			bool operator() (const std::type_info* lhs,
+					const std::type_info* rhs) const
+					{ return lhs < rhs; }
+		};
+
+		typedef std::map<const std::type_info*, size_t, Cmp> map_type;
+
+		TypeMap();
+
+		map_type::mapped_type operator [](const std::type_info& ti) const
+		{
+			map_type::const_iterator it = map_.find(&ti);
+			if (it != map_.end()) {
+				return it->second;
+			}
+			else {
+				std::ostringstream outs;
+				outs << "Failed to find libtabula type info for " << ti.name();
+				throw TypeLookupFailed(outs.str());
+			}
+		}
+
+		map_type map_;
+	};
+
+	// Data structures to map {Base, Type} pairs to and from libtabula
+	// C++ data types.
+	static const TypeInfo types_[];
+	static const int num_types_;
+	static const TypeMap type_map_;
+
+	// Internal data
 	Base base_type_;
 	unsigned int flags_;
 };

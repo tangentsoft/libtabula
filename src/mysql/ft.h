@@ -31,157 +31,37 @@
 #include "common.h"
 
 #include "field_type.h"
-#include "exceptions.h"
-
-#include <map>
-#include <sstream>
-#include <typeinfo>
 
 namespace libtabula {
 
-#if !defined(DOXYGEN_IGNORE)
-// Doxygen will not generate documentation for this section.
-
-class LIBTABULA_EXPORT MySQLFieldType;
-class LIBTABULA_EXPORT NativeToMySQLTypeMap;
-
-class LIBTABULA_EXPORT MySQLFieldTypeInfo
-{
-private:
-	friend class MySQLFieldType;
-	friend class NativeToMySQLTypeMap;
-
-	MySQLFieldTypeInfo& operator=(const MySQLFieldTypeInfo& other);
-	
-	// Not initting base_type_ and default_ because only MySQLFieldType
-	// can create them.  There *must* be only one copy of each.
-	MySQLFieldTypeInfo() :
-	sql_name_(0),
-	c_type_(0),
-	base_type_(
-#if MYSQL_VERSION_ID > 40000
-		MYSQL_TYPE_NULL
-#else
-		FIELD_TYPE_NULL
-#endif
-	),
-	flags_(0)
-	{
-	}
-	
-	MySQLFieldTypeInfo(const char* s,
-			const std::type_info& t, const enum_field_types bt,
-			const unsigned int flags = FieldType::tf_default) :
-	sql_name_(s),
-	c_type_(&t),
-	base_type_(bt),
-	flags_(flags)
-	{
-	}
-
-	bool is_default() const { return flags_ == FieldType::tf_default; }
-	bool is_null() const { return flags_ & FieldType::tf_null; }
-	bool is_unsigned() const { return flags_ & FieldType::tf_unsigned; }
-
-	const char* sql_name_;
-	const std::type_info* c_type_;
-	const enum_field_types base_type_;
-	const unsigned char flags_;
-};
-
-
-struct MySQLTypeInfoCmp
-{
-	bool operator() (const std::type_info* lhs,
-			const std::type_info* rhs) const
-			{ return lhs < rhs; }
-};
-
-class LIBTABULA_EXPORT NativeToMySQLTypeMap
-{
-private:
-	friend class MySQLFieldType;
-
-	typedef std::map<const std::type_info*, unsigned char, MySQLTypeInfoCmp>
-			map_type;
-
-	NativeToMySQLTypeMap(const MySQLFieldTypeInfo types[],
-			const int size);
-
-	const unsigned char& operator [](
-			const std::type_info& ti) const
-	{
-		map_type::const_iterator it = map_.find(&ti);
-		if (it != map_.end()) {
-			return it->second;
-		}
-		else {
-			std::ostringstream outs;
-			outs << "Failed to find MySQL C API type ID for " << ti.name();
-			throw TypeLookupFailed(outs.str());
-		}
-	}
-
-	map_type map_;
-};
-
-#endif // !defined(DOXYGEN_IGNORE)
-
-
-/// \brief SQL field type information
+/// \brief MySQL-specific field type information
 ///
 /// \internal Used within libtabula for mapping SQL types to C++ types
 /// and vice versa.
 class LIBTABULA_EXPORT MySQLFieldType : public FieldType
 {
 public:
-	/// \brief Extended version of FieldType::Base, adding
-	/// MySQL-specific data types
-	enum Base {
-		// Dupe base class values, since C++ can't subclass an enum.
-		ft_unsupported =	FieldType::ft_unsupported,
-		ft_integer =		FieldType::ft_integer,
-		ft_real =			FieldType::ft_real,
-		ft_text =			FieldType::ft_text,
-		ft_blob =			FieldType::ft_blob,
-
-		// MySQL-specific data types
-		ft_date =			ft_FIRST_UNUSED + 0,
-		ft_time =			ft_FIRST_UNUSED + 1,
-		ft_datetime =		ft_FIRST_UNUSED + 2,
-		ft_enum =			ft_FIRST_UNUSED + 3,
-		ft_set =			ft_FIRST_UNUSED + 4,
-		ft_null =			ft_FIRST_UNUSED + 5,
-	};
-
-	/// \brief Extended version of FieldType::Flags, adding
-	/// MySQL-specific type flags
-	enum Flag {
-		// See above
-		tf_default = 		FieldType::tf_default,
-		tf_unsigned =		FieldType::tf_unsigned,
-		tf_null = 			FieldType::tf_null,
-
-		// MySQL-specific type flags, from MYSQL_FIELD.flags
-		tf_auto_increment = tf_FIRST_UNUSED << 0,
-		tf_binary = 		tf_FIRST_UNUSED << 1,
-		tf_blob =			tf_FIRST_UNUSED << 2,
-		tf_enumeration =	tf_FIRST_UNUSED << 3,
-		tf_multiple_key =	tf_FIRST_UNUSED << 4,
-		tf_no_default =		tf_FIRST_UNUSED << 5,
-		tf_primary_key =	tf_FIRST_UNUSED << 6,
-		tf_set_type =		tf_FIRST_UNUSED << 7,
-		tf_timestamp =		tf_FIRST_UNUSED << 8,
-		tf_unique_key =		tf_FIRST_UNUSED << 9,
-		tf_zerofill =		tf_FIRST_UNUSED << 10,
-	};
-
 	/// \brief Standard constructor
 	///
-	/// \see FieldType::FieldType(FieldType::Base, FieldType::Flags)
-	MySQLFieldType(Base b = static_cast<Base>(-1), Flag f = tf_default) :
-	FieldType(static_cast<FieldType::Base>(b), 
-	          static_cast<FieldType::Flag>(f))
+	/// \see FieldType::FieldType(Base, Flags)
+	MySQLFieldType(Base b = ft_unsupported, Flag f = tf_default) :
+	FieldType(b, f)
+	{
+	}
+
+	/// \brief Promotion constructor
+	///
+	/// Converts generic libtabula data type info to MySQL-specific
+	/// info.  This ctor lets you create a base class instance then
+	/// later convert it to a DBDriver-specific instance.
+	///
+	/// FIXME: This may be a case of YAGNI.  The idea is that this will
+	/// effectively let us convert enum Base to enum_field_types, and
+	/// enum Flags to a MySQL C API "flags" bitfield.  But, we may find
+	/// that this conversion should happen elsewhere in the DBDriver
+	/// code, so the promotion ctor isn't necessary.
+	MySQLFieldType(const FieldType& ft) :
+	FieldType(ft)
 	{
 	}
 
@@ -191,7 +71,7 @@ public:
 	/// typically given as MYSQL_FIELD::type
 	/// \param flags is the MYSQL_FIELD::flags value
 	MySQLFieldType(enum_field_types t, unsigned int flags) :
-	FieldType(static_cast<FieldType::Base>(base_type(t)),
+	FieldType(base_type(t),
 			FieldType::tf_default | 
 			(flags & UNSIGNED_FLAG ? FieldType::tf_unsigned : 0) |
 			(flags & NOT_NULL_FLAG ? 0 : FieldType::tf_null))
@@ -201,58 +81,22 @@ public:
 	/// \brief Create object as a copy of another
 	MySQLFieldType(const MySQLFieldType& other) : FieldType(other) { } 
 
-	/// \brief Create a MySQLFieldType object from a C++ type_info object
-	///
-	/// This tries to map a C++ type to the closest MySQL data type.
-	/// It is necessarily somewhat approximate.  For one thing, we
-	/// ignore integer signedness.  We also make the fully-warranted
-	/// assumption that C++ hasn't grown a SQL-like "nullable" type
-	/// attribute between the time this code was written and the time
-	/// your compiler was last improved.
-	MySQLFieldType(const std::type_info& t) :
-	FieldType(static_cast<FieldType::Base>(native_to_mysql_type_map[t]),
-			FieldType::tf_default)
-	{
-	}
-
 	/// \brief Returns an implementation-defined name of the C++ type.
 	///
 	/// Returns the name that would be returned by typeid().name() for
 	/// the C++ type associated with the SQL type.
-	const char* name() const { return deref().c_type_->name(); }
+	const char* name() const { return type_info().c_type_->name(); }
 
 	/// \brief Returns the name of the SQL type.
 	///
 	/// Returns the SQL name for the type.
-	const char* sql_name() const { return deref().sql_name_; }
+	const char* sql_name() const { return type_info().sql_name_; }
 
 	/// \brief Returns the type_info for the C++ type associated with
 	/// the SQL type.
 	///
 	/// Returns the C++ type_info record corresponding to the SQL type.
-	const std::type_info& c_type() const { return *deref().c_type_; }
-
-	/// \brief Returns true if the SQL type is of a type that needs to
-	/// be quoted.
-	///
-	/// \return true if the type needs to be quoted for syntactically
-	/// correct SQL.
-	bool quote_q() const;
-
-	/// \brief Returns true if the SQL type is of a type that needs to
-	/// be escaped.
-	///
-	/// \return true if the type needs to be escaped for syntactically
-	/// correct SQL.
-	bool escape_q() const;
-
-private:
-	/// \brief An array of type info that roughly maps the MySQL C
-	/// API's enum_field_types to FieldType objects.
-	static const MySQLFieldTypeInfo types[];
-	static const int num_types;
-
-	static const NativeToMySQLTypeMap native_to_mysql_type_map;
+	const std::type_info& c_type() const { return *type_info().c_type_; }
 
 	/// \brief Return an index into MySQLFieldType::types array given
 	/// MySQL type information.
@@ -265,15 +109,7 @@ private:
 	/// system.  See null.h for details.
 	///
 	/// \param t Underlying MySQL C API type constant
-	///
-	/// While libtabula is tied to MySQL, \c t is just an abstraction
-	/// of enum_field_types from mysql_com.h.
 	static Base base_type(enum_field_types t);
-
-	const MySQLFieldTypeInfo& deref() const
-	{
-		return types[base_type_];
-	}
 };
 
 } // end namespace libtabula
