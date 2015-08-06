@@ -3,7 +3,7 @@
 #
 # Created 2014.08.24 by Warren Young
 #
-# Copyright © 2014 by Warren Young
+# Copyright © 2014-2015 by Warren Young
 #
 # Others may also hold copyrights on code in this file.  See the
 # CREDITS.md file in the top directory of the distribution for details.
@@ -27,4 +27,5 @@
 
 add_library(ssqls2parse STATIC parsev2.cpp)
 add_executable(ssqlsxlat genv2.cpp main.cpp)
-target_link_libraries(ssqlsxlat ssqls2parse tabula mysqlclient_r)
+target_link_libraries(ssqlsxlat ssqls2parse tabula 
+		${MYSQL_C_API_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})

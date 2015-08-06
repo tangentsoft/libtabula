@@ -4,7 +4,7 @@
 #
 # Created 2014.08.21 by Warren Young
 #
-# Copyright © 2014 by Warren Young
+# Copyright © 2014-2015 by Warren Young
 #
 # Others may also hold copyrights on code in this file.  See the
 # CREDITS.md file in the top directory of the distribution for details.
@@ -40,7 +40,6 @@
 #
 # - Replicate existing autoconf behavior:
 #   - Detect existence of <slist> etc.
-#   - Thread awareness selection
 #   - SSL support detection in mysqlclient
 #
 # - Add other build options
@@ -89,6 +88,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 
 set(MYSQL_FIND_REQUIRED 1)
 find_package(MySQL)
+
+find_package(Threads)
+if (CMAKE_HAVE_THREADS_LIBRARY)
+	set(MYSQL_C_API_LIBRARY mysqlclient_r)
+else()
+	set(MYSQL_C_API_LIBRARY mysqlclient)
+endif()
 
 CHECK_SYMBOL_EXISTS(getopt unistd.h HAVE_POSIX_GETOPT)
 if (NOT HAVE_POSIX_GETOPT)
