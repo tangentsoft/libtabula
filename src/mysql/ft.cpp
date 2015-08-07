@@ -68,17 +68,10 @@ MySQLFieldType::Base MySQLFieldType::base_type(enum_field_types t)
 			return ft_date;
 
 		case MYSQL_TYPE_TIME:
-#if defined(MYSQL_TYPE_TIME2)
-		case MYSQL_TYPE_TIME2:
-#endif
 			return ft_time;
 
 		case MYSQL_TYPE_DATETIME:
 		case MYSQL_TYPE_TIMESTAMP:
-#if defined(MYSQL_TYPE_DATETIME2)
-		case MYSQL_TYPE_DATETIME2:
-		case MYSQL_TYPE_TIMESTAMP2:
-#endif
 			return ft_datetime;
 
 		case MYSQL_TYPE_ENUM:
@@ -97,6 +90,15 @@ MySQLFieldType::Base MySQLFieldType::base_type(enum_field_types t)
 		case MYSQL_TYPE_VAR_STRING:
 		case MYSQL_TYPE_STRING:
 			return ft_text;
+
+		// MySQL 5.6+ compatibility types, never sent from the server to
+		// us, but we have to handle them to avoid a compiler warning.
+#if MYSQL_VERSION_ID >= 50600
+		case MYSQL_TYPE_TIME2:
+		case MYSQL_TYPE_DATETIME2:
+		case MYSQL_TYPE_TIMESTAMP2:
+			return ft_unsupported;
+#endif
 
 		// TODO: Add C++ data types to the library to allow us to
 		// represent these SQL data types.
