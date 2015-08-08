@@ -216,19 +216,21 @@ public:
 	/// depend on the format of the value.  It could change.
 	unsigned short id() const { return (flags_ << 8) | base_type_; }
 
-protected:
-	//// Subclass interface
 	// Used in the global static data structures that map libtabula data
 	// types and from {Base, Flag} enum pairs.  That in turn is how
 	// you can construct a FieldType object and call c_type() and such
 	// on it, yielding a value you did not explicitly pass to the ctor.
+	//
+	// \internal This is public only because the cpp file instantiates
+	// \c types_, a static array of these.  Library end-user code
+	// shouldn't use this directly.
 	class TypeInfo
 	{
 	public:
 		TypeInfo& operator=(const TypeInfo& other);
 		
 		TypeInfo(const char* s = 0, const std::type_info& t = typeid(void),
-				Base bt = ft_unsupported, Flag f = tf_default,
+				Base bt = ft_unsupported, unsigned int f = tf_default,
 				bool bg = true) :
 		sql_name_(s),
 		c_type_(&t),
@@ -249,6 +251,8 @@ protected:
 		const bool best_guess_;
 	};
 
+protected:
+	//// Subclass interface
 	/// \brief Look up the TypeInfo object corresponding to our
 	/// {Base, Flag} pair.
 	const TypeInfo& type_info() const
