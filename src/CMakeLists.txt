@@ -47,7 +47,7 @@ add_library(tabula SHARED
     datetime.cpp
     dbdriver.cpp
     field_names.cpp
-    field_type.h
+    field_type.cpp
     field_types.cpp
     libtabula.cpp
     manip.cpp
