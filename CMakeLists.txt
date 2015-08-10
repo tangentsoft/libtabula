@@ -85,6 +85,24 @@ set(LIBTABULA_VERSION_TWEAK  1)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 
+# Try to find some kind of "stdint" type header.
+find_path(LIBTABULA_HAVE_CSTDINT cstdint)
+if (LIBTABULA_HAVE_CSTDINT)
+	message("found C++11's <cstdint> header")
+else()
+	find_path(LIBTABULA_HAVE_BOOST_CSTDINT boost/cstdint.hpp)
+	if (LIBTABULA_HAVE_BOOST_CSTDINT)
+		message("found <boost/cstdint.hpp>")
+	else()
+		find_path(LIBTABULA_HAVE_STDINT_H stdint.h)
+		if (LIBTABULA_HAVE_STDINT_H)
+			message("found C99's <stdint.h>; hope we can use it in C++")
+		else()
+			message(SEND_ERROR "WARNING: no 'stdint' type header found!")
+		endif()
+	endif()
+endif()
+
 set(MYSQL_FIND_REQUIRED 1)
 find_package(MySQL)
 
