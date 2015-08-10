@@ -25,59 +25,27 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
 # USA
 
-add_executable(test_array_index array_index.cpp)
-target_link_libraries(test_array_index tabula mysqlclient_r)
+macro(add_test_executable basename)
+	add_executable(test_${basename} ${basename}.cpp)
+	target_link_libraries(test_${basename} tabula ${MYSQL_C_API_LIBRARY})
+	if (CMAKE_USE_PTHREADS_INIT)
+		target_link_libraries(test_${basename} pthread)
+	endif()
+endmacro(add_test_executable)
 
-add_executable(test_cpool cpool.cpp)
-target_link_libraries(test_cpool tabula mysqlclient_r)
+foreach(basename array_index cpool datetime insertpolicy inttypes manip 
+				 null_comparison qssqls qstream sqlstream ssqls2 string
+				 tcp uds wnp)
+	add_test_executable(${basename})
+endforeach(basename)
 
-add_executable(test_datetime datetime.cpp)
-target_link_libraries(test_datetime tabula mysqlclient_r)
-
-add_executable(test_insertpolicy insertpolicy.cpp)
-target_link_libraries(test_insertpolicy tabula mysqlclient_r)
-
-add_executable(test_inttypes inttypes.cpp)
-target_link_libraries(test_inttypes tabula mysqlclient_r)
-
-add_executable(test_manip manip.cpp)
-target_link_libraries(test_manip tabula mysqlclient_r)
-
-add_executable(test_null_comparison null_comparison.cpp)
-target_link_libraries(test_null_comparison tabula mysqlclient_r)
+# Add extra libraries to our needier targets
+target_link_libraries(test_ssqls2 ssqls2parse)
 
 if(TEST_NULL_UNIQUENESS)
 	# This test purposely includes bad code that should fail to compile.
 	# A thorough platform test will include an attempt to build this,
 	# and the test must be considered a failure if it *does* build.  The
 	# test is making sure that a build-time check works as expected.
-	add_executable(test_null_uniqueness null_uniqueness.cpp)
-	target_link_libraries(test_null_uniqueness tabula mysqlclient_r)
+	add_test_executable(null_uniqueness)
 endif()
-
-add_executable(test_qssqls qssqls.cpp)
-target_link_libraries(test_qssqls tabula mysqlclient_r)
-
-add_executable(test_qstream qstream.cpp)
-target_link_libraries(test_qstream tabula mysqlclient_r)
-
-add_executable(test_query_copy query_copy.cpp)
-target_link_libraries(test_query_copy tabula mysqlclient_r)
-
-add_executable(test_sqlstream sqlstream.cpp)
-target_link_libraries(test_sqlstream tabula mysqlclient_r)
-
-add_executable(test_ssqls2 ssqls2.cpp)
-target_link_libraries(test_ssqls2 ssqls2parse tabula mysqlclient_r)
-
-add_executable(test_string string.cpp)
-target_link_libraries(test_string tabula mysqlclient_r)
-
-add_executable(test_tcp tcp.cpp)
-target_link_libraries(test_tcp tabula mysqlclient_r)
-
-add_executable(test_uds uds.cpp)
-target_link_libraries(test_uds tabula mysqlclient_r)
-
-add_executable(test_wnp wnp.cpp)
-target_link_libraries(test_wnp tabula mysqlclient_r)
