@@ -66,9 +66,7 @@
 # - For each success above with CMake < 2.6, lower minimum requirement
 #
 # - Convert non-core top-level targets
-#   - tags
-#   - dist
-#   - rpm/deb/ebuild; CPack?
+#   - dist/rpm/deb/ebuild... via CPack
 #   - abicheck
 #
 # ---------------------
@@ -85,6 +83,24 @@ set(LIBTABULA_VERSION_BUGFIX 9)
 set(LIBTABULA_VERSION_TWEAK  1)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
+
+# Try to find some kind of "stdint" type header.
+find_path(LIBTABULA_HAVE_CSTDINT cstdint)
+if (LIBTABULA_HAVE_CSTDINT)
+	message("found C++11's <cstdint> header")
+else()
+	find_path(LIBTABULA_HAVE_BOOST_CSTDINT boost/cstdint.hpp)
+	if (LIBTABULA_HAVE_BOOST_CSTDINT)
+		message("found <boost/cstdint.hpp>")
+	else()
+		find_path(LIBTABULA_HAVE_STDINT_H stdint.h)
+		if (LIBTABULA_HAVE_STDINT_H)
+			message("found C99's <stdint.h>; hope we can use it in C++")
+		else()
+			message(SEND_ERROR "WARNING: no 'stdint' type header found!")
+		endif()
+	endif()
+endif()
 
 set(MYSQL_FIND_REQUIRED 1)
 find_package(MySQL)
@@ -125,3 +141,17 @@ add_subdirectory(examples)
 
 add_custom_target(dtest
 	COMMAND ${PROJECT_SOURCE_DIR}/dtest -u test -p test)
+
+# If ctags is present, add a top-level "tags" target which includes all
+# files in both the build and source versions of src/*.  Conditional
+# since it isn't always present on *ix, and almost never on Windows.
+find_program(CTAGS_PATH ctags)
+if (CTAGS_PATH)
+    message(STATUS "Found ctags: ${CTAGS_PATH}")
+	set_source_files_properties(tags PROPERTIES GENERATED true)
+	add_custom_target(tags 
+			COMMAND ctags -R --c++-kinds=+p --fields=+iaS --extra=+q 
+				${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
+			COMMENT "Generating tags file..."
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+endif(CTAGS_PATH)

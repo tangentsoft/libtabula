@@ -4,7 +4,8 @@
 #
 # Created 2014.08.21 by Warren Young
 #
-# Copyright © 2014 by Warren Young
+# Copyright © 2014-2015 by Warren Young
+# Copyright © 2015 by Educational Technology Resources, Inc.
 # Copyright © 2015 by Educational Technology Resources, Inc.
 #
 # Others may also hold copyrights on code in this file.  See the

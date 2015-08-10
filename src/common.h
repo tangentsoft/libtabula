@@ -58,11 +58,6 @@
 	// Stuff for Visual C++ only
 #	if defined(_MSC_VER)
 #		define LIBTABULA_PLATFORM_VISUAL_CPP
-		// MS *still* doesn't ship stdint.h, through VC++ 2008 at least.
-		// This means we have to take a wild guess at appropriate
-		// integer types in lib/sql_types.h.  See test/inttypes.cpp for
-		// tests that check whether we've guessed well.
-#		define LIBTABULA_NO_STDINT_H
 #		if _MSC_VER < 1400
 			// Workarounds for limitations of VC++ 2003 that are fixed
 			// in 2005 and later.

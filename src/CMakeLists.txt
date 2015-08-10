@@ -3,7 +3,8 @@
 #
 # Created 2014.08.21 by Warren Young
 #
-# Copyright © 2014 by Warren Young
+# Copyright © 2014-2015 by Warren Young
+# Copyright © 2015 by Educational Technology Resources, Inc.
 #
 # Others may also hold copyrights on code in this file.  See the
 # CREDITS.md file in the top directory of the distribution for details.
@@ -27,19 +28,22 @@
 
 set(QUERYDEF_PL "${CMAKE_SOURCE_DIR}/src/querydef.pl")
 add_custom_command(OUTPUT querydef.h
-	COMMAND ${QUERYDEF_PL}
-	DEPENDS ${QUERYDEF_PL}
-	COMMENT "Generating querydef.h..."
-	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
+    COMMAND ${QUERYDEF_PL}
+    DEPENDS ${QUERYDEF_PL}
+    COMMENT "Generating querydef.h..."
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
 
 set(SSQLS_PL "${CMAKE_SOURCE_DIR}/src/ssqls.pl")
 add_custom_command(OUTPUT ssqls.h
-	COMMAND ${SSQLS_PL}
-	DEPENDS ${SSQLS_PL}
-	COMMENT "Generating ssqls.h..."
-	WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
+    COMMAND ${SSQLS_PL}
+    DEPENDS ${SSQLS_PL}
+    COMMENT "Generating ssqls.h..."
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src")
 
 add_library(tabula SHARED
+    querydef.h
+    ssqls.h
+
     beemutex.cpp
     cmdline.cpp
     connection.cpp
@@ -53,19 +57,17 @@ add_library(tabula SHARED
     manip.cpp
     myset.cpp
     mystring.cpp
-	mysql/driver.cpp
+    mysql/driver.cpp
 	mysql/ft.cpp
     null.cpp
     options.cpp
     qparms.cpp
     query.cpp
-	querydef.h
     result.cpp
     row.cpp
     scopedconnection.cpp
     sql_buffer.cpp
     sqlstream.cpp
-    ssqls.h
     ssqls2.cpp
     stadapter.cpp
     tcp_connection.cpp

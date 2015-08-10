@@ -6,7 +6,7 @@
 /// \c Null<T> template.  See null.h for more information.
 
 /***********************************************************************
- Copyright © 2006-2009 by Educational Technology Resources, Inc.
+ Copyright © 2006-2009, 2015 by Educational Technology Resources, Inc.
  Others may also hold copyrights on code in this file.  See the
  CREDITS.txt file in the top directory of the distribution for details.
 
@@ -36,7 +36,11 @@
 
 #include <string>
 
-#if !defined(LIBTABULA_NO_STDINT_H)
+#if defined(LIBTABULA_HAVE_CSTDINT)
+#	include <cstdint>
+#elif defined(LIBTABULA_HAVE_BOOST_CSTDINT)
+#	include <boost/cstdint.hpp>
+#elif defined(LIBTABULA_HAVE_STDINT_H)
 #	include <stdint.h>
 #endif
 
@@ -48,18 +52,44 @@ namespace libtabula {
 
 // Define C++ integer types that are most nearly equivalent to those
 // used by the MySQL server.
-#if defined(LIBTABULA_NO_STDINT_H)
-	// Boo, we're going to have to wing it.
-	typedef tiny_int<signed char>	sql_tinyint;
-	typedef tiny_int<unsigned char>	sql_tinyint_unsigned;
-	typedef signed short			sql_smallint;
-	typedef unsigned short			sql_smallint_unsigned;
-	typedef signed int				sql_int;
-	typedef unsigned int			sql_int_unsigned;
-	typedef signed int				sql_mediumint;
-	typedef unsigned int			sql_mediumint_unsigned;
-	typedef longlong				sql_bigint;
-	typedef ulonglong				sql_bigint_unsigned;
+#if defined(LIBTABULA_HAVE_CSTDINT)
+	// Best case: we're using C++11 or newer, so we have official
+	// support for C99-like data types in C++.
+	typedef tiny_int<std::int8_t>	sql_tinyint;
+	typedef tiny_int<std::uint8_t>	sql_tinyint_unsigned;
+	typedef std::int16_t			sql_smallint;
+	typedef std::uint16_t			sql_smallint_unsigned;
+	typedef std::int32_t			sql_int;
+	typedef std::uint32_t			sql_int_unsigned;
+	typedef std::int32_t			sql_mediumint;
+	typedef std::uint32_t			sql_mediumint_unsigned;
+	typedef std::int64_t			sql_bigint;
+	typedef std::uint64_t			sql_bigint_unsigned;
+#elif defined(LIBTABULA_HAVE_BOOST_CSTDINT)
+	// Next best case: found the Boost emulation for this C++11 feature
+	typedef tiny_int<boost::int8_t>	sql_tinyint;
+	typedef tiny_int<boost::uint8_t>sql_tinyint_unsigned;
+	typedef boost::int16_t			sql_smallint;
+	typedef boost::uint16_t			sql_smallint_unsigned;
+	typedef boost::int32_t			sql_int;
+	typedef boost::uint32_t			sql_int_unsigned;
+	typedef boost::int32_t			sql_mediumint;
+	typedef boost::uint32_t			sql_mediumint_unsigned;
+	typedef boost::int64_t			sql_bigint;
+	typedef boost::uint64_t			sql_bigint_unsigned;
+#elif defined(LIBTABULA_HAVE_STDINT_H)
+	// We only found the C99 version of this header, so assume we can
+	// use it in C++, allowing us to get this feature semi-portably.
+	typedef tiny_int<int8_t>		sql_tinyint;
+	typedef tiny_int<uint8_t>		sql_tinyint_unsigned;
+	typedef int16_t					sql_smallint;
+	typedef uint16_t				sql_smallint_unsigned;
+	typedef int32_t					sql_int;
+	typedef uint32_t				sql_int_unsigned;
+	typedef int32_t					sql_mediumint;
+	typedef uint32_t				sql_mediumint_unsigned;
+	typedef int64_t					sql_bigint;
+	typedef uint64_t				sql_bigint_unsigned;
 #else
 	// Assume a system where C99 is supported in C++ in advance of
 	// actual standardization, so we can do this semi-portably.

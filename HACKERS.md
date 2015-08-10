@@ -10,9 +10,14 @@ Code Repository Access
 libtabula 4.0 and newer uses the [Fossil][1] [distributed version
 control system][2].
 
-To clone the code repository, say:
+To clone the code repository anonymously, say:
 
     $ fossil clone http://libtabula.org/code libtabula.fossil
+
+If you have a developer account on libtabula.org's Fossil instance, just
+add your username to the URL like so:
+
+    $ fossil clone http://username@libtabula.org/code libtabula.fossil
 
 That will get you a file called `libtabula.fossil` containing the
 full history of libtabula from just after the MySQL++ 3.2.1 fork.
@@ -29,7 +34,7 @@ Then to "open" the repo clone so you can hack on it, say:
     $ cd libtabula
     $ fossil open ../libtabula.fossil
 
-As with libtabula.fossil, you can call the working directory
+As with `libtabula.fossil`, you can call the working directory
 anythihg you like.  I actually prefer a tree like this:
 
     museum/                    # Where fossils are kept
@@ -37,6 +42,10 @@ anythihg you like.  I actually prefer a tree like this:
     src/                       # Working tree for software projects
         libtabula/
             skull/             # Fossil head, get it?   I crack me up.
+            trunk -> skull/    # Alias to match Fossil branch naming
+                build/         # Build directory for the skull/trunk
+            some-branch/       # Separately-opened working branch
+                build/         # Build directory for the working branch
             4.0.0/             # Release branch checkout
         mysql++/
             head/              # Gna! MySQL++ svn trunk checkout
@@ -50,6 +59,27 @@ can say `fossil settings autosync off`.)  If you don't have such
 permissions, you just modify your local copy, then have to merge
 in upstream changes when updating your local clone.
 
+Developers are expected to make all nontrivial changes on a branch,
+rather than check such changes directly into the trunk.  Once we have
+discussed the change on the mailing list and resolved any isssues with
+the experimental branch, it will be merged into the trunk.
+
+Creating a branch in Fossil is scary-simple, to the point that those
+coming from other version control systems may ask, "Is that really all
+there is to it?"  Yes, really, this is it:
+
+    $ fossil checkin --branch new-branch-name
+
+That is to say, you make your changes as you normally would; then when
+you go to check them in, you give the `--branch` option to the
+`ci/checkin` command to put the changes on a new branch, rather than add
+them to the same branch the changes were made against.
+
+At some point, the trunk version becomes the next major version.  Stable
+versions become either tags or branches.  (The only difference between
+tags and branches in Fossil is that branches may have subsequent changes
+made to them.)
+
 
 Bootstrapping the Library
 ----
@@ -59,6 +89,30 @@ bootstrap the library to get it to build from a Subversion checkout,
 you can forget all that.  CMake takes care of that for us now.  Just
 use the normal build procedures documented in `README-*.md`.
 
+
+CMake Build Directories
+----
+
+Although the Bakefile + Autotools based build system allowed separate
+source and object file trees, it was not the standard way of working on
+MySQL++. If you say something like `./bootsrap && make && make install`,
+you get what is called an in-tree build.
+
+CMake works best with out-of-tree builds.  Therefore, the standard
+commands after you have "opened" the libtabula Fossil repository are:
+
+    $ mkdir build
+    $ cd build
+    $ cmake ..
+
+Once CMake has generated the `Makefiles`, you can run `make` as normal.
+
+You may prefer parallel build and source trees to the above nested
+scheme.  This works as you would expect:
+
+    $ mkdir ../build
+    $ cd ../build
+    $ cmake ../trunk
 
 
 On Manipulating the Build System Source Files
@@ -80,29 +134,40 @@ file.
 Submitting Patches
 ----
 
-If you wish to submit a patch to the library, please send it to [the
-libtabula mailing list][11], or [create a ticket][12] and attach the
-patch to the ticket.  We want patches in unified diff format.
+The simplest way to send a change to libtabula is to say this after
+developing your change against the trunk of libtabula:
 
-The easiest way to get a unified diff is to check out a copy of the
-current libtabula tree as described above.  Then make your change,
-and ask Fossil to generate the diff for you:
+    $ fossil diff > my-changes.patch
 
-    $ fossil diff > mychange.patch
+Then attach that file to a new [mailing list][11] message.
 
-If your patch adds new files to the distribution, you can say
-`fossil add newfile` before you do the diff, which will include the
-contents of that file in the patch.  (You can do this even when
-you've checked out the tree anonymously.)  Then say `fossil revert
-newfile` to make Fossil forget about the new file.
+If your change is more than a small patch, `fossil diff` might not
+incorporate all of the changes you have made. The old unified `diff`
+format can't encode branch names, file renamings, file deletions, tags,
+checkin comments, and other Fossil-specific information. For such
+changes, it is better to send a Fossil bundle:
 
-Please don't submit patches against branches of the repository or
-against released versions. libtabula often drifts enough during
-development that a patch against anything other than the tip of the
-trunk won't apply cleanly.  We have historically not had separate
-"development" and "stable" branches; all development happens on the
-trunk, so that the branches you find in the libtabula Fossil repo
-are really just release tags, not true branch points.
+    $ fossil checkin --branch my-changes
+    $ fossil bundle export --branch my-changes my-changes.bundle
+
+The checkin command will fail on the "autosync" step if you did an
+anonymous checkout of the libtabula Fossil repo, but your changes will
+get stored in a new branch.  The "bundle" feature of Fossil takes that
+branch and packs just your changes up into a file that one of the
+developers can temporarily attach to their local repository, then apply
+if they approve the changes.
+
+Because you are working on a branch on your private copy of the
+libtabula Fossil repository, you are free to make as many checkins as
+you like on the new branch before giving the `bundle export` command.
+
+Contributors with a history of providing quality patches/bundles can
+apply to get a developer login on [the repository][14].
+
+Please make your patches or experimental branch bundles against the tip
+of the current trunk.  libtabula often drifts enough during development
+that a patch against a stable release may not apply to the trunk cleanly
+otherwise.
 
 
 The libtabula Code Style
@@ -299,3 +364,4 @@ for your platform.
 [11]: http://libtabula.org/ml/
 [12]: http://libtabula.org/code/tktnew
 [13]: http://linux.die.net/man/1/indent
+[14]: http://libtabula.org/code/
