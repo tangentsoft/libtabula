@@ -62,7 +62,10 @@ namespace libtabula {
 	typedef ulonglong				sql_bigint_unsigned;
 #else
 	// Assume a system where C99 is supported in C++ in advance of
-	// actual standardization, so we can do this portably.
+	// actual standardization, so we can do this semi-portably.
+	//
+	// FIXME: The proper way to do this is to also test for <cstdint>,
+	// added in C++11, which lets us use std::uint32_t and such.
 	typedef tiny_int<int8_t>		sql_tinyint;
 	typedef tiny_int<uint8_t>		sql_tinyint_unsigned;
 	typedef int16_t					sql_smallint;
