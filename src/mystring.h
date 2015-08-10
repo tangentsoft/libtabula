@@ -3,10 +3,10 @@
 /// class, used for holding data received from the database server.
 
 /***********************************************************************
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2008 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.txt file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
+ and © 2004-2008, 2015 by Educational Technology Resources, Inc.
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -183,7 +183,7 @@ public:
 
 	/// \brief Full constructor.
 	///
-	/// \param str the string this object represents, or 0 for SQL null
+	/// \param str the string this object represents
 	/// \param len the length of the string; embedded nulls are legal
 	/// \param type MySQL type information for data within str
 	/// \param is_null string represents a SQL null, not literal data
@@ -202,7 +202,7 @@ public:
 
 	/// \brief C++ string version of full ctor
 	///
-	/// \param str the string this object represents, or 0 for SQL null
+	/// \param str the string this object represents
 	/// \param type MySQL type information for data within str
 	/// \param is_null string represents a SQL null, not literal data
 	///
@@ -217,7 +217,7 @@ public:
 
 	/// \brief Null-terminated C string version of full ctor
 	///
-	/// \param str the string this object represents, or 0 for SQL null
+	/// \param str the string this object represents
 	/// \param type MySQL type information for data within str
 	/// \param is_null string represents a SQL null, not literal data
 	///
@@ -226,6 +226,24 @@ public:
 			FieldType::Base type = FieldType::ft_text,
 			bool is_null = false) :
 	buffer_(new SQLBuffer(str, static_cast<size_type>(strlen(str)),
+			type, is_null))
+	{
+	}
+
+	/// \brief String-to-T conversion ctor
+	///
+	/// This constructor is mainly used by SSQLS, since it knows the
+	/// expected C++ data type of a given SQL value, so it is calling
+	/// this ctor to save both the raw SQL string data and that type.
+	///
+	/// \param str the string this object represents
+	/// \param type C++ type information for data within str
+	/// \param is_null string represents a SQL null, not literal data
+	///
+	/// The resulting object will contain a copy of the string buffer.
+	explicit String(const std::string& str, const std::type_info& type,
+			bool is_null = false) :
+	buffer_(new SQLBuffer(str.data(), static_cast<size_type>(str.length()),
 			type, is_null))
 	{
 	}
