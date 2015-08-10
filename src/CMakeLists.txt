@@ -75,4 +75,4 @@ add_library(tabula SHARED
     vallist.cpp
     wnp_connection.cpp
 )
-target_link_libraries(tabula mysqlclient_r)
+target_link_libraries(tabula ${MYSQL_C_API_LIBRARY})
