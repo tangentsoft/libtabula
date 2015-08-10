@@ -66,7 +66,6 @@
 # - For each success above with CMake < 2.6, lower minimum requirement
 #
 # - Convert non-core top-level targets
-#   - tags
 #   - dist/rpm/deb/ebuild... via CPack
 #   - abicheck
 #
@@ -142,3 +141,17 @@ add_subdirectory(examples)
 
 add_custom_target(dtest
 	COMMAND ${PROJECT_SOURCE_DIR}/dtest -u test -p test)
+
+# If ctags is present, add a top-level "tags" target which includes all
+# files in both the build and source versions of src/*.  Conditional
+# since it isn't always present on *ix, and almost never on Windows.
+find_program(CTAGS_PATH ctags)
+if (CTAGS_PATH)
+    message(STATUS "Found ctags: ${CTAGS_PATH}")
+	set_source_files_properties(tags PROPERTIES GENERATED true)
+	add_custom_target(tags 
+			COMMAND ctags -R --c++-kinds=+p --fields=+iaS --extra=+q 
+				${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
+			COMMENT "Generating tags file..."
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+endif(CTAGS_PATH)
