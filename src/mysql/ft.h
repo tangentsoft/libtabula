@@ -3,7 +3,7 @@
 
 /***********************************************************************
  Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
- and © 2004-2008, 2014 by Educational Technology Resources, Inc.
+ and © 2004-2008, 2014-2015 by Educational Technology Resources, Inc.
  Others may also hold copyrights on code in this file.  See the
  CREDITS.txt file in the top directory of the distribution for details.
 
@@ -81,32 +81,11 @@ public:
 	/// \brief Create object as a copy of another
 	MySQLFieldType(const MySQLFieldType& other) : FieldType(other) { } 
 
-	/// \brief Returns an implementation-defined name of the C++ type.
+private:
+	/// \brief Return the FieldType::Base value corresponding to a given
+	/// MySQL C API data type enum value.
 	///
-	/// Returns the name that would be returned by typeid().name() for
-	/// the C++ type associated with the SQL type.
-	const char* name() const { return type_info().c_type_->name(); }
-
-	/// \brief Returns the name of the SQL type.
-	///
-	/// Returns the SQL name for the type.
-	const char* sql_name() const { return type_info().sql_name_; }
-
-	/// \brief Returns the type_info for the C++ type associated with
-	/// the SQL type.
-	///
-	/// Returns the C++ type_info record corresponding to the SQL type.
-	const std::type_info& c_type() const { return *type_info().c_type_; }
-
-	/// \brief Return an index into MySQLFieldType::types array given
-	/// MySQL type information.
-	///
-	/// This function is used in mapping from MySQL type information
-	/// (a type enum, and flags indicating whether it is unsigned and
-	/// whether it can be 'null') to the closest C++ types available
-	/// within libtabula.  Notice that nulls have to be handled specially:
-	/// the SQL null concept doesn't map directly onto the C++ type
-	/// system.  See null.h for details.
+	/// \internal An implementation detail of the enum_field_types ctor.
 	///
 	/// \param t Underlying MySQL C API type constant
 	static Base base_type(enum_field_types t);

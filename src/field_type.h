@@ -159,34 +159,30 @@ public:
 	///
 	/// Returns the name that would be returned by typeid().name() for
 	/// the C++ type associated with the SQL type.
-	///
-	/// FIXME: Shouldn't this be an abstract method?  Can we require
-	/// that only the DB driver create instances of our driver-specific
-	/// subclass, or must there be a way to create base class instances,
-	/// even if it's bogus, as our return value here shows?
-	virtual const char* name() const { return 0; }
+	const char* name() const { return type_info().c_type_->name(); }
 
 	/// \brief Returns the name of the SQL type.
 	///
 	/// Returns the SQL name for the type.
-	///
-	/// FIXME: Same problem as with name()
-	virtual const char* sql_name() const { return 0; }
+	const char* sql_name() const { return type_info().sql_name_; }
 
 	/// \brief Returns the type_info for the C++ type associated with
 	/// the SQL type.
 	///
 	/// Returns the C++ type_info record corresponding to the SQL type.
-	///
-	/// FIXME: Same problem as with name()
-	virtual const std::type_info& c_type() const { return typeid(void); }
+	const std::type_info& c_type() const { return *type_info().c_type_; }
 
-	/// \brief Returns the type_info for the C++ type inside of the
-	/// libtabula::Null type.
+	/// \brief Returns the libtabula data type enum for this object.
 	///
-	/// Returns the type_info for the C++ type inside the libtabula::Null
-	/// type.  If the type is not Null then this is the same as c_type().
-	virtual const FieldType::Base base_type() const { return base_type_; }
+	/// Our return value may simply be the Base value we got in our
+	/// ctor, but it could also be a conversion from another form,
+	/// either C++ type info via our std::type_info ctor or C DBMS
+	/// API type info from a subclass ctor.
+	///
+	/// This does not encode null-ness.
+	///
+	/// FIXME: Is this another YAGNI case?  Who calls it, and why?
+	const Base base_type() const { return base_type_; }
 
 	/// \brief Returns true if the SQL type is of a type that needs to
 	/// be quoted for syntactically correct SQL.
