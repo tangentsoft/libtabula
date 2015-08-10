@@ -4,7 +4,8 @@
 #
 # Created 2014.08.21 by Warren Young
 #
-# Copyright © 2014 by Warren Young
+# Copyright © 2014-2015 by Warren Young
+# Copyright © 2015 by Educational Technology Resources, Inc.
 #
 # Others may also hold copyrights on code in this file.  See the
 # CREDITS.md file in the top directory of the distribution for details.
@@ -37,75 +38,24 @@ endif()
 
 add_library(ltexcomm STATIC printdata.cpp)
 
-add_executable(cgi_jpeg cgi_jpeg.cpp)
-target_link_libraries(cgi_jpeg tabula mysqlclient_r)
+macro(add_example_executable basename)
+	add_executable(${basename} ${basename}.cpp)
+	target_link_libraries(${basename} ltexcomm tabula ${MYSQL_C_API_LIBRARY})
+	if (CMAKE_USE_PTHREADS_INIT)
+		target_link_libraries(${basename} pthread)
+	endif()
+endmacro(add_example_executable)
 
-add_executable(cpool cpool.cpp)
-target_link_libraries(cpool tabula mysqlclient_r)
+foreach(basename resetdb
 
-add_executable(dbinfo dbinfo.cpp)
-target_link_libraries(dbinfo tabula mysqlclient_r)
+				 cgi_jpeg load_jpeg
 
-add_executable(deadlock deadlock.cpp)
-target_link_libraries(deadlock tabula mysqlclient_r)
+				 simple1 simple2 simple3
+				 ssqls1 ssqls2 ssqls3 ssqls4 ssqls5 ssqls6
+				 tquery1 tquery2 tquery3 tquery4
 
-add_executable(fieldinf fieldinf.cpp)
-target_link_libraries(fieldinf tabula mysqlclient_r)
-
-add_executable(for_each for_each.cpp)
-target_link_libraries(for_each tabula mysqlclient_r)
-
-add_executable(load_jpeg load_jpeg.cpp)
-target_link_libraries(load_jpeg tabula mysqlclient_r)
-
-add_executable(multiquery multiquery.cpp)
-target_link_libraries(multiquery tabula mysqlclient_r)
-
-add_executable(resetdb resetdb.cpp)
-target_link_libraries(resetdb tabula mysqlclient_r)
-
-add_executable(simple1 simple1.cpp)
-target_link_libraries(simple1 tabula mysqlclient_r)
-
-add_executable(simple2 simple2.cpp)
-target_link_libraries(simple2 tabula mysqlclient_r)
-
-add_executable(simple3 simple3.cpp)
-target_link_libraries(simple3 tabula mysqlclient_r)
-
-add_executable(ssqls1 ssqls1.cpp)
-target_link_libraries(ssqls1 tabula mysqlclient_r)
-
-add_executable(ssqls2 ssqls2.cpp)
-target_link_libraries(ssqls2 ltexcomm tabula mysqlclient_r)
-
-add_executable(ssqls3 ssqls3.cpp)
-target_link_libraries(ssqls3 ltexcomm tabula mysqlclient_r)
-
-add_executable(ssqls4 ssqls4.cpp)
-target_link_libraries(ssqls4 ltexcomm tabula mysqlclient_r)
-
-add_executable(ssqls5 ssqls5.cpp)
-target_link_libraries(ssqls5 tabula mysqlclient_r)
-
-add_executable(ssqls6 ssqls6.cpp)
-target_link_libraries(ssqls6 ltexcomm tabula mysqlclient_r)
-
-add_executable(store_if store_if.cpp)
-target_link_libraries(store_if ltexcomm tabula mysqlclient_r)
-
-add_executable(tquery1 tquery1.cpp)
-target_link_libraries(tquery1 ltexcomm tabula mysqlclient_r)
-
-add_executable(tquery2 tquery2.cpp)
-target_link_libraries(tquery2 ltexcomm tabula mysqlclient_r)
-
-add_executable(tquery3 tquery3.cpp)
-target_link_libraries(tquery3 tabula mysqlclient_r)
-
-add_executable(tquery4 tquery4.cpp)
-target_link_libraries(tquery4 ltexcomm tabula mysqlclient_r)
-
-add_executable(transaction transaction.cpp)
-target_link_libraries(transaction ltexcomm tabula mysqlclient_r)
-
+				 cpool dbinfo deadlock fieldinf for_each multiquery
+				 store_if transaction
+				 )
+	add_example_executable(${basename})
+endforeach(basename)

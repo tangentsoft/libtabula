@@ -3,7 +3,8 @@
 #
 # Created 2014.08.21 by Warren Young
 #
-# Copyright © 2014 by Warren Young
+# Copyright © 2014-2015 by Warren Young
+# Copyright © 2015 by Educational Technology Resources, Inc.
 #
 # Others may also hold copyrights on code in this file.  See the
 # CREDITS.md file in the top directory of the distribution for details.
@@ -77,14 +78,13 @@ add_library(tabula SHARED
     vallist.cpp
     wnp_connection.cpp
 )
-target_link_libraries(tabula mysqlclient_r)
 
 # Add a top-level "tags" target which includes all files in both
 # the build and source versions of src/*.
 set_source_files_properties(tags PROPERTIES GENERATED true)
 add_custom_command(OUTPUT tags
     COMMAND ctags -R --c++-kinds=+p --fields=+iaS --extra=+q 
-		${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
+       ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND ln -sf ${CMAKE_CURRENT_BINARY_DIR}/tags ${CMAKE_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -92,6 +92,8 @@ add_custom_command(OUTPUT tags
 # is available, else it will fail to build on Windows.
 find_program(CTAGS_PATH ctags)
 if(CTAGS_PATH)
-	message(STATUS "Found ctags: ${CTAGS_PATH}")
-	add_dependencies(tabula tags)
+    message(STATUS "Found ctags: ${CTAGS_PATH}")
+    add_dependencies(tabula tags)
 endif(CTAGS_PATH)
+
+target_link_libraries(tabula ${MYSQL_C_API_LIBRARY})
