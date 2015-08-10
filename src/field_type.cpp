@@ -108,6 +108,8 @@ const FTTI FieldType::types_[] = {
 	FTTI("VARCHAR NOT NULL", typeid(sql_varchar), FieldType::ft_text),
 	FTTI("CHAR NOT NULL", typeid(sql_char), 
 			FieldType::ft_text, FieldType::tf_default, false),
+	FTTI("NULL NOT NULL", typeid(void),
+			FieldType::ft_null, FieldType::tf_default),
 
 	// Nullable versions of above
 	FTTI("TINYINT NULL", typeid(Null<sql_tinyint>),
@@ -168,7 +170,9 @@ const FTTI FieldType::types_[] = {
 	FTTI("VARCHAR NULL", typeid(Null<sql_varchar>),
 			FieldType::ft_text, FieldType::tf_null),
 	FTTI("CHAR NULL", typeid(Null<sql_char>),
-			FieldType::ft_text, FieldType::tf_null, false)
+			FieldType::ft_text, FieldType::tf_null, false),
+	FTTI("NULL NOT NULL", typeid(Null<void>),
+			FieldType::ft_null, FieldType::tf_default),
 };
 
 const int FieldType::num_types_ =

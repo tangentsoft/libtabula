@@ -67,6 +67,7 @@ public:
 		ft_unsupported,
 
 		// Data types pretty much every SQL implementation knows
+		ft_null,		// data type of SQL NULL values; not used as col type!
 		ft_integer,
 		ft_real,		// a.k.a float, double...
 		ft_text,
