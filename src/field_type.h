@@ -181,8 +181,6 @@ public:
 	/// API type info from a subclass ctor.
 	///
 	/// This does not encode null-ness.
-	///
-	/// FIXME: Is this another YAGNI case?  Who calls it, and why?
 	const Base base_type() const { return base_type_; }
 
 	/// \brief Returns true if the SQL type is of a type that needs to
@@ -237,6 +235,8 @@ public:
 		{
 		}
 
+		unsigned short id() const { return (flags_ << 8) | base_type_; }
+
 		bool is_default() const { return flags_ == FieldType::tf_default; }
 		bool is_null() const { return flags_ & FieldType::tf_null; }
 		bool is_unsigned() const { return flags_ & FieldType::tf_unsigned; }
@@ -245,7 +245,7 @@ public:
 		const std::type_info* c_type_;
 		const Base base_type_;
 		const unsigned int flags_;
-		const bool best_guess_;
+		const bool best_guess_;		// YAGNI?  Unused by TypeMap::operator[]
 	};
 
 protected:
@@ -270,23 +270,10 @@ private:
 					const std::type_info* rhs) const
 					{ return lhs < rhs; }
 		};
-
 		typedef std::map<const std::type_info*, size_t, Cmp> map_type;
 
 		TypeMap();
-
-		map_type::mapped_type operator [](const std::type_info& ti) const
-		{
-			map_type::const_iterator it = map_.find(&ti);
-			if (it != map_.end()) {
-				return it->second;
-			}
-			else {
-				std::ostringstream outs;
-				outs << "Failed to find libtabula type info for " << ti.name();
-				throw TypeLookupFailed(outs.str());
-			}
-		}
+		map_type::mapped_type operator [](const std::type_info& ti) const;
 
 		map_type map_;
 	};

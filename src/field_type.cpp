@@ -186,9 +186,24 @@ const FieldType::TypeMap FieldType::type_map_;
 FieldType::TypeMap::TypeMap()
 {
 	for (map_type::mapped_type i = 0; i < num_types_; ++i) {
-		if (FieldType::types_[i].best_guess_) {
-			map_[FieldType::types_[i].c_type_] = i;
-		}
+		map_[FieldType::types_[i].c_type_] = i;
+	}
+}
+
+FieldType::TypeMap::map_type::mapped_type 
+FieldType::TypeMap::operator [](const std::type_info& ti) const
+{
+	// Try for an exact match on the C++ std::type
+	map_type::const_iterator it = map_.find(&ti);
+	if (it != map_.end()) {
+		return it->second;
+	}
+	else {
+		// Can't find it.  Caller must be passing a C++ data type that
+		// simply isn't represented in the types_ array.  Wah.
+		std::ostringstream outs;
+		outs << "Failed to find libtabula type info for " << ti.name();
+		throw TypeLookupFailed(outs.str());
 	}
 }
 
