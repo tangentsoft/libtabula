@@ -145,6 +145,24 @@ point, 5.0.
 
 *   Database independence:
 
+    -   Row remains implemented in terms of MYSQL_ROW.  Need to do some
+        kind of pimpl trick here to push that off into the DBDriver.
+
+    -   Field is entirely MySQL-specific.  Rather than pimpl it,
+        consider just ripping it out, along with the only other
+        users of it, Result::fetch_field*().  All it does is let the
+        library user iterate through a thinly-wrapped version of the
+        C API's view of the table schema.  That's basically a form
+        of reflection, which isn't really a key use case for libtabula.
+
+        If we want to expose schema exploration, we can do so via
+        DBDriver.
+
+        Having done this, maybe rename String to Field, since that
+        makes Row a vector-of-Field, which makes more sense than
+        vector-of-String.  It also solves the old quandary about the
+        difference between libtabula::String vs std::string.
+
     -   Pass a single string parameter to Connection::connect(), being
         a URL scheme which we pass to DBDriver::create(), a virtual
         ctor which looks at the bit before the colon to figure out which
@@ -192,7 +210,7 @@ point, 5.0.
 
     -   Must create at least two other DBDriver subclasses to
         ensure base class is reusable before releasing v4.0.
-        PostgresDriver and SqlLiteDriver?
+        PostgresDriver and SQLiteDriver?
 
     -   Templatize all classes that use DBDriver interface with the
         DB driver type.  This lets you specify the driver type to use
