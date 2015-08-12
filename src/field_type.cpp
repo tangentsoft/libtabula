@@ -38,6 +38,9 @@ using namespace std;
 
 namespace libtabula {
 
+#if !defined(DOXYGEN_IGNORE)
+// Doxygen will not generate documentation for this section.
+
 // This table maps generic C++ type information to libtabula specific
 // type information.  It is part of the transformation that allows
 // plain C++ data types to map to driver-specific data types.
@@ -62,150 +65,222 @@ namespace libtabula {
 //
 // This table is inverted for reverse lookup as the static type_map_
 // object.
-typedef FieldType::TypeInfo FTTI;
-const FTTI FieldType::types_[] = {
+typedef detail::AnnotatedFT AFT;
+static const AFT types_[] = {
 	// Basic non-nullable type set
-	FTTI("TINYINT NOT NULL", typeid(sql_tinyint),
+	AFT("TINYINT NOT NULL", typeid(sql_tinyint),
 			FieldType::ft_integer, FieldType::tf_default, false),
-	FTTI("TINYINT UNSIGNED NOT NULL", typeid(sql_tinyint_unsigned),
+	AFT("TINYINT UNSIGNED NOT NULL", typeid(sql_tinyint_unsigned),
 			FieldType::ft_integer, FieldType::tf_unsigned, false),
-	FTTI("SMALLINT NOT NULL", typeid(sql_smallint),
+	AFT("SMALLINT NOT NULL", typeid(sql_smallint),
 			FieldType::ft_integer, FieldType::tf_default, false),
-	FTTI("SMALLINT UNSIGNED NOT NULL", typeid(sql_smallint_unsigned),
+	AFT("SMALLINT UNSIGNED NOT NULL", typeid(sql_smallint_unsigned),
 			FieldType::ft_integer, FieldType::tf_unsigned, false),
-	FTTI("MEDIUMINT NOT NULL", typeid(sql_mediumint),
+	AFT("MEDIUMINT NOT NULL", typeid(sql_mediumint),
 			FieldType::ft_integer, FieldType::tf_unsigned, false),
-	FTTI("MEDIUMINT UNSIGNED NOT NULL", typeid(sql_mediumint_unsigned),
+	AFT("MEDIUMINT UNSIGNED NOT NULL", typeid(sql_mediumint_unsigned),
 			FieldType::ft_integer, FieldType::tf_unsigned, false),
-	FTTI("INT NOT NULL", typeid(sql_int), FieldType::ft_integer),
-	FTTI("INT UNSIGNED NOT NULL", typeid(sql_int_unsigned),
+	AFT("INT NOT NULL", typeid(sql_int), FieldType::ft_integer),
+	AFT("INT UNSIGNED NOT NULL", typeid(sql_int_unsigned),
 			FieldType::ft_integer, FieldType::tf_unsigned),
-	FTTI("BIGINT NOT NULL", typeid(sql_bigint), 
+	AFT("BIGINT NOT NULL", typeid(sql_bigint), 
 			FieldType::ft_integer, FieldType::tf_default, false),
-	FTTI("BIGINT UNSIGNED NOT NULL", typeid(sql_bigint_unsigned),
+	AFT("BIGINT UNSIGNED NOT NULL", typeid(sql_bigint_unsigned),
 			FieldType::ft_integer, FieldType::tf_unsigned, false),
-	FTTI("FLOAT NOT NULL", typeid(sql_float), 
+	AFT("FLOAT NOT NULL", typeid(sql_float), 
 			FieldType::ft_real, FieldType::tf_default, false),
-	FTTI("FLOAT UNSIGNED NOT NULL", typeid(sql_float),
+	AFT("FLOAT UNSIGNED NOT NULL", typeid(sql_float),
 			FieldType::ft_real, FieldType::tf_unsigned, false),
-	FTTI("DOUBLE NOT NULL", typeid(sql_double), FieldType::ft_real),
-	FTTI("DOUBLE UNSIGNED NOT NULL", typeid(sql_double),
+	AFT("DOUBLE NOT NULL", typeid(sql_double), FieldType::ft_real),
+	AFT("DOUBLE UNSIGNED NOT NULL", typeid(sql_double),
 			FieldType::ft_real, FieldType::tf_unsigned),
-	FTTI("DECIMAL NOT NULL", typeid(sql_decimal), FieldType::ft_decimal),
-	FTTI("TIMESTAMP NOT NULL", typeid(sql_timestamp), FieldType::ft_timestamp),
-	FTTI("DATE NOT NULL", typeid(sql_date), FieldType::ft_date),
-	FTTI("TIME NOT NULL", typeid(sql_time), FieldType::ft_time),
-	FTTI("DATETIME NOT NULL", typeid(sql_datetime), FieldType::ft_datetime),
-	FTTI("ENUM NOT NULL", typeid(sql_enum), FieldType::ft_enum),
-	FTTI("SET NOT NULL", typeid(sql_set), FieldType::ft_set),
-	FTTI("TINYBLOB NOT NULL", typeid(sql_tinyblob),
+	AFT("DECIMAL NOT NULL", typeid(sql_decimal), FieldType::ft_decimal),
+	AFT("TIMESTAMP NOT NULL", typeid(sql_timestamp), FieldType::ft_timestamp),
+	AFT("DATE NOT NULL", typeid(sql_date), FieldType::ft_date),
+	AFT("TIME NOT NULL", typeid(sql_time), FieldType::ft_time),
+	AFT("DATETIME NOT NULL", typeid(sql_datetime), FieldType::ft_datetime),
+	AFT("ENUM NOT NULL", typeid(sql_enum), FieldType::ft_enum),
+	AFT("SET NOT NULL", typeid(sql_set), FieldType::ft_set),
+	AFT("TINYBLOB NOT NULL", typeid(sql_tinyblob),
 			FieldType::ft_blob, FieldType::tf_default, false),
-	FTTI("MEDIUMBLOB NOT NULL", typeid(sql_mediumblob), 
+	AFT("MEDIUMBLOB NOT NULL", typeid(sql_mediumblob), 
 			FieldType::ft_blob, FieldType::tf_default, false),
-	FTTI("LONGBLOB NOT NULL", typeid(sql_longblob),
+	AFT("LONGBLOB NOT NULL", typeid(sql_longblob),
 			FieldType::ft_blob, FieldType::tf_default, false),
-	FTTI("BLOB NOT NULL", typeid(sql_blob), FieldType::ft_blob),
-	FTTI("VARCHAR NOT NULL", typeid(sql_varchar), FieldType::ft_text),
-	FTTI("CHAR NOT NULL", typeid(sql_char), 
+	AFT("BLOB NOT NULL", typeid(sql_blob), FieldType::ft_blob),
+	AFT("VARCHAR NOT NULL", typeid(sql_varchar), FieldType::ft_text),
+	AFT("CHAR NOT NULL", typeid(sql_char), 
 			FieldType::ft_text, FieldType::tf_default, false),
-	FTTI("NULL NOT NULL", typeid(void),
+	AFT("NULL NOT NULL", typeid(void),
 			FieldType::ft_null, FieldType::tf_default),
 
 	// Nullable versions of above
-	FTTI("TINYINT NULL", typeid(Null<sql_tinyint>),
+	AFT("TINYINT NULL", typeid(Null<sql_tinyint>),
 			FieldType::ft_integer, FieldType::tf_null, false),
-	FTTI("TINYINT UNSIGNED NULL", typeid(Null<sql_tinyint_unsigned>),
+	AFT("TINYINT UNSIGNED NULL", typeid(Null<sql_tinyint_unsigned>),
 			FieldType::ft_integer,
 			FieldType::tf_null | FieldType::tf_unsigned, false),
-	FTTI("SMALLINT NULL", typeid(Null<sql_smallint>),
+	AFT("SMALLINT NULL", typeid(Null<sql_smallint>),
 			FieldType::ft_integer, FieldType::tf_null, false),
-	FTTI("SMALLINT UNSIGNED NULL", typeid(Null<sql_smallint_unsigned>),
+	AFT("SMALLINT UNSIGNED NULL", typeid(Null<sql_smallint_unsigned>),
 			FieldType::ft_integer,
 			FieldType::tf_null | FieldType::tf_unsigned, false),
-	FTTI("MEDIUMINT NULL", typeid(Null<sql_mediumint>),
+	AFT("MEDIUMINT NULL", typeid(Null<sql_mediumint>),
 			FieldType::ft_integer, FieldType::tf_null, false),
-	FTTI("MEDIUMINT UNSIGNED NULL", typeid(Null<sql_mediumint_unsigned>), 
+	AFT("MEDIUMINT UNSIGNED NULL", typeid(Null<sql_mediumint_unsigned>), 
 			FieldType::ft_integer,
 			FieldType::tf_null | FieldType::tf_unsigned, false),
-	FTTI("INT NULL", typeid(Null<sql_int>),
+	AFT("INT NULL", typeid(Null<sql_int>),
 			FieldType::ft_integer, FieldType::tf_null),
-	FTTI("INT UNSIGNED NULL", typeid(Null<sql_int_unsigned>),
+	AFT("INT UNSIGNED NULL", typeid(Null<sql_int_unsigned>),
 			FieldType::ft_integer, FieldType::tf_null | FieldType::tf_unsigned),
-	FTTI("BIGINT NULL", typeid(Null<sql_bigint>),
+	AFT("BIGINT NULL", typeid(Null<sql_bigint>),
 			FieldType::ft_integer, FieldType::tf_null, false),
-	FTTI("BIGINT UNSIGNED NULL", typeid(Null<sql_bigint_unsigned>),
+	AFT("BIGINT UNSIGNED NULL", typeid(Null<sql_bigint_unsigned>),
 			FieldType::ft_integer,
 			FieldType::tf_null | FieldType::tf_unsigned, false),
-	FTTI("FLOAT NULL", typeid(Null<sql_float>),
+	AFT("FLOAT NULL", typeid(Null<sql_float>),
 			FieldType::ft_real, FieldType::tf_null, false),
-	FTTI("FLOAT UNSIGNED NULL", typeid(Null<sql_float>),
+	AFT("FLOAT UNSIGNED NULL", typeid(Null<sql_float>),
 			FieldType::ft_real,
 			FieldType::tf_null | FieldType::tf_unsigned, false),
-	FTTI("DOUBLE NULL", typeid(Null<sql_double>),
+	AFT("DOUBLE NULL", typeid(Null<sql_double>),
 			FieldType::ft_real, FieldType::tf_null),
-	FTTI("DOUBLE UNSIGNED NULL", typeid(Null<sql_double>),
+	AFT("DOUBLE UNSIGNED NULL", typeid(Null<sql_double>),
 			FieldType::ft_real, FieldType::tf_null | FieldType::tf_unsigned),
-	FTTI("DECIMAL NULL", typeid(Null<sql_decimal>),
+	AFT("DECIMAL NULL", typeid(Null<sql_decimal>),
 			FieldType::ft_decimal, FieldType::tf_null),
-	FTTI("TIMESTAMP NULL", typeid(Null<sql_timestamp>),
+	AFT("TIMESTAMP NULL", typeid(Null<sql_timestamp>),
 			FieldType::ft_timestamp),
-	FTTI("DATE NULL", typeid(Null<sql_date>),
+	AFT("DATE NULL", typeid(Null<sql_date>),
 			FieldType::ft_date, FieldType::tf_null),
-	FTTI("TIME NULL", typeid(Null<sql_time>),
+	AFT("TIME NULL", typeid(Null<sql_time>),
 			FieldType::ft_time, FieldType::tf_null),
-	FTTI("DATETIME NULL", typeid(Null<sql_datetime>),
+	AFT("DATETIME NULL", typeid(Null<sql_datetime>),
 			FieldType::ft_datetime, FieldType::tf_null),
-	FTTI("ENUM NULL", typeid(Null<sql_enum>),
+	AFT("ENUM NULL", typeid(Null<sql_enum>),
 			FieldType::ft_enum, FieldType::tf_null),
-	FTTI("SET NULL", typeid(Null<sql_set>),
+	AFT("SET NULL", typeid(Null<sql_set>),
 			FieldType::ft_set, FieldType::tf_null),
-	FTTI("TINYBLOB NULL", typeid(Null<sql_tinyblob>),
+	AFT("TINYBLOB NULL", typeid(Null<sql_tinyblob>),
 			FieldType::ft_blob, FieldType::tf_null, false),
-	FTTI("MEDIUMBLOB NULL", typeid(Null<sql_mediumblob>),
+	AFT("MEDIUMBLOB NULL", typeid(Null<sql_mediumblob>),
 			FieldType::ft_blob, FieldType::tf_null, false),
-	FTTI("LONGBLOB NULL", typeid(Null<sql_longblob>),
+	AFT("LONGBLOB NULL", typeid(Null<sql_longblob>),
 			FieldType::ft_blob, FieldType::tf_null, false),
-	FTTI("BLOB NULL", typeid(Null<sql_blob>),
+	AFT("BLOB NULL", typeid(Null<sql_blob>),
 			FieldType::ft_blob, FieldType::tf_null),
-	FTTI("VARCHAR NULL", typeid(Null<sql_varchar>),
+	AFT("VARCHAR NULL", typeid(Null<sql_varchar>),
 			FieldType::ft_text, FieldType::tf_null),
-	FTTI("CHAR NULL", typeid(Null<sql_char>),
+	AFT("CHAR NULL", typeid(Null<sql_char>),
 			FieldType::ft_text, FieldType::tf_null, false),
-	FTTI("NULL NOT NULL", typeid(Null<void>),
+	AFT("NULL NOT NULL", typeid(Null<void>),
 			FieldType::ft_null, FieldType::tf_default),
 };
 
-const int FieldType::num_types_ =
-		sizeof(FieldType::types_) / sizeof(FieldType::types_[0]);
+// Number of elements in types_[]
+static const int num_types_ = sizeof(types_) / sizeof(types_[0]);
 
-const FieldType::TypeMap FieldType::type_map_;
 
-#if !defined(DOXYGEN_IGNORE)
-// Doxygen will not generate documentation for this section.
-
-FieldType::TypeMap::TypeMap()
+// Set up an "index" into types_[] keyed on std::type_info, to make
+// the FieldType(type_info) conversion ctor faster.
+class TypeMap
 {
-	for (map_type::mapped_type i = 0; i < num_types_; ++i) {
-		map_[FieldType::types_[i].c_type_] = i;
+private:
+	struct Cmp
+	{
+		bool operator() (const type_info* lhs, const type_info* rhs) const
+				{ return lhs < rhs; }
+	};
+	typedef map<const type_info*, size_t, Cmp> map_type;
+
+	map_type map_;
+
+public:
+	TypeMap()
+	{
+		for (map_type::mapped_type i = 0; i < num_types_; ++i) {
+			map_[types_[i].c_type_] = i;
+		}
 	}
+	const map_type::mapped_type operator [](const type_info& ti) const
+	{
+		// Try for an exact match on the C++ std::type_info value
+		map_type::const_iterator it = map_.find(&ti);
+		if (it != map_.end()) {
+			return it->second;
+		}
+		else {
+			// Can't find it.  Caller must be passing a C++ data type
+			// that simply isn't represented in the types_ array.  Wah.
+			ostringstream outs;
+			outs << "Failed to find libtabula type info for " << ti.name();
+			throw TypeLookupFailed(outs.str());
+		}
+	}
+};
+static const TypeMap type_map_;
+
+
+// std::type_info conversion ctor.  Looks up the statically-defined
+// libtabula type info in types_[] and copies that.
+FieldType::FieldType(const type_info& t)
+{
+	size_t i = type_map_[t];
+	base_type_ = types_[i].base_type_;
+	flags_ = types_[i].flags_;
 }
 
-FieldType::TypeMap::map_type::mapped_type 
-FieldType::TypeMap::operator [](const std::type_info& ti) const
+
+// "Annotate" this type by looking up the C++ and SQL type info in the
+// types_[] table based on our libtabula {Base,Flags} pair.
+const AFT&
+FieldType::annotate() const
 {
-	// Try for an exact match on the C++ std::type
-	map_type::const_iterator it = map_.find(&ti);
-	if (it != map_.end()) {
-		return it->second;
+	// Make sure we got fully-initted first.
+	if (base_type_ == ft_unsupported) {
+		throw TypeLookupFailed("FieldType::annotate() called before "
+				"object fully initted");
+	}
+
+	// Try to find an entry in types_[] matching our {Base,Flags} pair
+	int guess = -1;
+	for (size_t i = 0; i < num_types_; ++i) {
+		const AFT& cand = types_[i];
+		if (base_type_ == cand.base_type_) {
+			// Found a possible match.
+			if (flags_ == cand.flags_) {
+				// It's a good match, but is it the best?
+				guess = i;
+				if (cand.best_guess_) return cand;
+			}
+			else if (cand.flags_ & flags_ == cand.flags_) {
+				// All flags on the candidate are present in the
+				// caller's value, so keep this one in mind, but
+				// don't go with it unless we find no better option.
+				guess = i;
+			}
+			// else, it's only a weak match; hold out for better
+		}
+	}
+
+	// Did we find one?
+	if (guess >= 0) {
+		return types_[guess];
 	}
 	else {
-		// Can't find it.  Caller must be passing a C++ data type that
-		// simply isn't represented in the types_ array.  Wah.
-		std::ostringstream outs;
-		outs << "Failed to find libtabula type info for " << ti.name();
+		ostringstream outs;
+		outs << "Failed to find C++ and SQL type info for libtabula "
+				"type {" << base_type_ << ',' << flags_ << '}';
 		throw TypeLookupFailed(outs.str());
 	}
 }
+
+
+// Pass calls down to our equivalent AnnotatedFT object
+const char* FieldType::name() const { return annotate().c_type_->name(); }
+const char* FieldType::sql_name() const { return annotate().sql_name_; }
+const std::type_info& FieldType::c_type() const { return *annotate().c_type_; }
 
 #endif // !defined(DOXYGEN_IGNORE)
 

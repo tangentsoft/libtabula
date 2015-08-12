@@ -45,6 +45,9 @@
 
 namespace libtabula {
 
+namespace detail {
+	class AnnotatedFT;
+}
 
 /// \brief SQL field type information
 ///
@@ -141,12 +144,7 @@ public:
 	/// assumption that C++ hasn't grown a SQL-like "nullable" type
 	/// attribute between the time this code was written and the time
 	/// your compiler was last improved.
-	FieldType(const std::type_info& t)
-	{
-		size_t i = type_map_[t];
-		base_type_ = types_[i].base_type_;
-		flags_ = types_[i].flags_;
-	}
+	FieldType(const std::type_info& t);
 
 	/// \brief Assign another FieldType object to this object
 	FieldType& operator =(const FieldType& t)
@@ -155,23 +153,6 @@ public:
 		flags_ = t.flags_;
 		return *this;
 	}
-
-	/// \brief Returns an implementation-defined name of the C++ type.
-	///
-	/// Returns the name that would be returned by typeid().name() for
-	/// the C++ type associated with the SQL type.
-	const char* name() const { return type_info().c_type_->name(); }
-
-	/// \brief Returns the name of the SQL type.
-	///
-	/// Returns the SQL name for the type.
-	const char* sql_name() const { return type_info().sql_name_; }
-
-	/// \brief Returns the type_info for the C++ type associated with
-	/// the SQL type.
-	///
-	/// Returns the C++ type_info record corresponding to the SQL type.
-	const std::type_info& c_type() const { return *type_info().c_type_; }
 
 	/// \brief Returns the libtabula data type enum for this object.
 	///
@@ -182,6 +163,43 @@ public:
 	///
 	/// This does not encode null-ness.
 	const Base base_type() const { return base_type_; }
+
+	/// \brief Returns true if this type describes a SQL column with a
+	/// default value.
+	///
+	/// Always returns false if the object is storing information about
+	/// a SQL value on a particular row, rather than column info.
+	bool is_default() const { return flags_ == FieldType::tf_default; }
+
+	/// \brief Returns true if this type describes either a null-able SQL
+	/// column or a SQL value that is NULL.
+	bool is_null() const { return flags_ & FieldType::tf_null; }
+
+	/// \brief Returns true if this type describes an SQL column that
+	/// cannot be negative.
+	///
+	/// Various SQL DBMSes interpret this differently.  Some don't have
+	/// a strong notion of unsigned-ness (e.g. SQLite) while others take
+	/// the concept rather too far (IMHO) allowing perversions like
+	/// "unsigned float." (e.g. MySQL/MariaDB)
+	bool is_unsigned() const { return flags_ & FieldType::tf_unsigned; }
+
+	/// \brief Returns an implementation-defined name of the C++ type.
+	///
+	/// Returns the name that would be returned by typeid().name() for
+	/// the C++ type associated with the SQL type.
+	const char* name() const;
+
+	/// \brief Returns the name of the SQL type.
+	///
+	/// Returns the SQL name for the type.
+	const char* sql_name() const;
+
+	/// \brief Returns the type_info for the C++ type associated with
+	/// the SQL type.
+	///
+	/// Returns the C++ type_info record corresponding to the SQL type.
+	const std::type_info& c_type() const;
 
 	/// \brief Returns true if the SQL type is of a type that needs to
 	/// be quoted for syntactically correct SQL.
@@ -211,83 +229,46 @@ public:
 	/// depend on the format of the value.  It could change.
 	unsigned short id() const { return (flags_ << 8) | base_type_; }
 
-	// Used in the global static data structures that map libtabula data
-	// types and from {Base, Flag} enum pairs.  That in turn is how
-	// you can construct a FieldType object and call c_type() and such
-	// on it, yielding a value you did not explicitly pass to the ctor.
-	//
-	// \internal This is public only because the cpp file instantiates
-	// \c types_, a static array of these.  Library end-user code
-	// shouldn't use this directly.
-	class TypeInfo
+private:
+	//// Internal support functions
+	const detail::AnnotatedFT& annotate() const;
+
+	//// Internal data
+	Base base_type_;
+	unsigned int flags_;
+};
+
+namespace detail {
+	/// \brief An extension of FieldType, adding several values that are
+	/// implicitly associated with our parent's {Base, Flag} pair.
+	///
+	/// \internal This type is not for use by end-user code.  It is
+	/// public only because libtabula creates a static array of these
+	/// for use by FieldType to use in various lookups.
+	class AnnotatedFT : public FieldType
 	{
 	public:
-		TypeInfo& operator=(const TypeInfo& other);
+		AnnotatedFT& operator=(const AnnotatedFT& other);
 		
-		TypeInfo(const char* s = 0, const std::type_info& t = typeid(void),
-				Base bt = ft_unsupported, unsigned int f = tf_default,
+		// FIXME: Reorder parameter list to match FieldType.  It's only
+		// in this order to minimize diffs in the types_[] definition
+		// relative to MySQL++.  Once that table settles down, we can
+		// do a big-bang changeover.
+		AnnotatedFT(const char* s, const std::type_info& t,
+				Base bt, unsigned int f = tf_default,
 				bool bg = true) :
+		FieldType(bt, f),
 		sql_name_(s),
 		c_type_(&t),
-		base_type_(bt),
-		flags_(f),
 		best_guess_(bg)
 		{
 		}
 
-		unsigned short id() const { return (flags_ << 8) | base_type_; }
-
-		bool is_default() const { return flags_ == FieldType::tf_default; }
-		bool is_null() const { return flags_ & FieldType::tf_null; }
-		bool is_unsigned() const { return flags_ & FieldType::tf_unsigned; }
-
 		const char* sql_name_;
 		const std::type_info* c_type_;
-		const Base base_type_;
-		const unsigned int flags_;
-		const bool best_guess_;		// YAGNI?  Unused by TypeMap::operator[]
+		const bool best_guess_;
 	};
-
-protected:
-	//// Subclass interface
-	/// \brief Look up the TypeInfo object corresponding to our
-	/// {Base, Flag} pair.
-	const TypeInfo& type_info() const
-	{
-		return types_[base_type_];
-	}
-
-private:
-	// Helper class for mapping data types to and from our enums above
-	class LIBTABULA_EXPORT TypeMap
-	{
-	private:
-		friend class FieldType;
-
-		struct Cmp
-		{
-			bool operator() (const std::type_info* lhs,
-					const std::type_info* rhs) const
-					{ return lhs < rhs; }
-		};
-		typedef std::map<const std::type_info*, size_t, Cmp> map_type;
-
-		TypeMap();
-		map_type::mapped_type operator [](const std::type_info& ti) const;
-
-		map_type map_;
-	};
-
-	// Data structures to map {Base, Type} pairs to and from libtabula
-	// C++ data types.
-	static const TypeInfo types_[];
-	static const int num_types_;
-	static const TypeMap type_map_;
-
-	// Internal data
-	Base base_type_;
-	unsigned int flags_;
-};
+} // end namespace libtabula::detail
 
 /// \brief Returns true if two FieldType objects are equal.
 inline bool operator ==(const FieldType& lhs, const FieldType& rhs)
