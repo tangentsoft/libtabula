@@ -236,8 +236,6 @@ point, 5.0.
 
     -   Tricky bits:
 
-        -   Initializing result set objects.
-
         -   type_info module.  Extremely closely tied to MySQL C API
             right now.  Will probably have to turn it into a parallel
             class hierarchy to DBDriver, or fold it in with same.
