@@ -230,17 +230,9 @@ point, 5.0.
                 DBD::row_type fetch_raw_row();
             }
 
-    -   Tricky bits:
-
-        -   Initializing result set objects.
-
-        -   type_info module.  Extremely closely tied to MySQL C API
-            right now.  Will probably have to turn it into a parallel
-            class hierarchy to DBDriver, or fold it in with same.
-
-        -   Will CMake let us figure out which DB engines are available
-            on non-autoconf systems, or at least pass in options that
-            let the user select them?
+    -   Will CMake let us figure out which DB engines are available
+        on non-autoconf systems, or at least pass in options that
+        let the user select them?
 
 *   If `pkg-config` is available, register ourselves with it using
     information discovered by `configure`.  Also, write out a
