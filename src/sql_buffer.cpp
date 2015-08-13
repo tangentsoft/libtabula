@@ -62,6 +62,13 @@ SQLBuffer::quote_q() const
 		// SQL NOW() function, which must not be quoted.
 		return false;
 	}
+	else if (is_null_) {
+		// The value is null, which is a separate thing from the type
+		// being null-able, so we have to check for it up here.  If
+		// you try to push this check down into FieldType::is_null(),
+		// something like "sql_int_null x = 5" would be quoted.
+		return false;
+	}
 	else {
 		// Normal case: we can infer the need to quote from the type.
 		return type_.quote_q();
