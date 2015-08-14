@@ -30,9 +30,6 @@
 #include "cmdline.h"
 #include "images.h"
 
-#define CRLF			"\r\n"
-#define CRLF2			"\r\n\r\n"
-
 int
 main(int argc, char* argv[])
 {
@@ -43,6 +40,11 @@ main(int argc, char* argv[])
 	if (!cmdline) {
 		return 1;
 	}
+
+	// Define line ending style used in output, varying depending on
+	// whether the output is CGI/HTTP or the bmark.txt file for dtest.
+	const char* eol1 = cmdline.dtest_mode() ? "\n" : "\r\n";
+	const char* eol2 = cmdline.dtest_mode() ? "\n" : "\r\n\r\n";
 
 	// Parse CGI query string environment variable to get image ID
 	unsigned int img_id = 0;
@@ -84,32 +86,32 @@ main(int argc, char* argv[])
 		if (res && res.num_rows()) {
 			images img = res[0];
 			if (img.data.is_null) {
-				std::cout << "Content-type: text/plain" << CRLF2;
-				std::cout << "No image content!" << CRLF;
+				std::cout << "Content-type: text/plain" << eol2;
+				std::cout << "No image content!" << eol1;
 			}
 			else {
-				std::cout << "X-Image-Id: " << img_id << CRLF; // for debugging
-				std::cout << "Content-type: image/jpeg" << CRLF;
+				std::cout << "X-Image-Id: " << img_id << eol1; // for debugging
+				std::cout << "Content-type: image/jpeg" << eol1;
 				std::cout << "Content-length: " <<
-						img.data.data.length() << CRLF2;
+						img.data.data.length() << eol2;
 				std::cout << img.data;
 			}
 		}
 		else {
-			std::cout << "Content-type: text/plain" << CRLF2;
-			std::cout << "ERROR: No image with ID " << img_id << CRLF;
+			std::cout << "Content-type: text/plain" << eol2;
+			std::cout << "ERROR: No image with ID " << img_id << eol1;
 		}
 	}
 	catch (const libtabula::BadQuery& er) {
 		// Handle any query errors
-		std::cout << "Content-type: text/plain" << CRLF2;
-		std::cout << "QUERY ERROR: " << er.what() << CRLF;
+		std::cout << "Content-type: text/plain" << eol2;
+		std::cout << "QUERY ERROR: " << er.what() << eol1;
 		return 1;
 	}
 	catch (const libtabula::Exception& er) {
 		// Catch-all for any other libtabula exceptions
-		std::cout << "Content-type: text/plain" << CRLF2;
-		std::cout << "GENERAL ERROR: " << er.what() << CRLF;
+		std::cout << "Content-type: text/plain" << eol2;
+		std::cout << "GENERAL ERROR: " << er.what() << eol1;
 		return 1;
 	}
 
