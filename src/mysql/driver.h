@@ -318,11 +318,11 @@ public:
 	/// \brief Returns the number of rows in the given result set
 	///
 	/// Wraps \c mysql_num_rows() in MySQL C API.
+	///
+	/// \internal This is needed by Query::store(), so it can reserve
+	/// storage space for the number of known rows in the result set.
 	ulonglong num_rows(ResultBase::Impl& impl) const
 	{
-		// FIXME: Do we still need this?  It might have been used only
-		// as part of the "store" query implementation.  Recommend
-		// calling res.length() instead?
 		return mysql_num_rows(MYSQL_RES_FROM_IMPL(impl));
 	}
 
