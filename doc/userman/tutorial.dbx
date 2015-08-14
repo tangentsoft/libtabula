@@ -28,7 +28,7 @@
     but it can vary on different Linuxes.</para>
 
     <para>Before you get started, please read through any of the
-    <filename>README*.txt</filename> files included with the libtabula
+    <filename>README*.md</filename> files included with the libtabula
     distribution that are relevant to your platform. We won&#x2019;t
     repeat all of that here.</para>
 
@@ -146,7 +146,7 @@ GRANT ALL PRIVILEGES ON libtabula.* TO test@'%';</screen>
     after running some of the other examples, as they change the
     database.</para>
 
-    <para>See <filename>README-examples.txt</filename> for more
+    <para>See <filename>README-examples.md</filename> for more
     details on running the examples.</para>
   </sect2>
 

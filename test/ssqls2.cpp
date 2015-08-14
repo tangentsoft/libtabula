@@ -2,7 +2,7 @@
  test/ssqls2.cpp - Tests the SSQLS v2 mechanism
 
  Copyright © 2009 by Warren Young.  Others may also hold copyrights
- on code in this file.  See the CREDITS.txt file in the top directory
+ on code in this file.  See the CREDITS.md file in the top directory
  of the distribution for details.
 
  This file is part of libtabula

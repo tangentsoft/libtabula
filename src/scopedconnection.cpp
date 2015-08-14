@@ -2,7 +2,7 @@
  scopedconnection.cpp - Implements the ScopedConnection class.
 
  Copyright © 2010 by Switchplane, Ltd.  Others may also hold
- copyrights on code in this file.  See the CREDITS.txt file in the
+ copyrights on code in this file.  See the CREDITS.md file in the
  top directory of the distribution for details.
 
  This file is part of libtabula.

@@ -3,7 +3,7 @@
  	an SSQLS v2 parse result.  Implements ssqlsxlat -o flag.
 
  Copyright © 2009 by Warren Young.  Others may also hold copyrights
- on code in this file.  See the CREDITS.txt file in the top directory
+ on code in this file.  See the CREDITS.md file in the top directory
  of the distribution for details.
 
  This file is part of libtabula.

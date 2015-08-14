@@ -4,7 +4,7 @@
 
  Copyright © 2007 by Educational Technology Resources, Inc.
  Others may also hold copyrights on code in this file.  See the
- CREDITS.txt file in the top directory of the distribution for details.
+ CREDITS.md file in the top directory of the distribution for details.
 
  This file is part of libtabula
 

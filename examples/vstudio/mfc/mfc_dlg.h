@@ -2,7 +2,7 @@
  mfc_dlg.h - Declares the dialog class for the libtabula MFC example.
 
  Copyright © 2007 by Educational Technology Resources, Inc.  Others 
- may also hold copyrights on code in this file.  See the CREDITS.txt
+ may also hold copyrights on code in this file.  See the CREDITS.md
  file in the top directory of the distribution for details.
 
  This file is part of libtabula.

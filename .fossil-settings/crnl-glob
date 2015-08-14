@@ -1,0 +1,4 @@
+examples/vstudio/mfc/*.cpp
+examples/vstudio/mfc/*.h
+examples/vstudio/wforms/*.cpp
+examples/vstudio/wforms/*.h

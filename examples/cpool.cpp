@@ -5,7 +5,7 @@
 
  Copyright © 2008-2010 by Educational Technology Resources, Inc.
  Others may also hold copyrights on code in this file.  See the
- CREDITS.txt file in the top directory of the distribution for details.
+ CREDITS.md file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -193,7 +193,7 @@ main(int argc, char *argv[])
 	// on to check that it's okay to start doing that real work.  This
 	// latter check should never fail on Windows, but will fail on most
 	// other systems unless you take positive steps to build with thread
-	// awareness turned on.  See README-*.txt for your platform.
+	// awareness turned on.  See README-*.md for your platform.
 	poolptr = new SimpleConnectionPool(cmdline);
 	try {
 		libtabula::ScopedConnection cp(*poolptr, true);

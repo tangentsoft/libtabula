@@ -6,7 +6,7 @@
 
  Copyright © 2004 Beeyond Software Holding BV and © 2007 by
  Educational Technology Resources, Inc.  Others may also hold
- copyrights on code in this file.  See the CREDITS.txt file in the
+ copyrights on code in this file.  See the CREDITS.md file in the
  top directory of the distribution for details.
 
  This file is part of libtabula.

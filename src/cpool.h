@@ -4,7 +4,7 @@
 /***********************************************************************
  Copyright © 2007-2008 by Educational Technology Resources, Inc. and
  © 2007 by Jonathan Wakely.  Others may also hold copyrights on
- code in this file.  See the CREDITS.txt file in the top directory
+ code in this file.  See the CREDITS.md file in the top directory
  of the distribution for details.
 
  This file is part of libtabula.

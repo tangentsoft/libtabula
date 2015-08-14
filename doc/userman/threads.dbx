@@ -51,7 +51,7 @@
         to look for thread support on your system, not a requirement
         to do or die: if the script doesn&#x2019;t find what it needs
         to do threading, libtabula will just get built without thread
-        support. See <filename>README-Unix.txt</filename> for more
+        support. See <filename>README-Unix.md</filename> for more
         details.</para>
 
         <para>On Windows, if you use the Visual C++ project files or
@@ -81,8 +81,8 @@
         of MySQL, you should have only one version of the C
         API library, which should be thread-aware. If you have
         two, you probably just have separate debug and optimized
-        builds. See <filename>README-Visual-Studio.txt</filename> or
-        <filename>README-MinGW.txt</filename> for details.</para>
+        builds. See <filename>README-Visual-Studio.md</filename> or
+        <filename>README-MinGW.md</filename> for details.</para>
 
         <para>If you build MySQL from source, you might only get
         one version of the MySQL C API library, and it can have

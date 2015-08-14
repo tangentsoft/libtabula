@@ -40,13 +40,13 @@
     of the <computeroutput>--with-mysql</computeroutput>,
     <computeroutput>--with-mysql-include</computeroutput>, and
     <computeroutput>--with-mysql-lib</computeroutput> flags. See
-    <filename>README-Unix.txt</filename> for details.</para>
+    <filename>README-Unix.md</filename> for details.</para>
 
     <para>If you need to modify the build system files, per-platform
     instructions are in
-    <filename>README-Visual-Studio.txt</filename>,
-    <filename>README-MinGW.txt</filename>, and
-    <filename>README-Mac-OS-X.txt</filename>.</para>
+    <filename>README-Visual-Studio.md</filename>,
+    <filename>README-MinGW.md</filename>, and
+    <filename>README-Mac-OS-X.md</filename>.</para>
   </sect2>
 
 

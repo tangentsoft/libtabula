@@ -6,7 +6,7 @@
 #
 # Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
 # © 2004-2010 by Educational Technology Resources, Inc.  Others may
-# also hold copyrights on code in this file.  See the CREDITS.txt file
+# also hold copyrights on code in this file.  See the CREDITS.md file
 # in the top directory of the distribution for details.
 #
 # This file is part of libtabula.

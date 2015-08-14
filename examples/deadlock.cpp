@@ -7,7 +7,7 @@
 
  Copyright © 2007 by Jim Wallace and © 2007-2009 by Educational
  Technology Resources, Inc.  Others may also hold copyrights on code
- in this file.  See the CREDITS.txt file in the top directory of the
+ in this file.  See the CREDITS.md file in the top directory of the
  distribution for details.
 
  This file is part of libtabula.
