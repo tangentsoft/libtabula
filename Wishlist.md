@@ -124,10 +124,6 @@ Items in this section are big or break the library's ABI, so they have
 to be done in 4.0, else they must wait for the next allowed ABI breakage
 point, 5.0.
 
-*   Reimplement FieldNames in terms of std::map.  At least one test
-    shows that the linear scan for field names in row["foo"] is a
-    huge time-sink: http://lists.mysql.com/plusplus/9732
-
 *   Reimplement the ostringstream interface in SQLStream, drop the
     inheritance, and include an ostreamstring instance as a member
     instead of deriving from it.  There is some evidence that VC++ has
@@ -145,8 +141,12 @@ point, 5.0.
 
 *   Database independence:
 
-    -   Row remains implemented in terms of MYSQL_ROW.  Need to do some
-        kind of pimpl trick here to push that off into the DBDriver.
+    -   `Row` remains implemented in terms of `MYSQL_ROW`.  Need to
+	    create a `[MySQL]RowImpl` class hierarchy and pass instances
+	    of them via the pimpl idiom to `Row` instead of `MYSQL_ROW`.
+	    An easy case is `MySQLDriver::fetch_row()`, part of the
+	    low-level implementation of "use" queries, but the real
+	    trick is doing it for "store" queries.
 
     -   Field is entirely MySQL-specific.  Rather than pimpl it,
         consider just ripping it out, along with the only other
@@ -234,15 +234,9 @@ point, 5.0.
                 DBD::row_type fetch_raw_row();
             }
 
-    -   Tricky bits:
-
-        -   type_info module.  Extremely closely tied to MySQL C API
-            right now.  Will probably have to turn it into a parallel
-            class hierarchy to DBDriver, or fold it in with same.
-
-        -   Will CMake let us figure out which DB engines are available
-            on non-autoconf systems, or at least pass in options that
-            let the user select them?
+    -   Will CMake let us figure out which DB engines are available
+        on non-autoconf systems, or at least pass in options that
+        let the user select them?
 
 *   If `pkg-config` is available, register ourselves with it using
     information discovered by `configure`.  Also, write out a

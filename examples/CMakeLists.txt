@@ -6,6 +6,7 @@
 #
 # Copyright © 2014-2015 by Warren Young
 # Copyright © 2015 by Educational Technology Resources, Inc.
+# Copyright © 2015 by Educational Technology Resources, Inc.
 #
 # Others may also hold copyrights on code in this file.  See the
 # CREDITS.md file in the top directory of the distribution for details.

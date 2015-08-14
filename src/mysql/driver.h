@@ -92,12 +92,6 @@ public:
 		~ResultImpl() { /* implicit mysql_free_result(res_.raw()) */  }
 		operator MYSQL_RES*() const { return res_.raw(); }
 
-		// FIXME: Do we still need this?  Can't see who calls it.
-		ResultImpl* clone() const
-		{
-			return new ResultImpl(res_, rows());
-		}
-
 		size_t rows() const { return rows_; }
 
 	private:
@@ -207,8 +201,6 @@ public:
 	Row fetch_row(ResultBase& res, ResultBase::Impl& impl)
 	{
 		if (MYSQL_ROW raw = mysql_fetch_row(MYSQL_RES_FROM_IMPL(impl))) {
-			// FIXME: Create MySQLRowImpl here from MYSQL_ROW, and
-			//        make Row() take a RowImpl* as the first param.
 			return Row(raw, &res, fetch_lengths(impl),
 					res.throw_exceptions());
 		}
@@ -324,11 +316,11 @@ public:
 	/// \brief Returns the number of rows in the given result set
 	///
 	/// Wraps \c mysql_num_rows() in MySQL C API.
+	///
+	/// \internal This is needed by Query::store(), so it can reserve
+	/// storage space for the number of known rows in the result set.
 	ulonglong num_rows(ResultBase::Impl& impl) const
 	{
-		// FIXME: Do we still need this?  It might have been used only
-		// as part of the "store" query implementation.  Recommend
-		// calling res.length() instead?
 		return mysql_num_rows(MYSQL_RES_FROM_IMPL(impl));
 	}
 

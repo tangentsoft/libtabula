@@ -279,13 +279,6 @@ public:
 	/// that must be quoted when used in a SQL query
 	bool quote_q() const;
 
-	/// \brief Returns the type ID of the buffer's data
-	///
-	/// Values from type_info.h.  At the moment, these are the same as
-	/// the underlying MySQL C API type IDs, but it's not a good idea
-	/// to count on this remaining the case.
-	int type_id() const;
-
 	/// \brief Turns on the internal 'is_processed_' flag.
 	///
 	/// This is an implementation detail of template queries, used to

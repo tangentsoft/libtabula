@@ -136,8 +136,8 @@ test_int_conversion(const libtabula::String& s, bool throw_expected)
 static bool
 test_null()
 {
-	libtabula::String not_null("", libtabula::mysql_type_info::string_type, false);
-	libtabula::String is_null("", libtabula::mysql_type_info::string_type, true);
+	libtabula::String not_null("", libtabula::FieldType::ft_text, false);
+	libtabula::String is_null("", libtabula::FieldType::ft_text, true);
 	if (not_null.is_null() == true) {
 		std::cerr << "not_null.is_null() == true!" << std::endl;
 		return false;

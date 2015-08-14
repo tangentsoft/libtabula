@@ -51,12 +51,14 @@ add_library(tabula SHARED
     datetime.cpp
     dbdriver.cpp
     field_names.cpp
+    field_type.cpp
     field_types.cpp
     libtabula.cpp
     manip.cpp
     myset.cpp
     mystring.cpp
     mysql/driver.cpp
+	mysql/ft.cpp
     null.cpp
     options.cpp
     qparms.cpp
@@ -70,7 +72,6 @@ add_library(tabula SHARED
     stadapter.cpp
     tcp_connection.cpp
     transaction.cpp
-    type_info.cpp
     uds_connection.cpp
     utility.cpp
     vallist.cpp

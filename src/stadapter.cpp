@@ -56,7 +56,7 @@ is_processed_(processed)
 }
 
 SQLTypeAdapter::SQLTypeAdapter(const std::string& str, bool processed) :
-buffer_(new SQLBuffer(str, mysql_type_info::string_type, false)),
+buffer_(new SQLBuffer(str, SQLBuffer::string_type, false)),
 is_processed_(processed)
 {
 }
@@ -64,7 +64,7 @@ is_processed_(processed)
 #if !defined(DOXYGEN_IGNORE)
 SQLTypeAdapter::SQLTypeAdapter(const Null<string>& str, bool processed) :
 buffer_(new SQLBuffer(str.is_null ? null_str : str.data,
-		str.is_null ? typeid(void) : typeid(str.data), str.is_null)),
+		SQLBuffer::string_type, str.is_null)),
 is_processed_(processed)
 {
 }
@@ -73,26 +73,26 @@ SQLTypeAdapter::SQLTypeAdapter(const Null<String>& str, bool processed) :
 buffer_(new SQLBuffer(
 		str.is_null ? null_str.c_str() : str.data.data(),
 		str.is_null ? null_str.length() : str.data.length(),
-		str.is_null ? typeid(void) : typeid(str.data), str.is_null)),
+		SQLBuffer::string_type, str.is_null)),
 is_processed_(processed)
 {
 }
 #endif
 
 SQLTypeAdapter::SQLTypeAdapter(const char* str, bool processed) :
-buffer_(new SQLBuffer(str, strlen(str), mysql_type_info::string_type, false)),
+buffer_(new SQLBuffer(str, strlen(str), SQLBuffer::string_type, false)),
 is_processed_(processed)
 {
 }
 
 SQLTypeAdapter::SQLTypeAdapter(const char* str, int len, bool processed) :
-buffer_(new SQLBuffer(str, len, mysql_type_info::string_type, false)),
+buffer_(new SQLBuffer(str, len, SQLBuffer::string_type, false)),
 is_processed_(processed)
 {
 }
 
 SQLTypeAdapter::SQLTypeAdapter(char c) :
-buffer_(new SQLBuffer(stream2string(c), mysql_type_info::string_type, false)),
+buffer_(new SQLBuffer(stream2string(c), SQLBuffer::string_type, false)),
 is_processed_(false)
 {
 }
@@ -402,7 +402,7 @@ SQLTypeAdapter::assign(const char* pc, int len)
 		len = int(strlen(pc));
 	}
 
-	buffer_ = new SQLBuffer(pc, len, mysql_type_info::string_type, false);
+	buffer_ = new SQLBuffer(pc, len, SQLBuffer::string_type, false);
 	is_processed_ = false;
 	return *this;
 }
@@ -513,12 +513,6 @@ SQLTypeAdapter::quote_q() const
 	// If no buffer, it means we're an empty string, so we need to be 
 	// quoted to be expressed properly in SQL.
 	return buffer_ ? buffer_->quote_q() : true;
-}
-
-int
-SQLTypeAdapter::type_id() const
-{
-	return buffer_ ? buffer_->type().id() : 0;
 }
 
 } // end namespace libtabula
