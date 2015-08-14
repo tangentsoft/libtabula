@@ -1,8 +1,11 @@
 /***********************************************************************
  query.cpp - Implements the Query class.
 
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
- and © 2004-2009, 2014 by Educational Technology Resources, Inc.
+ Copyright © 1998 by Kevin Atkinson,
+ © 1999-2001 by MySQL AB,
+ © 2004-2009, 2014 by Educational Technology Resources, Inc., and
+ © 2015 by Warren Young.
+ 
  Others may also hold copyrights on code in this file.  See the
  CREDITS.txt file in the top directory of the distribution for details.
 
@@ -29,6 +32,7 @@
 #include "autoflag.h"
 #include "dbdriver.h"
 #include "connection.h"
+#include "sql_types.h"
 
 namespace libtabula {
 
@@ -187,7 +191,7 @@ Query::execute(const char* str, size_t len)
 		// back in here with a completed query, but the processing_
 		// flag will be set, allowing us to avoid an infinite loop.
 		AutoFlag<> af(template_defaults.processing_);
-		return execute(SQLQueryParms() << str << len );
+		return execute(SQLQueryParms() << sql_text(str, len));
 	}
 	if ((copacetic_ = conn_->driver()->execute(str, len)) == true) {
 		if (parse_elems_.size() == 0) {
@@ -487,7 +491,7 @@ Query::store(const char* str, size_t len)
 		// back in here with a completed query, but the processing_
 		// flag will be set, allowing us to avoid an infinite loop.
 		AutoFlag<> af(template_defaults.processing_);
-		return store(SQLQueryParms() << str << len );
+		return store(SQLQueryParms() << sql_text(str, len));
 	}
 
 	DBDriver* dbd = conn_->driver();
@@ -600,7 +604,7 @@ Query::use(const char* str, size_t len)
 		// back in here with a completed query, but the processing_
 		// flag will be set, allowing us to avoid an infinite loop.
 		AutoFlag<> af(template_defaults.processing_);
-		return use(SQLQueryParms() << str << len);
+		return use(SQLQueryParms() << sql_text(str, len));
 	}
 
 	DBDriver* dbd = conn_->driver();

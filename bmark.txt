@@ -243,7 +243,6 @@ Inserted "NULL" into images table, 0 bytes, ID 1
 
 ---------------- BEGIN cgi_jpeg OUTPUT ----------------
 Content-type: text/plain
-
 No image content!
 ================ END cgi_jpeg OUTPUT ================
 

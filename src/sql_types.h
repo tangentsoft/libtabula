@@ -38,6 +38,8 @@
 
 #if defined(LIBTABULA_HAVE_CSTDINT)
 #	include <cstdint>
+#elif defined(LIBTABULA_HAVE_TR1_CSTDINT)
+#	include <tr1/cstdint>
 #elif defined(LIBTABULA_HAVE_BOOST_CSTDINT)
 #	include <boost/cstdint.hpp>
 #elif defined(LIBTABULA_HAVE_STDINT_H)
@@ -65,6 +67,18 @@ namespace libtabula {
 	typedef std::uint32_t			sql_mediumint_unsigned;
 	typedef std::int64_t			sql_bigint;
 	typedef std::uint64_t			sql_bigint_unsigned;
+#elif defined(LIBTABULA_HAVE_TR1_CSTDINT)
+	// Next best case: found the TR1 precursor for this C++11 feature
+	typedef tiny_int<std::tr1::int8_t>sql_tinyint;
+	typedef tiny_int<std::tr1::uint8_t>sql_tinyint_unsigned;
+	typedef std::tr1::int16_t		sql_smallint;
+	typedef std::tr1::uint16_t		sql_smallint_unsigned;
+	typedef std::tr1::int32_t		sql_int;
+	typedef std::tr1::uint32_t		sql_int_unsigned;
+	typedef std::tr1::int32_t		sql_mediumint;
+	typedef std::tr1::uint32_t		sql_mediumint_unsigned;
+	typedef std::tr1::int64_t		sql_bigint;
+	typedef std::tr1::uint64_t		sql_bigint_unsigned;
 #elif defined(LIBTABULA_HAVE_BOOST_CSTDINT)
 	// Next best case: found the Boost emulation for this C++11 feature
 	typedef tiny_int<boost::int8_t>	sql_tinyint;
