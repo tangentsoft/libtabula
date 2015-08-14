@@ -104,7 +104,7 @@ class LIBTABULA_EXPORT ResultBase : public OptionalExceptions
 {
 public:
 	/// \brief Base class for drivers to extend so they can stash
-	/// driver-sprcific result info result sets
+	/// driver-specific result info result sets
 	class Impl
 	{
 	public:
