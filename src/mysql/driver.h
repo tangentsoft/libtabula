@@ -201,8 +201,6 @@ public:
 	Row fetch_row(ResultBase& res, ResultBase::Impl& impl)
 	{
 		if (MYSQL_ROW raw = mysql_fetch_row(MYSQL_RES_FROM_IMPL(impl))) {
-			// FIXME: Create MySQLRowImpl here from MYSQL_ROW, and
-			//        make Row() take a RowImpl* as the first param.
 			return Row(raw, &res, fetch_lengths(impl),
 					res.throw_exceptions());
 		}

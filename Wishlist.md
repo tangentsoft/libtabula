@@ -141,8 +141,12 @@ point, 5.0.
 
 *   Database independence:
 
-    -   Row remains implemented in terms of MYSQL_ROW.  Need to do some
-        kind of pimpl trick here to push that off into the DBDriver.
+    -   `Row` remains implemented in terms of `MYSQL_ROW`.  Need to
+	    create a `[MySQL]RowImpl` class hierarchy and pass instances
+	    of them via the pimpl idiom to `Row` instead of `MYSQL_ROW`.
+	    An easy case is `MySQLDriver::fetch_row()`, part of the
+	    low-level implementation of "use" queries, but the real
+	    trick is doing it for "store" queries.
 
     -   Field is entirely MySQL-specific.  Rather than pimpl it,
         consider just ripping it out, along with the only other
