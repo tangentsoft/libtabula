@@ -250,13 +250,11 @@ namespace detail {
 	public:
 		AnnotatedFT& operator=(const AnnotatedFT& other);
 		
-		// FIXME: Reorder parameter list to match FieldType.  It's only
-		// in this order to minimize diffs in the types_[] definition
-		// relative to MySQL++.  Once that table settles down, we can
-		// do a big-bang changeover.
+		// Parameter order differs from FieldType's ctor on purpose:
+		// they're ordered to allow some to default in many cases in
+		// the types_[] table initialization.
 		AnnotatedFT(const char* s, const std::type_info& t,
-				Base bt, unsigned int f = tf_default,
-				bool bg = true) :
+				Base bt, unsigned int f = tf_default, bool bg = true) :
 		FieldType(bt, f),
 		sql_name_(s),
 		c_type_(&t),
