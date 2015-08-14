@@ -254,7 +254,7 @@ FieldType::annotate() const
 				guess = i;
 				if (cand.best_guess_) return cand;
 			}
-			else if (cand.flags_ & flags_ == cand.flags_) {
+			else if ((cand.flags_ & flags_) == cand.flags_) {
 				// All flags on the candidate are present in the
 				// caller's value, so keep this one in mind, but
 				// don't go with it unless we find no better option.
