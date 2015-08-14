@@ -1,18 +1,20 @@
 Credits
 ====
 
-MySQL was created by Kevin Atkinson during 1998.  From version
-1.0 (released in June 1999) through 1.7.9 (May 2001), the primary
-maintainer was [Sinisa Milivojevic](mailto:sinisa@mysql.com).  Neither
-Kevin nor Sinisa are currently involved in libtabula development.
+MySQL++ was created by Kevin Atkinson during 1998, who passed off
+maintenance to [Sinisa Milivojevic](mailto:sinisa@mysql.com), who worked
+on the library from version 1.0 (June 1999) through 1.7.9 (May 2001).
 The current maintainer is [Warren Young](mailto:wyoung@libtabula.org),
-starting with MySQL++ 1.7.10 in August of 2004.
+starting with MySQL++ 1.7.10 in August of 2004.  Warren forked libtabula
+off from MySQL++ 3.2.1 sometime in 2014, which was first released as
+version 4.0.0 in XXXXXX 201x.
 
-A fuller account of the library's history &mdash; including
-the transition from MySQL++ to libtabula &mdash; is [in the user
-manual][1].  For the nitty-gritty details, see [the libtabula change
-log][2] and [the MySQL++ change log][3]. Change log items that aren't
-attributed to anyone else were done by Warren Young.
+A fuller account of the library's history &mdash; including the
+transition from MySQL++ to libtabula &mdash; is [in the user manual][1].
+For the nitty-gritty details, see [the libtabula change log][2] and
+[the MySQL++ change log][3]. Change log items that aren't attributed to
+anyone else were done by Warren Young, much of it while working for
+Educational Technology Resources.
 
 
 Other contributors of note since MySQL++ 1.7.10:
@@ -71,7 +73,7 @@ apparently written by Kevin Atkinson:
 
 *   Fredric Fredricson - For a long talk about automatic conversions.
 
-*   Michael Widenius - libtabula developer who has been very
+*   Michael Widenius - MySQL developer who has been very
     supportive of my efforts.
 
 *   Paul J. Lucas - For the original idea of treating the query object
