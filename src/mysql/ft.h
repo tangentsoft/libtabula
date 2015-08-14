@@ -49,22 +49,6 @@ public:
 	{
 	}
 
-	/// \brief Promotion constructor
-	///
-	/// Converts generic libtabula data type info to MySQL-specific
-	/// info.  This ctor lets you create a base class instance then
-	/// later convert it to a DBDriver-specific instance.
-	///
-	/// FIXME: This may be a case of YAGNI.  The idea is that this will
-	/// effectively let us convert enum Base to enum_field_types, and
-	/// enum Flags to a MySQL C API "flags" bitfield.  But, we may find
-	/// that this conversion should happen elsewhere in the DBDriver
-	/// code, so the promotion ctor isn't necessary.
-	MySQLFieldType(const FieldType& ft) :
-	FieldType(ft)
-	{
-	}
-
 	/// \brief Create object from MySQL C API type info
 	///
 	/// \param t the underlying MySQL C API type ID for this type,
