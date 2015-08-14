@@ -92,12 +92,6 @@ public:
 		~ResultImpl() { /* implicit mysql_free_result(res_.raw()) */  }
 		operator MYSQL_RES*() const { return res_.raw(); }
 
-		// FIXME: Do we still need this?  Can't see who calls it.
-		ResultImpl* clone() const
-		{
-			return new ResultImpl(res_, rows());
-		}
-
 		size_t rows() const { return rows_; }
 
 	private:
