@@ -169,7 +169,7 @@ Row::operator =(const Row& rhs)
 	data_->assign(rhs.data_->begin(), rhs.data_->end());
 	field_names_->clear();
 	copy(rhs.field_names_->cbegin(), rhs.field_names_->cend(),
-			field_names_->begin());		// FIXME: Can we switch to assign()?
+			field_names_->begin());
 	initialized_ = rhs.initialized_;
 	return *this;
 }
