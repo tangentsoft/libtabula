@@ -115,6 +115,16 @@ scheme.  This works as you would expect:
     $ cmake ../trunk
 
 
+Debug Builds
+----
+
+By default, CMake creates a release build on Unixy systems, which means
+you don't get debugging symbols in the resulting binaries.  To enable a
+debug build, change the "cmake .." command above to:
+
+     $ cmake -DCMAKE_BUILD_TYPE=Debug ..
+
+
 On Manipulating the Build System Source Files
 ----
 
