@@ -31,34 +31,13 @@
 
 namespace libtabula {
 
-Row::Row(MYSQL_ROW row, const ResultBase* res,
-		const unsigned long* lengths, bool throw_exceptions) :
+Row::Row(Row::Impl* pimpl, const RefCountedPointer<FieldNames>& fn,
+		bool throw_exceptions) :
 OptionalExceptions(throw_exceptions),
-initialized_(false)
+data_(pimpl),
+field_names_(fn),
+initialized_(true)
 {
-	if (row) {
-		if (res) {
-			size_type size = res->num_fields();
-			data_.reserve(size);
-			for (size_type i = 0; i < size; ++i) {
-				bool is_null = row[i] == 0;
-				data_.push_back(value_type(
-						is_null ? "NULL" : row[i],
-						is_null ? 4 : lengths[i],
-						res->field_type(int(i)).base_type(),
-						is_null));
-			}
-
-			field_names_ = res->field_names();
-			initialized_ = true;
-		}
-		else if (throw_exceptions) {
-			throw ObjectNotInitialized("RES is NULL");
-		}
-	}
-	else if (throw_exceptions) {
-		throw ObjectNotInitialized("ROW is NULL");
-	}
 }
 
 
@@ -66,7 +45,7 @@ Row::const_reference
 Row::at(size_type i) const
 {
 	if (i < size()) {
-		return data_[i];
+		return data_->at(i);
 	}
 	else {
 		throw BadIndex("Row", int(i), int(size()));
@@ -181,6 +160,18 @@ Row::field_num(const char* name) const
 	else {
 		return 0;
 	}
+}
+
+
+Row&
+Row::operator =(const Row& rhs)
+{
+	data_->assign(rhs.data_->begin(), rhs.data_->end());
+	field_names_->clear();
+	copy(rhs.field_names_->cbegin(), rhs.field_names_->cend(),
+			field_names_->begin());		// FIXME: Can we switch to assign()?
+	initialized_ = rhs.initialized_;
+	return *this;
 }
 
 

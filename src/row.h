@@ -2,10 +2,13 @@
 /// \brief Declares the classes for holding row data from a result set.
 
 /***********************************************************************
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2008 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.md file
- in the top directory of the distribution for details.
+ Copyright © 1998 by Kevin Atkinson
+           © 1999-2001 by MySQL AB
+           © 2004-2008 by Educational Technology Resources, Inc.
+           © 2015 by Warren Young
+
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.txt file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -43,7 +46,6 @@ namespace libtabula {
 #if !defined(DOXYGEN_IGNORE)
 // Make Doxygen ignore this
 class FieldNames;
-class LIBTABULA_EXPORT ResultBase;
 #endif
 
 /// \brief Manages rows from a result set.
@@ -70,11 +72,23 @@ private:
 	typedef bool Row::*private_bool_type;
 
 public:
-	/// \brief type of our internal data list
+	/// \brief Base class for drivers to use for passing raw row data to
+	/// us, and optionally to extend for stashing driver-specific info.
 	///
-	/// This is public because all other typedefs we have for
-	/// mirroring std::vector's public interface depend on it.
-	typedef std::vector<String> list_type;
+	/// \internal This is public because the driver passes pointers to
+	/// such objects to our ctor, and many other std::vector like
+	/// interfaces on this object are implemented in terms of it.  End
+	/// user code should not create such objects directly.
+	class Impl : public std::vector<String>
+	{
+	public:
+		Impl() { }
+		virtual ~Impl() { } 
+	};
+
+	/// \brief Alias of Impl for compatibility with STL and MySQL++
+	/// code.
+	typedef Impl list_type;
 
 	/// \brief constant iterator type
 	typedef list_type::const_iterator const_iterator;
@@ -122,7 +136,7 @@ public:
 	/// \brief Copy constructor
 	Row(const Row& r) :
 	OptionalExceptions(),
-	data_(r.data_.begin(), r.data_.end()),
+	data_(r.data_),
 	field_names_(r.field_names_),
 	initialized_(r.initialized_)
 	{
@@ -130,12 +144,10 @@ public:
 
 	/// \brief Create a row object
 	///
-	/// \param row MySQL C API row data
-	/// \param res result set that the row comes from
-	/// \param lengths length of each item in row
+	/// \param pri raw row data, from the C API driver
+	/// \param fn list of fields in this row
 	/// \param te if true, throw exceptions on errors
-	Row(MYSQL_ROW row, const ResultBase* res,
-			const unsigned long* lengths, bool te = true);
+	Row(Impl* pri, const RefCountedPointer<FieldNames>& fn, bool te = true);
 
 	/// \brief Destroy object
 	~Row() { }
@@ -147,18 +159,18 @@ public:
 	const_reference at(size_type i) const;
 
 	/// \brief Get a reference to the last element of the vector
-	const_reference back() const { return data_.back(); }
+	const_reference back() const { return data_->back(); }
 
 	/// \brief Return a const iterator pointing to first element in the
 	/// container
-	const_iterator begin() const { return data_.begin(); }
+	const_iterator begin() const { return data_->begin(); }
 
 	/// \brief Returns true if container is empty
-	bool empty() const { return data_.empty(); }
+	bool empty() const { return data_->empty(); }
 
 	/// \brief Return a const iterator pointing to one past the last
 	/// element in the container
-	const_iterator end() const { return data_.end(); }
+	const_iterator end() const { return data_->end(); }
 
 	/// \brief Get an "equal list" of the fields and values in this row
 	///
@@ -289,20 +301,14 @@ public:
 	size_type field_num(const char* name) const;
 
 	/// \brief Get a reference to the first element of the vector
-	const_reference front() const { return data_.front(); }
+	const_reference front() const { return data_->front(); }
 
 	/// \brief Return maximum number of elements that can be stored
 	/// in container without resizing.
-	size_type max_size() const { return data_.max_size(); }
+	size_type max_size() const { return data_->max_size(); }
 
 	/// \brief Assignment operator
-	Row& operator =(const Row& rhs)
-	{
-		data_.assign(rhs.data_.begin(), rhs.data_.end());
-		field_names_.assign(rhs.field_names_);
-		initialized_ = rhs.initialized_;
-		return *this;
-	}
+	Row& operator =(const Row& rhs);
 
 	/// \brief Get the value of a field given its name.
 	///
@@ -346,19 +352,19 @@ public:
 	///
 	operator private_bool_type() const
 	{
-		return data_.size() && initialized_ ? &Row::initialized_ : 0;
+		return data_->size() && initialized_ ? &Row::initialized_ : 0;
 	}
 
 	/// \brief Return reverse iterator pointing to first element in the
 	/// container
-	const_reverse_iterator rbegin() const { return data_.rbegin(); }
+	const_reverse_iterator rbegin() const { return data_->rbegin(); }
 
 	/// \brief Return reverse iterator pointing to one past the last
 	/// element in the container
-	const_reverse_iterator rend() const { return data_.rend(); }
+	const_reverse_iterator rend() const { return data_->rend(); }
 
 	/// \brief Get the number of fields in the row.
-	size_type size() const { return data_.size(); }
+	size_type size() const { return data_->size(); }
 
 	/// \brief Get a list of the values in this row
 	///
@@ -521,8 +527,8 @@ public:
 	}
 
 private:
-	list_type data_;
-	RefCountedPointer<FieldNames> field_names_;
+	RefCountedPointer<Impl> data_;
+	const RefCountedPointer<FieldNames> field_names_;
 	bool initialized_;
 };
 

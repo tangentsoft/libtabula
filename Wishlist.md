@@ -141,13 +141,6 @@ point, 5.0.
 
 *   Database independence:
 
-    -   `Row` remains implemented in terms of `MYSQL_ROW`.  Need to
-	    create a `[MySQL]RowImpl` class hierarchy and pass instances
-	    of them via the pimpl idiom to `Row` instead of `MYSQL_ROW`.
-	    An easy case is `MySQLDriver::fetch_row()`, part of the
-	    low-level implementation of "use" queries, but the real
-	    trick is doing it for "store" queries.
-
     -   Field is entirely MySQL-specific.  Rather than pimpl it,
         consider just ripping it out, along with the only other
         users of it, Result::fetch_field*().  All it does is let the
@@ -237,6 +230,13 @@ point, 5.0.
     -   Will CMake let us figure out which DB engines are available
         on non-autoconf systems, or at least pass in options that
         let the user select them?
+
+    -   The MySQL `type_info` refactoring caused us to split out
+	    FieldType::Base and is_null parameters in a few places.  We
+	    can pass a FieldType object here instead, since that encodes
+	    null-ness as well.  We might need to make a distinction
+	    between "can be NULL" and "is NULL" to make this work,
+	    though.
 
 *   If `pkg-config` is available, register ourselves with it using
     information discovered by `configure`.  Also, write out a

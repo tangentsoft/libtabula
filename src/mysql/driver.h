@@ -198,16 +198,7 @@ public:
 	/// \brief Returns the next DB row from the given result set.
 	///
 	/// Wraps \c mysql_fetch_row() in MySQL C API.
-	Row fetch_row(ResultBase& res, ResultBase::Impl& impl)
-	{
-		if (MYSQL_ROW raw = mysql_fetch_row(MYSQL_RES_FROM_IMPL(impl))) {
-			return Row(raw, &res, fetch_lengths(impl),
-					res.throw_exceptions());
-		}
-		else {
-			return Row();
-		}
-	}
+	Row fetch_row(ResultBase& res, ResultBase::Impl& impl);
 
 	/// \brief Returns the lengths of the fields in the current row
 	///
