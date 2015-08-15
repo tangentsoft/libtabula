@@ -151,6 +151,10 @@ public:
 	const RefCountedPointer<FieldTypes>& field_types() const
 			{ return types_; }
 
+	/// \brief Returns a pointer to the DBDriver subclass that created
+	/// this object.
+	DBDriver* driver() const { return driver_; }
+
 	/// \brief Returns the number of fields in this result set
 	size_t num_fields() const { return fields_.size(); }
 
