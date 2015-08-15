@@ -101,8 +101,12 @@ then
 	then
 		echo
 		echo 'All tests passed.'
+		ec=0
+	else
+		ec=1
 	fi
 	rm -f $TMP
+	exit $ec
 else
 	mv $TMP $BFILE
 	chmod -w $BFILE

@@ -15,6 +15,8 @@ either the API or the ABI.
 
 *   test/manip doesn't test the escape manipulator!
 
+*   Move unit tests out from under dtest umbrella into CTest.
+
 *   The `DateTime` family's `time_t` conversion operators should detect
     DATETIME("0") type values and return `time_t(0)` rather than
     attempt to stuff an out-of-range value into a smaller box.
