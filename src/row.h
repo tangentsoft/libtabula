@@ -293,7 +293,7 @@ public:
 
 	/// \brief Return maximum number of elements that can be stored
 	/// in container without resizing.
-	size_type max_size() const { return data_.max_size(); }
+	size_type max_size() const { return initialized_ ? data_.max_size() : 0; }
 
 	/// \brief Assignment operator
 	Row& operator =(const Row& rhs)
@@ -346,7 +346,7 @@ public:
 	///
 	operator private_bool_type() const
 	{
-		return data_.size() && initialized_ ? &Row::initialized_ : 0;
+		return initialized_ && data_.size() ? &Row::initialized_ : 0;
 	}
 
 	/// \brief Return reverse iterator pointing to first element in the
@@ -358,7 +358,7 @@ public:
 	const_reverse_iterator rend() const { return data_.rend(); }
 
 	/// \brief Get the number of fields in the row.
-	size_type size() const { return data_.size(); }
+	size_type size() const { return initialized_ ? data_.size() : 0; }
 
 	/// \brief Get a list of the values in this row
 	///
