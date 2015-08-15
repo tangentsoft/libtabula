@@ -144,8 +144,17 @@ add_subdirectory(src/ssx)
 add_subdirectory(test)
 add_subdirectory(examples)
 
+# Two testing targets based on the dtest script, one running it
+# standalone, one under CTest.  The latter suppresses output and 
+# only reports pass/fail.  The dtest target can't depend on "all"
+# due to a CMake design weakness, while "test" does implicitly,
+# since it's integrated into the CMake design.
 add_custom_target(dtest
 	COMMAND ${PROJECT_SOURCE_DIR}/dtest -u test -p test)
+include(CTest)
+if (BUILD_TESTING)
+    add_test(dtest ${PROJECT_SOURCE_DIR}/dtest -u test -p test)
+endif(BUILD_TESTING)
 
 # If ctags is present, add a top-level "tags" target which includes all
 # files in both the build and source versions of src/*.  Conditional
