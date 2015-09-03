@@ -207,6 +207,12 @@ point, 5.0.
         ensure base class is reusable before releasing v4.0.
         PostgresDriver and SQLiteDriver?
 
+    -   Maybe create DummyDriver, which would let us put more of the
+        library under the test suite.  Our excuse for not doing
+        that before is that many operations required a DB server
+        conn and cooperating classes, but if we can mock the DBMS,
+        we can treat the other classes as separately-testable units.
+
     -   Templatize all classes that use DBDriver interface with the
         DB driver type.  This lets you specify the driver type to use
         with a Connection and all its children without modifying the
