@@ -5,11 +5,14 @@
 /// This file mostly takes care of platform differences.
 
 /***********************************************************************
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB,
- © 2004-2009 by Educational Technology Resources, Inc., and
- © 2009 by Warren Young.  Others may also hold copyrights on code
- in this file.  See the CREDITS.md file in the top directory of the
- distribution for details.
+ Copyright
+   © 1998 by Kevin Atkinson
+   © 1999-2001 by MySQL AB
+   © 2004-2009, 2015 by Educational Technology Resources, Inc.
+   © 2009, 2014 by Warren Young
+   
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.md file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -31,6 +34,15 @@
 
 #if !defined(LIBTABULA_COMMON_H)
 #define LIBTABULA_COMMON_H
+
+// Bring in the file CMake wrote to persist the results of some of the
+// checks it made.  Unlike with the autotools config.h generated in
+// MySQL++, this file always exists, so we can use it unconditionally.
+// Also, since the library normally installs its headers into a sub
+// directory of a standard include directory, we don't need to worry
+// about the name being too generic, thus conflicting with another
+// library's config.h.
+#include "config.h"
 
 #if !defined(DOXYGEN_IGNORE)
 // Doxygen will not generate documentation for the following stuff.
@@ -106,15 +118,6 @@
 	// We need to use the DOS/Windows path separator here
 	#define LIBTABULA_PATH_SEPARATOR '\\'
 #else
-	// If not VC++, MinGW, or Xcode, we assume we're on a system using
-	// autoconf, so bring in the config.h file it wrote containing the
-	// config test results.  Only do this during the library build, and
-	// even then, not if included from a libtabula header file, since
-	// config.h cannot be safely installed with the other headers.
-#	if defined(LIBTABULA_NOT_HEADER) && !defined(MYSQLPP_XCODE)
-#		include "config.h"
-#	endif
-
 	// Make DLL stuff a no-op on this platform.
 	#define LIBTABULA_EXPORT
 
@@ -140,7 +143,11 @@ enum sql_cmp_type { sql_use_compare };
 #if !defined(DOXYGEN_IGNORE)
 // Figure out how to get large integer support on this system.  Suppress
 // refman documentation for these typedefs, as they're system-dependent.
-#if defined(LIBTABULA_NO_LONG_LONGS)
+#if defined(HAVE_LONG_LONG)
+// CMake positively found support for C99-like "long long" in C++ here
+typedef unsigned long long ulonglong;
+typedef long long longlong;
+#elif defined(LIBTABULA_NO_LONG_LONGS)
 // Alias "longlong" and "ulonglong" to the regular "long" counterparts
 typedef unsigned long ulonglong;
 typedef long longlong;

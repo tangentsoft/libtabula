@@ -4,7 +4,9 @@
 #
 # Created 2014.08.21 by Warren Young
 #
-# Copyright © 2014-2015 by Warren Young
+# Copyright
+#   © 2014-2015 by Warren Young
+#   © 2015 by Educational Technology Resources, Inc.
 #
 # Others may also hold copyrights on code in this file.  See the
 # CREDITS.md file in the top directory of the distribution for details.
@@ -138,11 +140,16 @@ include_directories(src ${PROJECT_BINARY_DIR}/src ${MYSQL_INCLUDE_DIR})
 get_filename_component(MYSQL_LIBRARY_DIR "${MYSQL_LIBRARY}" PATH)
 link_directories(${MYSQL_LIBRARY_DIR})
 
+add_subdirectory(cmake)
 add_subdirectory(doc)
 add_subdirectory(src)
 add_subdirectory(src/ssx)
 add_subdirectory(test)
 add_subdirectory(examples)
+
+# Check for specific post-C++98 features.  Must be after cmake subdir.
+include(cmake/CheckCXX11Features.cmake)
+CXX_CHECK_FEATURE("long long" HAVE_CXX_LONG_LONG)
 
 # Two testing targets based on the dtest script, one running it
 # standalone, one under CTest.  The latter suppresses output and 
