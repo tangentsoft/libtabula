@@ -150,6 +150,7 @@ add_subdirectory(examples)
 # Check for specific post-C++98 features.  Must be after cmake subdir.
 include(cmake/CheckCXX11Features.cmake)
 CXX_CHECK_FEATURE("long long" HAVE_CXX_LONG_LONG)
+CXX_CHECK_FEATURE("cbegin and cend" HAVE_CXX_CBEGIN_CEND)
 
 # Two testing targets based on the dtest script, one running it
 # standalone, one under CTest.  The latter suppresses output and 

@@ -1,10 +1,13 @@
 /***********************************************************************
  row.cpp - Implements the Row class.
 
- Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2007 by Educational Technology Resources, Inc.  Others may
- also hold copyrights on code in this file.  See the CREDITS.md file
- in the top directory of the distribution for details.
+ Copyright
+   © 1998 by Kevin Atkinson
+   © 1999-2001 by MySQL AB
+   © 2004-2007, 2015 by Educational Technology Resources, Inc. 
+   
+ Others may also hold copyrights on code in this file.  See the
+ CREDITS.md file in the top directory of the distribution for details.
 
  This file is part of libtabula.
 
@@ -168,8 +171,13 @@ Row::operator =(const Row& rhs)
 {
 	data_->assign(rhs.data_->begin(), rhs.data_->end());
 	field_names_->clear();
+#if defined(HAVE_CXX_CBEGIN_CEND)
 	copy(rhs.field_names_->cbegin(), rhs.field_names_->cend(),
 			field_names_->begin());
+#else
+	copy(rhs.field_names_->begin(), rhs.field_names_->end(),
+			field_names_->begin());
+#endif
 	initialized_ = rhs.initialized_;
 	return *this;
 }

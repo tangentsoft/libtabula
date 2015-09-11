@@ -2,3 +2,6 @@
 #cmakedefine HAVE_LIBIBERTY_GETOPT
 
 #cmakedefine HAVE_LOCALTIME_R
+
+#cmakedefine HAVE_CXX_LONG_LONG
+#cmakedefine HAVE_CXX_CBEGIN_CEND
