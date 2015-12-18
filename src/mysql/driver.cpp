@@ -153,7 +153,7 @@ MySQLDriver::fetch_row(ResultBase& res, ResultBase::Impl& impl)
 		const unsigned long* lengths = fetch_lengths(impl);
 		for (Row::size_type i = 0; i < size; ++i) {
 			bool is_null = raw[i] == 0;
-			pd->at(i).assign(Row::value_type(
+			pd->push_back(Row::value_type(
 					is_null ? "NULL" : raw[i],
 					is_null ? 4 : lengths[i],
 					res.field_type(int(i)).base_type(),
