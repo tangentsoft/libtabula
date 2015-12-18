@@ -195,7 +195,7 @@ public:
 			ResultBase::Impl& impl) const = 0;
 
 	/// \brief Returns the next row from the given "use" query result set.
-	virtual Row fetch_row(ResultBase& res, ResultBase::Impl& impl) = 0;
+	virtual Row fetch_row(ResultBase& res) = 0;
 
 	/// \brief Releases memory used by a result set
 	virtual void free_result(ResultBase::Impl& impl) const = 0;

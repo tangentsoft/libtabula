@@ -151,6 +151,12 @@ public:
 	const RefCountedPointer<FieldTypes>& field_types() const
 			{ return types_; }
 
+	/// \brief Access the driver-level implementation result set info
+	///
+	/// This is primarily for the benefit of the DBDriver subclass,
+	/// not end-user code.
+	virtual Impl& impl() const = 0;
+
 	/// \brief Returns a pointer to the DBDriver subclass that created
 	/// this object.
 	DBDriver* driver() const { return driver_; }
@@ -250,6 +256,12 @@ public:
 	/// \brief Destroy result set
 	~StoreQueryResult() { }
 
+	/// \brief Access the driver-level implementation result set info
+	///
+	/// This is primarily for the benefit of the DBDriver subclass,
+	/// not end-user code.
+	Impl& impl() const { return *pimpl_; }
+
 	/// \brief Returns the number of rows in this result set
 	list_type::size_type num_rows() const { return size(); }
 
@@ -274,7 +286,8 @@ private:
 	/// one.
 	StoreQueryResult& copy(const StoreQueryResult& other);
 
-	bool copacetic_;	///< true if initialized from a good result set
+	RefCountedPointer<Impl> pimpl_;	///< Driver-level result set info
+	bool copacetic_;				///< true if initialized from good result
 };
 
 

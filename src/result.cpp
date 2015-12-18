@@ -93,11 +93,12 @@ StoreQueryResult::StoreQueryResult(Impl* res, size_t rows,
 		DBDriver* dbd, bool te) :
 ResultBase(res, dbd, te),
 list_type(rows),
+pimpl_(res),
 copacetic_(true)
 {
 	if (copacetic_) {
 		iterator it = begin();
-		while (Row row = dbd->fetch_row(*this, *res)) *it++ = row;
+		while (Row row = dbd->fetch_row(*this)) *it++ = row;
 	}
 }
 
@@ -158,7 +159,7 @@ UseQueryResult::fetch_row()
 		}
 	}
 
-	if (Row row = driver_->fetch_row(*this, impl())) {
+	if (Row row = driver_->fetch_row(*this)) {
 		const unsigned long* lengths = fetch_lengths();
 		if (lengths) {
 			return row;

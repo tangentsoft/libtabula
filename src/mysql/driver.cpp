@@ -143,14 +143,13 @@ MySQLDriver::fetch_fields(Fields& fl, ResultBase::Impl& impl) const
 
 
 Row
-MySQLDriver::fetch_row(ResultBase& res, ResultBase::Impl& impl)
-// FIXME: Why do we need the impl param?  Can't we get that from res?
+MySQLDriver::fetch_row(ResultBase& res)
 {
-	if (MYSQL_ROW raw = mysql_fetch_row(MYSQL_RES_FROM_IMPL(impl))) {
+	if (MYSQL_ROW raw = mysql_fetch_row(MYSQL_RES_FROM_IMPL(res.impl()))) {
 		Row::size_type size = res.num_fields();
 		Row::Impl* pd = new Row::Impl;
 		pd->reserve(size);
-		const unsigned long* lengths = fetch_lengths(impl);
+		const unsigned long* lengths = fetch_lengths(res.impl());
 		for (Row::size_type i = 0; i < size; ++i) {
 			bool is_null = raw[i] == 0;
 			pd->push_back(Row::value_type(
