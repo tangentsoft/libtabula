@@ -528,7 +528,7 @@ public:
 
 private:
 	RefCountedPointer<Impl> data_;
-	const RefCountedPointer<FieldNames> field_names_;
+	RefCountedPointer<FieldNames> field_names_;
 	bool initialized_;
 };
 

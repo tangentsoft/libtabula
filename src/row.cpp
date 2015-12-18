@@ -169,15 +169,8 @@ Row::field_num(const char* name) const
 Row&
 Row::operator =(const Row& rhs)
 {
-	data_->assign(rhs.data_->begin(), rhs.data_->end());
-	field_names_->clear();
-#if defined(HAVE_CXX_CBEGIN_CEND)
-	copy(rhs.field_names_->cbegin(), rhs.field_names_->cend(),
-			field_names_->begin());
-#else
-	copy(rhs.field_names_->begin(), rhs.field_names_->end(),
-			field_names_->begin());
-#endif
+	data_ = rhs.data_;
+	field_names_ = rhs.field_names_;
 	initialized_ = rhs.initialized_;
 	return *this;
 }
