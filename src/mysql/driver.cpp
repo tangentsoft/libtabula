@@ -145,6 +145,10 @@ MySQLDriver::fetch_fields(Fields& fl, ResultBase::Impl& impl) const
 Row
 MySQLDriver::fetch_row(ResultBase& res)
 {
+	// FIXME: Why is this called after Query.store()?   It should only
+	// happen after Query.use() because the table data is in the
+	// StoreQueryResult object.  This is what crashes the count_rows()
+	// call in examples/resetdb.cpp.
 	if (MYSQL_ROW raw = mysql_fetch_row(MYSQL_RES_FROM_IMPL(res.impl()))) {
 		Row::size_type size = res.num_fields();
 		Row::Impl* pd = new Row::Impl;
