@@ -40,7 +40,7 @@ foreach(basename array_index cpool datetime insertpolicy inttypes manip
 endforeach(basename)
 
 # Add extra libraries to our needier targets
-target_link_libraries(test_ssqls2 ssqls2parse)
+target_link_libraries(test_ssqls2 ssqls2parse tabula)
 
 if(TEST_NULL_UNIQUENESS)
 	# This test purposely includes bad code that should fail to compile.
