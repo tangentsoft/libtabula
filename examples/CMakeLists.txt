@@ -4,7 +4,7 @@
 #
 # Created 2014.08.21 by Warren Young
 #
-# Copyright © 2014-2015 by Warren Young
+# Copyright © 2014-2016 by Warren Young
 # Copyright © 2015 by Educational Technology Resources, Inc.
 # Copyright © 2015 by Educational Technology Resources, Inc.
 #
@@ -47,16 +47,16 @@ macro(add_example_executable basename)
 	endif()
 endmacro(add_example_executable)
 
-foreach(basename resetdb
+foreach(
+	basename resetdb
+	cgi_jpeg load_jpeg
 
-				 cgi_jpeg load_jpeg
-
-				 simple1 simple2 simple3
-				 ssqls1 ssqls2 ssqls3 ssqls4 ssqls5 ssqls6
-				 tquery1 tquery2 tquery3 tquery4
-
-				 cpool dbinfo deadlock fieldinf for_each multiquery
-				 store_if transaction
-				 )
+	simple1 simple2 simple3
+	ssqls1 ssqls2 ssqls3 ssqls4 ssqls5 ssqls6
+	tquery1 tquery2 tquery3 tquery4
+	
+	cpool dbinfo deadlock fieldinf for_each multiquery
+	store_if transaction
+)
 	add_example_executable(${basename})
 endforeach(basename)
