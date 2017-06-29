@@ -12,18 +12,15 @@ control system][2].
 
 To clone the code repository anonymously, say:
 
-    $ fossil clone http://libtabula.org/code libtabula.fossil
+    $ fossil clone https://libtabula.org/code libtabula.fossil
 
 If you have a developer account on libtabula.org's Fossil instance, just
 add your username to the URL like so:
 
-    $ fossil clone http://username@libtabula.org/code libtabula.fossil
+    $ fossil clone https://username@libtabula.org/code libtabula.fossil
 
 That will get you a file called `libtabula.fossil` containing the
 full history of libtabula from just after the MySQL++ 3.2.1 fork.
-
-(If you need to dig into libtabula's history prior to the fork,
-see the instructions in [the MySQL++ equivalent to this file][3].)
 
 You can call that clone file anything you like.  Even the `.fossil`
 extension is just a convention, not a requirement.
@@ -47,9 +44,9 @@ anythihg you like.  I actually prefer a tree like this:
             some-branch/       # Separately-opened working branch
                 build/         # Build directory for the working branch
             4.0.0/             # Release branch checkout
-        mysql++/
-            head/              # Gna! MySQL++ svn trunk checkout
-            3.2.1/             # Release tarball unpacked
+        mysqlpp/
+            head/              # MySQL++ Fossil trunk checkout
+            3.2.3/             # Release tarball unpacked
 
 Fossil will let you make any modifications you like to your local
 repository copy.  For those with privileges on the upstream
