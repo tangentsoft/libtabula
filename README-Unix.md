@@ -10,7 +10,7 @@ your OS:
 
 *   [Cygwin](README-Cygwin.md)
 *   [Linux](README-Linux.md)
-*   [Mac OS X](README-Mac-OS-X.md)
+*   [macOS](README-macOS.md)
 *   [Solaris](README-Solaris.md)
 
 There are no special instructions for any other Unix flavors.

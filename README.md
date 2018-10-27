@@ -38,7 +38,7 @@ it containing information specific to that platform.  Please read it:
 
 *   [Cygwin](README-Cygwin.md)
 *   [Linux](README-Linux.md)
-*   [Mac OS X](README-Mac-OS-X.md)
+*   [macOS](README-macOS.md)
 *   [MinGW](README-MinGW.md)
 *   [Solaris](README-Solaris.md)
 *   [Unix (generic)](README-Unix.md)
@@ -64,7 +64,7 @@ libtabula uses [CMake][4] to generate platform-specific build files
 from a platform-independent set of build rules.  We have successfully
 used it to build libtabula under these native build system types:
 
-*   **Makefiles**: For Unixy platforms, including Linux, Mac OS X,
+*   **Makefiles**: For Unixy platforms, including Linux, macOS,
     Cygwin, and MinGW, in addition to the "real" Unices.
     
     See [the Unix README](README-Unix.md) for general instructions.
@@ -74,7 +74,7 @@ used it to build libtabula under these native build system types:
 
     -   [Cygwin](README-Cygwin.md)
     -   [Linux](README-Linux.md)
-    -   [Mac OS X](README-Mac-OS-X.md)
+    -   [macOS](README-macOS.md)
     -   [MinGW](README-MinGW.md)
     -   [Solaris](README-Solaris.md)
 
@@ -97,7 +97,7 @@ used it to build libtabula under these native build system types:
 *   **Xcode**: CMake will generate an Xcode project file instead of
     Makefiles on OS X if you ask nicely.
 
-    See [the Mac OS X README](README-Mac-OS-X.md) for more the proper
+    See [the macOS README](README-macOS.md) for more the proper
     incantation.
 
 CMake can generate many other kinds of IDE project files, but we have

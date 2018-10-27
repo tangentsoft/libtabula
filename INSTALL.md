@@ -7,7 +7,7 @@ instructions for all popular platforms:
 
 * [Cygwin](README-Cygwin.md)
 * [Linux](README-Linux.md)
-* [Mac OS X](README-Mac-OS-X.md)
+* [macOS](README-macOS.md)
 * [MinGW](README-MinGW.md)
 * [Solaris](README-Solaris.md)
 * [Visual C++](README-Visual-C%2b%2b.md)
