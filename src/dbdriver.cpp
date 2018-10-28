@@ -1,8 +1,8 @@
 /***********************************************************************
  dbdriver.cpp - Implements the DBDriver class.
 
- Copyright © 2005-2009, 2014 by Educational Technology Resources, Inc.
- Others may also hold copyrights on code in this file.  See the
+ Copyright © 2005-2009, 2014, 2018 by Educational Technology Resources,
+ Inc.  Others may also hold copyrights on code in this file.  See the
  CREDITS.md file in the top directory of the distribution for details.
 
  This file is part of libtabula.
@@ -25,6 +25,8 @@
 
 #define LIBTABULA_NOT_HEADER
 #include "dbdriver.h"
+
+#include "common.h"
 
 using namespace std;
 
@@ -91,7 +93,7 @@ bool
 DBDriver::set_option(Option* o)
 {
 	// Ensure o gets destroyed if there is a fatal error or exception
-	std::auto_ptr<Option> cleanup(o);
+	UNIQUE_PTR(Option) cleanup(o);
 
 	option_error_ = o->set(this);
 	if (option_error_ == Option::err_NONE) {

@@ -131,6 +131,7 @@
 // currently works for g++ and clang++.
 #if __cplusplus >= 201103L
 #	define UNIQUE_PTR(what) std::unique_ptr<what>
+#else
 #	define UNIQUE_PTR(what) std::auto_ptr<what>
 #endif
 
@@ -194,6 +195,32 @@ typedef unsigned long ulong;
 #	include <mysql/mysql.h>
 #else
 #	include <mysql.h>
+#endif
+
+// The Unicode chapter of the user manual justifies the following.
+#if MYSQL_VERSION_ID >= 50500
+    /// \brief Use this macro in CREATE TABLE strings to get the best
+    /// available UTF-8 character set.
+    ///
+    /// MySQL++ is built against MySQL or MariaDB 5.5 or newer, so these
+    /// macros are defined so that programs using them get the complete
+    /// UTF-8 character set.
+#   define LIBTABULA_UTF8_CS  "utf8mb4"
+
+    /// \brief Use this macro in CREATE TABLE strings to get a matching
+    /// collation to the character set selected by LIBTABULA_UTF8_CS
+#   define LIBTABULA_UTF8_COL "utf8mb4_general_ci"
+#else
+    /// \brief Use this macro in CREATE TABLE strings to get the best
+    /// available UTF-8 character set and correpsonding collation.
+    ///
+    /// MySQL++ is built against a version of MySQL or MariaDB older than
+    /// 5.5, so we must use the legacy 3-byte-limited subset of UTF-8.
+#   define LIBTABULA_UTF8_CS  "utf8"
+
+    /// \brief Use this macro in CREATE TABLE strings to get a matching
+    /// collation to the character set selected by LIBTABULA_UTF8_CS
+#   define LIBTABULA_UTF8_COL "utf8_general_ci"
 #endif
 
 #endif // !defined(LIBTABULA_COMMON_H)

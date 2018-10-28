@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.4//EN"
+    "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 
 <sect1 id="unicode" xreflabel="Using Unicode with libtabula">
   <title>Using Unicode with libtabula</title>
@@ -30,22 +30,21 @@
     characters using only 7-bit ASCII.</para>
 
     <para>Unicode solves this problem. It encodes every character used
-    for writing in the world, using up to 4 bytes per character.  The
-    subset covering the most economically valuable cases takes two bytes
-    per character, so many Unicode-aware programs only support this
-    subset, storing characters as 2-byte values, rather than use 4-byte
-    characters so as to cover all possible cases, however rare. This
-    subset of Unicode is called the Basic Multilingual Plane, or
-    BMP.</para>
-
-    <para>Unfortunately, Unicode was invented about two decades
-    too late for Unix and C. Those decades of legacy created an
-    immense inertia preventing a widespread move away from 8-bit
-    characters. MySQL and C++ come out of these older traditions, and
-    so they share the same practical limitations. libtabula currently
-    doesn&#x2019;t have any code in it for Unicode conversions; it
-    just passes data along unchanged from the underlying DBMS C API,
-    so you still need to be aware of these underlying issues.</para>
+    for writing in the world, using up to 4 bytes per character.  Before
+    emoji became popular, the subset covering the most economically
+    valuable cases fit into the lower 65536 code points, so you could
+    encode most texts using only two bytes per character.  Many
+    nominally Unicode-aware programs only support this subset, called
+    the Basic Multilingual Plane, or BMP.</para>
+  
+    <para>Unfortunately, Unicode was invented about two decades too late
+    for Unix and C. Those decades of legacy created an immense inertia
+    preventing a widespread move away from 8-bit characters. MySQL and
+    C++ come out of these older traditions, and so they share the same
+    practical limitations. MySQL++ doesn&#x2019;t have any code in it
+    for Unicode conversions, and it likely never will; it just passes
+    data along unchanged from the underlying MySQL C API, so you still
+    need to be aware of these underlying issues.</para>
 
     <para>During the development of the <ulink
     url="http://en.wikipedia.org/wiki/Plan_9_from_Bell_Labs">Plan
@@ -57,11 +56,46 @@
     compatible with C strings, since it doesn&#x2019;t use 0 bytes
     anywhere as multi-byte Unicode encodings do. As a result, many
     programs that deal in text will cope with UTF-8 data even though
-    they have no explicit support for UTF-8. (Follow the last link above
-    to see how the design of UTF-8 allows this.) Thus, when explicit
-    support for Unicode was added in MySQL v4.1, they chose to make
-    UTF-8 the native encoding, to preserve backward compatibility with
-    programs that had no Unicode support.</para>
+    they have no explicit support for UTF-8. Follow the last link above
+    to see how the design of UTF-8 allows this.</para>
+  </sect2>
+
+
+  <sect2 id="unicode-mysql">
+    <title>Unicode in MySQL</title>
+
+    <para>Since MySQL comes out of the Unix world, and it predates the
+    widespread use of UTF-8 in Unix, the early versinos of MySQL had no
+    explicit support for Unicode. From the start, you could store raw
+    UTF-8 strings, but it wouldn&#x2019;t know how to do things like
+    sort a column of UTF-8 strings.</para>
+
+    <para>MySQL 4.1 added the first explicit support for Unicode. This
+    version of MySQL supported only the BMP, meaning that if you told it
+    to expect strings to be in UTF-8, it could only use up to 3 bytes
+    per character.</para>
+
+    <para>MySQL 5.5 was the first release to completely support Unicode.
+    Because the BMP-only Unicode support had been in the wild for about
+    6 years by that point, and changing to the new character set
+    requires a table rebuild, the new one was called
+    &#x201C;utf8mb4&#x201D; rather than change the longstanding meaning
+    of &#x201C;utf8&#x201D; in MySQL. This release also added a new
+    alias for the old UTF-8 subset character set,
+    &#x201C;utf8mb3.&#x201D;</para>
+
+    <para>Finally, in MySQL 8.0, &#x201C;utf8mb4&#x201D; became the
+    default character set. For backwards compatibility,
+    &#x201C;utf8&#x201D; remains an alias for
+    &#x201C;utf8mb3.&#x201D;</para>
+
+    <para>We&#x2019;ve defined the <varname>LIBTABULA_UTF8_CS</varname>
+    and <varname>LIBTABULA_UTF8_COL</varname> macros which expand to
+    &#x201C;utf8mb4&#x201D; and &#x201C;utf8mb4_general_ci&#x201D; when
+    you build this library against MySQL 5.5 and newer and to
+    &#x201C;utf8&#x201D; and &#x201C;utf8_general_ci&#x201D; otherwise.
+    We use these macros in our <filename>resetdb</filename> example;
+    you're welcome to use them in your code as well.</para>
   </sect2>
 
 
@@ -99,27 +133,19 @@
   <sect2 id="unicode-windows">
     <title>Unicode on Windows</title>
 
-    <para>Each Windows API function that takes a string
-    actually comes in two versions. One version supports only
-    1-byte &#x201C;ANSI&#x201D; characters<footnote><para>A
-    superset of ASCII</para></footnote> so they end in
-    'A'. The first Unicode-aware versions of Windows
-    supported a 2-byte subset of Unicode called <ulink
-    url="http://en.wikipedia.org/wiki/UCS-2">UCS-2</ulink>. Since
-    Windows XP, Windows now uses the <ulink
-    url="http://en.wikipedia.org/wiki/UTF-16">UTF-16</ulink>
-    encoding natively instead; it also takes 2 bytes per character
-    for typical Western texts, but unlike UCS-2, it can extend to up
-    to 4 bytes per character to encode the rarer Unicode characters.
-    Regardless of whether you use UTF-16 or UCS-2, these are often
-    generically called &#x201C;wide&#x201D; characters, so the
-    other set of Windows API functions end in 'W'. The <function><ulink
+    <para>Each Windows API function that takes a string actually comes
+    in two versions. One version supports only 1-byte
+    &#x201C;ANSI&#x201D; characters (a superset of ASCII), so they end
+    in 'A'. Since Windows XP, there is also a parallel set of APIs
+    ending in 'W' (meaning &#x201C;wide&#x201D;) that expect <ulink
+    url="http://en.wikipedia.org/wiki/UTF-16">UTF-16</ulink> encoded
+    strings. The <function><ulink
     url="http://msdn.microsoft.com/library/en-us/winui/winui/windowsuserinterface/windowing/dialogboxes/dialogboxreference/dialogboxfunctions/messagebox.asp">MessageBox</ulink>()</function>
-    API, for instance, is actually a macro, not a real function. If
-    you define the <symbol>UNICODE</symbol> macro when building
-    your program, the <function>MessageBox()</function> macro
-    evaluates to <function>MessageBoxW()</function>; otherwise,
-    to <function>MessageBoxA()</function>.</para>
+    API, for instance, is actually a macro, not a real function. If you
+    define the <symbol>UNICODE</symbol> macro when building your
+    program, the <function>MessageBox()</function> macro evaluates to
+    <function>MessageBoxW()</function>; otherwise, to
+    <function>MessageBoxA()</function>.</para>
 
     <para>Most open source DBMSes these days use the UTF-8 Unicode
     encoding by preference but Windows uses UTF-16 instead.  Because

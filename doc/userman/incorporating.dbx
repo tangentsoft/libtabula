@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.4//EN"
+    "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 
 <sect1 id="incorporating">
   <title>Using libtabula in Your Own Project</title>
@@ -236,7 +236,7 @@
     in mind, and uses its standard rules implicitly. Those rules
     are designed to use these two variables separately like this.
     If you were writing your own compilation rules, you could write
-    them in such a way that you didn&#x2019;t have to do this.</para>
+    them in such a way that you didn&rsquo;t have to do this.</para>
 
     <para>Beyond that, we have a pretty vanilla
     <filename>Makefile</filename>, thanks in large part to the fact

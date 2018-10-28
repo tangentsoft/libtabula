@@ -6,7 +6,7 @@
 	the examples modify the table in this database.
 
  Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2009 by Educational Technology Resources, Inc.  Others may
+ © 2004-2009, 2018 by Educational Technology Resources, Inc.  Others may
  also hold copyrights on code in this file.  See the CREDITS file in
  the top directory of the distribution for details.
 
@@ -137,8 +137,9 @@ main(int argc, char *argv[])
 				"  price DECIMAL(6,2) NULL, " << // NaN & inf. == NULL
 				"  sdate DATE NOT NULL, " <<
 				"  description MEDIUMTEXT NULL) " <<
-				"ENGINE = InnoDB " <<
-				"CHARACTER SET utf8 COLLATE utf8_general_ci";
+				"ENGINE = InnoDB" <<
+				" CHARACTER SET "LIBTABULA_UTF8_CS
+                " COLLATE " LIBTABULA_UTF8_COL;
 		query.execute();
 
 		// Set up the template query to insert the data.  The parse()

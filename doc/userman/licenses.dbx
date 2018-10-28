@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.4//EN"
+    "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 
 <sect1 id="licenses">
   <title>Licensing</title>
 
-  <para>The primary copyright holders on libtabula and its
-  documentation are Kevin Atkinson (© 1998), MySQL AB (© 1999 through
-  2001) and Educational Technology Resources, Inc. (© 2004 through the
-  date of this writing).  There are other contributors, who also retain
-  copyrights on their additions; see the ChangeLog file in the
-  distribution tarball for details. Contributions made prior to May
-  2014 were done to MySQL++, the predecessor to this library.</para>
+  <para>The primary copyright holders on libtabula and its documentation
+  are Kevin Atkinson (© 1998), MySQL AB (© 1999 through 2001) and
+  Educational Technology Resources, Inc. (© 2004 through the date of
+  this writing).  There are other contributors, who also retain
+  copyrights on their additions; see the
+  <filename>ChangeLog.md</filename> file in the distribution tarball for
+  details. Contributions made prior to May 2014 were done to MySQL++,
+  the predecessor to this library.</para>
 
   <para>The libtabula library and its Reference Manual are released under
   the GNU Lesser General Public License (LGPL), reproduced below.</para>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook V4.4//EN"
+    "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 
 <sect1 id="breakages">
   <title>Incompatible Library Changes</title>
 
   <para>This chapter documents those library changes since the v4.0.0
-  fork with MySQL++ that break end-user programs. You can dig this
-  stuff out of the ChangeLog, but the ChangeLog focuses more on
-  explaining and justifying the facets of each change, while this
-  section focuses on how to migrate your code between these library
-  versions.</para>
+  fork with MySQL++ that break end-user programs. You can dig this stuff
+  out of the <filename>ChangeLog.md</filename> file, but the change log
+  focuses more on explaining and justifying the facets of each change,
+  while this section focuses on how to migrate your code between these
+  library versions.</para>
 
-  <para>Since pure additions do not break programs, those changes
-  are still documented only in the ChangeLog.</para>
+  <para>Since pure additions do not break programs, those changes are
+  still documented only in the change log.</para>
 
 
   <sect2 id="api-changes">
@@ -28,7 +28,7 @@
     <sect3 id="api-4.0.0">
       <title>v4.0.0</title>
 
-      <subtitle>Or, differences between MySQL++ 3.2.1 and
+      <subtitle>Or, differences between MySQL++ 3.2.4 and
       libtabula</subtitle>
 
       <para>Renamed library files from <filename>*mysqlpp*</filename>
