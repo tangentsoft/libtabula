@@ -2,7 +2,7 @@
  stadapter.cpp - Implements the SQLTypeAdapter class.
 
  Copyright © 1998 by Kevin Atkinson, © 1999-2001 by MySQL AB, and
- © 2004-2009 by Educational Technology Resources, Inc.  Others may
+ © 2004-2009, 2018 by Educational Technology Resources, Inc.  Others may
  also hold copyrights on code in this file.  See the CREDITS.md file
  in the top directory of the distribution for details.
 
@@ -416,7 +416,7 @@ SQLTypeAdapter::assign(const null_type&)
 }
 
 char
-SQLTypeAdapter::at(size_type i) const throw(std::out_of_range)
+SQLTypeAdapter::at(size_type i) const
 {
 	if (buffer_) {
 		if (i <= length()) {

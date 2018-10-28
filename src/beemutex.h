@@ -17,7 +17,7 @@
 /// - added more Doxygen comments, and changed some existing comments
 
 /***********************************************************************
- Copyright © 2004 Beeyond Software Holding BV and © 2007-2008
+ Copyright © 2004 Beeyond Software Holding BV and © 2007-2008, 2018
  by Educational Technology Resources, Inc.  Others may also hold
  copyrights on code in this file.  See the CREDITS.md file in the
  top directory of the distribution for details.
@@ -61,7 +61,7 @@ public:
 	///
 	/// Throws a MutexFailed exception if we can't acquire the lock for
 	/// some reason.  The exception contains a message saying why.
-	BeecryptMutex() throw (MutexFailed);
+	BeecryptMutex();
 
 	/// \brief Destroy the mutex
 	///
@@ -70,14 +70,14 @@ public:
 
 	/// \brief Acquire the mutex, blocking if it can't be acquired
 	/// immediately.
-	void lock() throw (MutexFailed);
+	void lock();
 
 	/// \brief Acquire the mutex immediately and return true, or return
 	/// false if it would have to block to acquire the mutex.
-	bool trylock() throw (MutexFailed);
+	bool trylock();
 
 	/// \brief Release the mutex
-	void unlock() throw (MutexFailed);
+	void unlock();
 
 private:
 	void* pmutex_;

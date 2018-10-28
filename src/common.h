@@ -8,7 +8,7 @@
  Copyright
    © 1998 by Kevin Atkinson
    © 1999-2001 by MySQL AB
-   © 2004-2009, 2015 by Educational Technology Resources, Inc.
+   © 2004-2009, 2015, 2018 by Educational Technology Resources, Inc.
    © 2009, 2014 by Warren Young
    
  Others may also hold copyrights on code in this file.  See the
@@ -125,10 +125,13 @@
 	#define LIBTABULA_PATH_SEPARATOR '/'
 #endif
 
-#if defined(LIBTABULA_MYSQL_HEADERS_BURIED)
-#	include <mysql/mysql_version.h>
-#else
-#	include <mysql_version.h>
+// C++11 added unique_ptr as a replacement for auto_ptr.  We don't have
+// the ABI problem above with this one, so we switch to it with the
+// oldest release possible.  As with the above ifdef, this one only
+// currently works for g++ and clang++.
+#if __cplusplus >= 201103L
+#	define UNIQUE_PTR(what) std::unique_ptr<what>
+#	define UNIQUE_PTR(what) std::auto_ptr<what>
 #endif
 
 namespace libtabula {
