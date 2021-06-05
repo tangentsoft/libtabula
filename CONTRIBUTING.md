@@ -1,4 +1,4 @@
-Hacking on libtabula
+Contributing work to the libtabula development effort
 ====
 
 If you are going to make any changes to libtabula, here are some rules

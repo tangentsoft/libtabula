@@ -4,8 +4,9 @@ Wishlist
 This is a list of all the ideas for features and fixes that we have
 seriously contemplated for libtabula.
 
-Patches for any of these thoughtfully considered!  See the [HACKERS.md
-file][1] for instructions on sending patches.
+Patches for any of these thoughtfully considered!  See the
+[contribution guide][cguide] for instructions on sending patches.
+
 
 Any Version
 -----------
@@ -632,4 +633,4 @@ won't get done until we start v5.0 at earliest.
     modeled on above.
 
 
-[1]: HACKERS.md
+[cguide]: ./CONTRIBUTING.md

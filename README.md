@@ -27,7 +27,9 @@ development files installed for the DBMSes you want libtabula to
 work with.
 
 To build a version checked out from the Fossil repository, see
-[the HACKERS file](HACKERS.md).
+[the contribution guide][cgiude].
+
+[cguide]: ./CONTRIBUTING.md
 
 
 Additional Things to Read
@@ -48,7 +50,7 @@ For authorship information, see [the CREDITS file](CREDITS.md).
 
 For license information, see [the COPYING file](COPYING.md).
 
-If you want to change libtabula, see [the HACKERS file](HACKERS.md).
+If you want to change libtabula, see [the contribution guide][cguide].
 
 You should have received a user manual and a reference manual with
 libtabula.  If not, you can [read a recent version online][2].
@@ -131,7 +133,7 @@ working.
 We have nothing in particular against these unsupported systems.  We
 just lack the time and interest to support everything ourselves.  If you
 are sufficiently motivated to get libtabula working on one of these
-alternate systems, see [the HACKERS file](HACKERS.md) first for
+alternate systems, see [the contribution guide][cguide] first for
 guidance.  If you follow the advice in that file, your patch will be
 more likely to be accepted.
 
@@ -140,7 +142,7 @@ If You Want to Hack on libtabula...
 ----
 
 If you intend to change the library or example code, please read
-[the HACKERS file](HACKERS.md).
+[the contribution guide][cguide].
 
 If you want to change the user manual, read [the doc
 README](doc/userman/README.md)
